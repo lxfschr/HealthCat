@@ -10,8 +10,6 @@ class Person(models.Model):
     #basic information of every user
     firstName= models.CharField("First Name",max_length=50) 
     lastName= models.CharField("Last Name",max_length=50)
-    bio= models.CharField("Bio",max_length=300)
-    dateOfBirth=models.DateField("Date of Birth (MM/DD/YYYY) ")
     phone=models.IntegerField("Phone",max_length=15,blank=True)
     zipCode=models.IntegerField(max_length=5)
     proPic= models.ImageField(upload_to='proPicsFolder', blank=True)
@@ -25,7 +23,6 @@ class Pet(models.Model):
 
     profilePic= models.ImageField(upload_to='petProfilePic',blank=True)
     name = models.CharField(max_length=50)
-    about = models.CharField(max_length=100)
 
     rfid= models.IntegerField(max_length=30)
 
