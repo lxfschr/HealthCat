@@ -21,7 +21,7 @@ class Pet(models.Model):
 
     # there could currently be only one owner to a pet.
     owner = models.ForeignKey('Person', related_name = 'petOwner')
-    moderators = models.ManyToMany('Person',related_name='petMods')
+    caretakers = models.ManyToMany('Person',related_name='petMods')
 
     profilePic= models.ImageField(upload_to='petProfilePic',blank=True)
     name = models.CharField(max_length=50)
@@ -85,7 +85,7 @@ class Bowl(models.Model):
     bowlID = models.CharField(max_length=8)
 
     owner = models.ForeignKey('Person', related_name="bowlOwner")
-    moderators = models.ManyToMany('Person',related_name="bowlMods")
+    caretakers = models.ManyToMany('Person',related_name="bowlMods")
 
     petsToServe = models.ManyToMany('Bowl')
 
