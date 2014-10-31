@@ -1,0 +1,11 @@
+What is the way Units are generally handled in the websites. ?
+
+way 1 :
+A user is assigned a unit on profile and all his data is saved based on that unit.
+then when ever he requests to change the unit. all his data shall be recomputed.
+
+Way2 :
+keep every unit-based value with a unit field and compute results based on the preffered unit on the fly. 
+
+How to do it. ? is there any other way ?
+
