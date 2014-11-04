@@ -17,12 +17,13 @@ Is there a reason breed is represented as a foreign key in PetStats? Will there 
 
 Nice mockup, the interactive mockup was pretty nice and provided a good idea of how your site will look and function.
 
-### Sprint 1 Planning (0/10)
+### Sprint 1 Planning (9.9/10)
 
-The sprint PDF was the same as the product backlog, if this was some kind of error email me.
+Looks good, make sure to specify exactly who the product owner of the sprint is.
+
 ---
 
-### Total Score (30/40)
+### Total Score (39.9/40)
 
 ---
 
