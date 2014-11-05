@@ -41,10 +41,10 @@ def register(request):
     
     # Just display the registration form if this is a GET request
     if request.method == 'GET':
-        context['form'] = ProfileForm()
+        context['form'] = RegistrationForm()
         return render(request, 'healthcat/register.html', context)
 
-    form = ProfileForm(request.POST)
+    form = RegistrationForm(request.POST)
     context['form'] = form
     if not form.is_valid():
         return render (request,'healthcat/register.html',context)
@@ -59,7 +59,7 @@ def register(request):
         return render(request, 'healthcat/register.html', context)
     new_user.save()
     
-    user_profile = Profile(user = new_user)
+    user_profile = Person(user = new_user, phone_number = form.cleaned_data['phone_number'], zip_code = form.cleaned_data['zip_code'])
 
     user_profile.save()
 

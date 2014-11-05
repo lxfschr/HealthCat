@@ -14,16 +14,12 @@ class ProfileForm(forms.ModelForm):
         model = Person
         exclude = ('user',)
         widgets = {
-                   'first_name': forms.TextInput(attrs={'placeholder': 'First Name...'}),
-                   'last_name': forms.TextInput(attrs={'placeholder': 'Last Name...'}),
                    'phone_number': forms.TextInput(attrs={'placeholder': 'Phone Number...'}),
                    'zip_code': forms.TextInput(attrs={'placeholder': 'Zip Code...'}),
                    'picture': forms.FileInput(),
                   }
 
 class RegistrationForm(forms.Form):
-    first_name = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'First Name...'}))
-    last_name = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Last Name...'}))
     username = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Email Address...'}))
     password1 = forms.CharField(max_length = 200, 
                                 label='Password', 
@@ -31,7 +27,14 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(max_length = 200,
                                 label='Confirm Password',
                                 widget=forms.PasswordInput(attrs={'class':'input-block-level', 'placeholder':'Confirm Password...'}))
-
+    first_name = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'First Name...'}))
+    last_name = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Last Name...'}))
+    phone_number = forms.CharField(max_length = 13, 
+                                label='Phone Number', 
+                                widget=forms.PasswordInput(attrs={'class':'input-block-level', 'placeholder':'Phone Number...'}))
+    zip_code = forms.CharField(max_length = 5, 
+                                label='Zip Code', 
+                                widget=forms.PasswordInput(attrs={'class':'input-block-level', 'placeholder':'Zip Code...'}))
     class Meta:
         model = User
         fields = ("first_name","last_name", "username", "password1", "password2")

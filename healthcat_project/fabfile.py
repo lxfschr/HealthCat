@@ -13,20 +13,15 @@ def prepare_deployment(branch_name):
         print 'commit returned non-zero', e
     #local('git checkout master && git merge ' + branch_name)
 
-def deploy():
-    with lcd('../../Team134/healthcat_project'):
-        print os.getcwd()
-        # With git...
-        local('git pull')
-
-        # With both
-        local('python manage.py makemigrations')
-        try:
-            migrate = local('python manage.py migrate')
-            if migrate.failed:
-                print 'Nothing to commit, exiting...'
-                sys.exit(0)
-        except SystemExit, e:
-            print 'migrate returned non-zero', e
-        local('python manage.py test healthcat')
-        local('python manage.py runserver')
+def runserver():
+    # With both
+    local('python manage.py makemigrations')
+    try:
+        migrate = local('python manage.py migrate')
+        if migrate.failed:
+            print 'Nothing to commit, exiting...'
+            sys.exit(0)
+    except SystemExit, e:
+        print 'migrate returned non-zero', e
+    local('python manage.py test healthcat')
+    local('python manage.py runserver')

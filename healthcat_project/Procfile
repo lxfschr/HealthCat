@@ -1,0 +1,1 @@
+web gunicorn healthcat_project.wsgi --log-file -
