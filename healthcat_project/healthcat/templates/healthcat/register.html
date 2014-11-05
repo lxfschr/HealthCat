@@ -1,0 +1,31 @@
+{% extends 'healthcat/index.html' %}
+  {% block title %} Register {% endblock %}
+  {% block styles %}
+    <link href="../../static/css/form.css" rel="stylesheet">
+  {% endblock %} 
+  {% block loggedInNavBar %}
+  {% endblock loggedInNavBar %} 
+
+  {% block body %}
+    <div class="container">
+      <form class="form-signin" role="form" method="POST" action="register">
+        <table>
+          {% for field in form.visible_fields %}
+            <tr>
+              <td>{{ field }}</td>
+              <td>
+                {% for error in field.errors %}
+                  <p class='text-danger'>{{ error }}</p>
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+        <br></br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="document.pressed=this.value" value="Register"> Register </button>
+        <a href="/">Cancel</a>
+        {% csrf_token %}
+      </form>
+
+    </div> <!-- /container -->
+  {% endblock body %}

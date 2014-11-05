@@ -61,6 +61,13 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'healthcat_project.urls'
 
+# Used by the authentication system for the healthcat application.
+# URL to use if the authentication system requires a user to log in.
+LOGIN_URL = '/healthcat/login'
+
+# Default URL to redirect to after a user logs in.
+LOGIN_REDIRECT_URL = '/healthcat/'
+
 WSGI_APPLICATION = 'healthcat_project.wsgi.application'
 
 
@@ -79,7 +86,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 
@@ -92,3 +99,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+
+# Configures Django to merely print emails rather than sending them.
+# Comment out this line to enable real email-sending.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# To enable real email-sending, you should uncomment and 
+# configure the settings below.
+# EMAIL_HOST = 'Your-SMTP-host'               # perhaps 'smtp.andrew.cmu.edu'
+# EMAIL_HOST_USER = 'Your-SMTP-username'      # perhaps your Andrew ID
+# EMAIL_HOST_PASSWORD = 'Your-SMTP-password'
+# EMAIL_USE_TLS = True
