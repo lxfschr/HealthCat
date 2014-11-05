@@ -1,31 +1,50 @@
 {% extends 'healthcat/index.html' %}
-  {% block title %} Register {% endblock %}
-  {% block styles %}
+
+{% block title %} 
+    Register 
+{% endblock %}
+
+{% block styles %}
     <link href="../../static/css/form.css" rel="stylesheet">
-  {% endblock %} 
-  {% block logged_in_navbar %}
-  {% endblock logged_in_navbar %} 
+{% endblock %} 
 
-  {% block body %}
+{% block logged_in_navbar %} {% endblock logged_in_navbar %} 
+
+{% block body %}
     <div class="container">
-      <form class="form-signin" role="form" method="POST" action="register">
-        <table>
-          {% for field in form.visible_fields %}
-            <tr>
-              <td>{{ field }}</td>
-              <td>
-                {% for error in field.errors %}
-                  <p class='text-danger'>{{ error }}</p>
-                {% endfor %}
-              </td>
-            </tr>
-          {% endfor %}
-        </table>
-        <br></br>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="document.pressed=this.value" value="Register"> Register </button>
-        <a href="/">Cancel</a>
-        {% csrf_token %}
-      </form>
+        
+    {% if form.is_multipart %}
+        <form class="form-signin" role="form" method="POST" enctype="multipart/form-data" action="{% url 'register' %}">
+    {% else %}
+        <form class="form-signin" role="form" method="POST" action="{% url 'register' %}">
+    {% endif %}
+            <div class="white-container">
 
+                {% for field in form.visible_fields %}
+                    <label for='{{ field.id_for_label }}' class={{ field.css_classes }}> {{ field.label }} </label>
+                    {% if field.field.icon_name and field.field.tooltip %}
+                        <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
+                    {% elif field.field.icon_name %}
+                        <i class="{{ field.field.icon_name }} color-aaa"></i>
+                    {% endif %}
+                    {% for error in field.errors %}
+                            <span class='text-danger'> {{ error }} </span>
+                    {% endfor %}
+                    {{ field }}
+                {% endfor %}
+
+                <button class="btn btn-lg btn-primary btn-block submit-button" type="submit"> Register </button>
+                
+                <div class="form-instruction">
+                    Already have an account? <a href="{% url 'login' %}">Log In</a>
+                </div>
+
+                
+                {% csrf_token %}
+
+            </div> <!-- white container -->
+
+        </form>
+        
     </div> <!-- /container -->
-  {% endblock body %}
+{% endblock body %}

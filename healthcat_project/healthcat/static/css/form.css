@@ -1,10 +1,3 @@
-
-body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
-}
-
 .form-signin {
   max-width: 330px;
   padding: 0px;
@@ -12,31 +5,78 @@ body {
 }
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .form-signin .checkbox {
   font-weight: normal;
 }
 .form-signin .form-control {
   position: relative;
-  height: auto;
+  height: 36px;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   padding: 12px;
-  font-size: 16px;
+  font-size: 12px;
+  margin-bottom: 12px;
 }
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
-  margin-bottom: 6px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 6px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+
+.form-instruction {
+  margin-top: 12px;
 }
 
+.white-container {
+    background-color: white;
+    padding: 12pt;
+    margin: 12pt 0;
+    height: auto;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.optional-tag {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.form-link {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.submit-button {
+  margin-top: 12px;
+}
+
+.has-feedback label~.form-control-feedback {
+  top: 32px;
+}
+
+.color-aaa {
+  color: #aaa;
+}
+
+.color-bbb {
+  color: #bbb;
+}
+
+.required:after {
+  content: '*';
+}
+
+.email-address:before {
+   content: "Email address: ";
+}
+
+label {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.field-icon {
+  margin-top: 4px;
+}

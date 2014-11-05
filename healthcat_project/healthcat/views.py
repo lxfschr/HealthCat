@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 
 # Decorator to use built-in authentication system
@@ -25,6 +25,7 @@ from django.http import HttpResponse, Http404
 
 import json
 
+
 # Create your views here.
 @login_required
 def home(request):
@@ -37,7 +38,6 @@ def home(request):
 def register(request):
     context = {}
     errors = []
-    context['errors'] = errors
     
     # Just display the registration form if this is a GET request
     if request.method == 'GET':
@@ -45,7 +45,9 @@ def register(request):
         return render(request, 'healthcat/register.html', context)
 
     form = RegistrationForm(request.POST)
+    
     context['form'] = form
+    
     if not form.is_valid():
         return render (request,'healthcat/register.html',context)
 
@@ -55,13 +57,11 @@ def register(request):
                                         last_name = form.cleaned_data['last_name'],
                                         email=form.cleaned_data['username'])
 
-    if errors:
-        return render(request, 'healthcat/register.html', context)
     new_user.save()
     
-    user_profile = Person(user = new_user, phone_number = form.cleaned_data['phone_number'], zip_code = form.cleaned_data['zip_code'])
+    user_owner = Owner(user = new_user, zip_code = form.cleaned_data['zip_code'])
 
-    user_profile.save()
+    user_owner.save()
 
     # Generate a one-time use token and an email message body
     token = default_token_generator.make_token(new_user)
@@ -72,7 +72,7 @@ verify your email address and complete the registration of your account:
 
   http://%s%s
 """ % (request.get_host(), 
-       reverse('confirm', args=(new_user.username, token)))
+       reverse('confirm_registration', args=(new_user.username, token)))
 
     send_mail(subject="Verify your email address",
               message= email_body,
@@ -80,7 +80,7 @@ verify your email address and complete the registration of your account:
               recipient_list=[new_user.email])
 
     context['email'] = form.cleaned_data['username']
-    return render(request, 'healthcat/needs_confirmation.html', context)
+    return render(request, 'healthcat/confirm_registration.html', context)
 
 def reset_password(request):
     context = {}

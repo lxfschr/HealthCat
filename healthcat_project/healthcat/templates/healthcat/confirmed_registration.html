@@ -1,0 +1,14 @@
+{% extends 'healthcat/index.html' %}
+  {% block title %} Confirmed Registration {% endblock %}
+
+  {% block styles %} {% endblock %} 
+
+
+  {% block loggedInNavBar %} {% endblock loggedInNavBar %}
+
+  {% block body %}
+    <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+      Thank you for confirming your email address.
+      Please <a href="{% url 'login' %}">login</a> to access your account.
+    </div> <!-- /container -->
+  {% endblock body %}

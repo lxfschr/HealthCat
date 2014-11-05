@@ -25,3 +25,7 @@ def runserver():
         print 'migrate returned non-zero', e
     local('python manage.py test healthcat')
     local('python manage.py runserver')
+
+def flush():
+    # With both
+    local('python manage.py flush')
