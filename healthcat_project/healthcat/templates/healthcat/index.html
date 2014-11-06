@@ -23,8 +23,6 @@
 </head>
 
 <body>
-	<div class="container">
-
 	  <!-- Static navbar -->
     <div class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
@@ -40,17 +38,17 @@
         {% block logged_in_navbar %}
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li {% block statisticsActive %}{% endblock %} > <a href="/healthcat/statistics"> Statistics </a></li>
             <li {% block profileActive %}{% endblock %} > <a href="/healthcat/"> Profile </a></li>
+            <li {% block statisticsActive %}{% endblock %} > <a href="/healthcat/statistics"> Statistics </a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{user.username}} <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/healthcat/statistics"> Statistics </a></li>
-                <li><a href="/healthcat/"> My Profile </a></li>
+                <li><a href="{% url 'home' %}"> Profile </a></li>
+                <li><a href="{% url 'statistics' %}"> Statistics </a></li>
                 <li class="divider"></li>
-                <li><a href="/healthcat/edit_profile"> Edit Profile </a></li>
-                <li><a href="/healthcat/change_password"> Change Password </a></li>
-                <li><a href="/healthcat/logout"> Sign Out </a></li>
+                <li><a href="{% url 'edit_profile' %}"> Edit Profile </a></li>
+                <li><a href="{% url 'change_password' %}"> Change Password </a></li>
+                <li><a href="{% url 'logout' %}"> Sign Out </a></li>
               </ul>
             </li>
           </ul>
@@ -65,8 +63,6 @@
   
   {% endblock %}
   <!-- Body -->
-
-	</div>
 
   <!-- Javascript -->
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

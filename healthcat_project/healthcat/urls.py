@@ -17,4 +17,7 @@ urlpatterns = patterns('',
     url(r'^change_password$', 'healthcat.views.change_password', name='change_password'),
     url(r'^confirm_registration/(?P<username>[a-zA-Z0-9_@\+\-.]+)/(?P<token>[a-z0-9\-]+)$', 'healthcat.views.confirm_registration', name='confirm_registration'),
     url(r'^confirm_password_reset/(?P<username>[a-zA-Z0-9_@\+\-.]+)/(?P<token>[a-z0-9\-]+)$', 'healthcat.views.confirm_password_reset', name='confirm_password_reset'),
+    url(r'^get_owner_photo/(?P<user_id>\d+)$', 'healthcat.views.get_owner_photo', name='get_owner_photo'),
+    url(r'^statistics', 'healthcat.views.statistics', name='statistics'),
+    url(r'^edit-profile$', 'healthcat.views.edit_profile', name='edit_profile'),
 )

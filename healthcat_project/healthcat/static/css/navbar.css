@@ -1,21 +1,36 @@
 body {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 24px;
   background-color: #eee;
 }
 
-.navbar {
-  margin-bottom: 20px;
+.page-container {
+    background-color: white;
+    padding: 12pt;
+    height: auto;
 }
+
+.navbar {
+  margin-bottom: 0px;
+}
+
+.navbar {
+  position: relative;
+  min-height: 50px;
+  margin-bottom: 0px;
+  border: 0px solid transparent;
+}
+
 .navbar-default {
   background-color: #eee;
   border-color: #eee;
 }
+
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
   color: #B01030;
   background-color: transparent;
 }
+
 .navbar-brand {
   float: left;
   height: 50px;
@@ -26,11 +41,18 @@ body {
   font-family: Tahoma, Verdana, sans-serif;
   font-weight: bold;
 }
+
 .navbar-brand:hover,
 .navbar-brand:focus {
   text-decoration: none;
 }
+
 .navbar-default .navbar-brand {
   color: Crimson;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+  color: #555;
+  background-color: #fff;
 }
 

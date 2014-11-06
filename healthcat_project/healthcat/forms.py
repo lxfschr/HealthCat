@@ -47,13 +47,13 @@ class RegistrationForm(forms.Form):
                                     attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 
                                            'placeholder':'eg: alex@healthcat.com'})
                                 )
-    password1 = forms.CharField(max_length = 200, 
+    password1 = forms.CharField(max_length = 16, 
                                 label='Password', 
                                 widget=forms.PasswordInput(
                                     attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 
                                            'placeholder':'eg: 1234'})
                                 )
-    password2 = forms.CharField(max_length = 200,
+    password2 = forms.CharField(max_length = 16,
                                 label='Confirm Password',
                                 widget=forms.PasswordInput(
                                     attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 
@@ -78,6 +78,9 @@ class RegistrationForm(forms.Form):
                                     attrs={'class':'form-control' + ' ' + error_css_class, 
                                            'placeholder':'eg: 15213'})
                                 )
+    photo = forms.FileField(required=False,
+                                  label='Photo',
+                                 )
     class Meta:
         model = User
         fields = ("first_name","last_name", "username", "password1", "password2")
@@ -110,3 +113,24 @@ class ResetPasswordForm(forms.Form):
             raise forms.ValidationError("Sorry, we do not have an accout with that email.")
         return email
 
+class ChangePasswordForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
+    password1 = forms.CharField(max_length = 16, 
+                                label='New Password', 
+                                widget=forms.PasswordInput(
+                                    attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 
+                                           'placeholder':'eg: 1234'}))
+    password2 = forms.CharField(max_length = 16,
+                                label='Confirm New Password',
+                                widget=forms.PasswordInput(
+                                    attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 
+                                           'placeholder':'eg: 1234'}))
+    def clean(self):
+        cleaned_data = super(ChangePasswordForm,self).clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords did not match.")
+        return cleaned_data

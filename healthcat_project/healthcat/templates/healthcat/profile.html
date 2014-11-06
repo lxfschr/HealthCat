@@ -1,31 +1,33 @@
 {% extends 'healthcat/index.html' %}
 
 {% block title %} 
-  owner 
+    Profile 
 {% endblock %}
 
-{% block ownerActive %} 
-    class="active" 
+{% block profileActive %} 
+        class="active" 
 {% endblock %}
 
 <!--Body -->
 {% block body %}
-  <div id="sidebar" class="col-sm-2 col-md-2">
+    <div class="page-container">
+        <div id="sidebar" class="col-sm-2 col-md-2">
 
-    {% if owner.photo %}
-  	 <img id="owner_photo" src={% url 'get_owner_photo' owner.user.id %} alt=" {{ owner.user.first_name }}'s photo" title="{{ owner.user.first_name }}'s photo" />
-    {% else %}
-      <img id="owner_photo" src="/static/images/default_owner_photo.jpg" alt="default owner photo" title="default owner photo" />
-    {% endif %}
+            {% if owner.photo %}
+                <img id="owner_photo" src={% url 'get_owner_photo' owner.user.id %} alt=" {{ owner.user.first_name }}'s photo" title="{{ owner.user.first_name }}'s photo" />
+            {% else %}
+                <img id="owner_photo" src="/static/images/default_owner_photo.jpg" alt="default owner photo" title="default owner photo" />
+            {% endif %}
 
-  	<div id="email"> {{ owner.user.email }} </div>
-  	<div id="name"> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
+            <div id="email"> {{ owner.user.email }} </div>
+            <div id="name"> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
 
-  </div> <!-- sidebar -->
+        </div> <!-- sidebar -->
 
-  <div class="row">
-    <div class="col-sm-6 col-sm-offset-1 col-md-6 col-md-offset-1">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-1 col-md-6 col-md-offset-1">
 
+            </div>
+        </div>
     </div>
-  </div>
 {% endblock body %}

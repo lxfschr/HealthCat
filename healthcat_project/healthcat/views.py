@@ -33,6 +33,8 @@ def home(request):
     context = {}
     user = request.user
     context['user'] = user
+    owner = Owner.objects.get(user = user)
+    context['owner'] = owner
     return render(request, 'healthcat/profile.html', context)
 
 def register(request):
@@ -44,7 +46,7 @@ def register(request):
         context['form'] = RegistrationForm()
         return render(request, 'healthcat/register.html', context)
 
-    form = RegistrationForm(request.POST)
+    form = RegistrationForm(request.POST, request.FILES)
     
     context['form'] = form
     
@@ -59,7 +61,7 @@ def register(request):
 
     new_user.save()
     
-    user_owner = Owner(user = new_user, zip_code = form.cleaned_data['zip_code'])
+    user_owner = Owner(user = new_user, zip_code = form.cleaned_data['zip_code'], photo=form.cleaned_data['photo'])
 
     user_owner.save()
 
@@ -132,11 +134,7 @@ def change_password(request):
     user.set_password(form.cleaned_data['password1'])
     user.save()
 
-    return render(request, 'healthcat/changed_password.html', context)
-
-
-
-
+    return render(request, 'healthcat/login', context)
 
 @transaction.commit_on_success
 def confirm_registration(request, username, token):
@@ -163,3 +161,21 @@ def confirm_password_reset(request, username, token):
     user.is_active = True
     user.save()
     return render(request, 'healthcat/confirmed_password_reset.html', {})
+
+@login_required
+def get_owner_photo(request, user_id):
+    user = get_object_or_404(User, id = user_id)
+    owner = get_object_or_404(Owner, user=user)
+    if not owner.photo:
+        return Http404
+    content_type = guess_type(owner.photo.name)
+    return HttpResponse(owner.photo, content_type=content_type)
+
+@login_required
+def statistics(request):
+    return redirect('/')
+
+
+@login_required
+def edit_profile(request):
+    return redirect('/')
