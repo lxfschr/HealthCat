@@ -8,5 +8,8 @@
 }
 
 #owner_name {
-	font-size: 12pt;
+	font-size: 18px;
+	font-family: 'Lato', sans-serif;
+	margin-bottom: 12px;
+	font-weight: 400;
 }
