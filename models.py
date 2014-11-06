@@ -53,6 +53,11 @@ class PetStats(models.Model):
     # other features concerning cats's health/performance
     # might be added here. 
 
+
+class Breed(models.Model):
+    name= models.CharField(max_length=50)
+
+    
 class ConsumptionRecord(models.Model):
     pet=models.ForeignKey('Pet')
     timeStart = models.TimeField()
@@ -67,7 +72,7 @@ class FoodSchedule(models.Model):
     nameOfSchedule = models.CharField(max_length=20)
     maxAmountPerDay = models.IntegerField()
     def getScheduleQuerySet(self):
-        return TimeWindow.objects.filter(relatedSchedule=self)
+        return TimeAmountWindow.objects.filter(relatedSchedule=self)
 
 
 class TimeAmountWindow(models.Model):
