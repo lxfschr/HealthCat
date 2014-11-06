@@ -11,7 +11,7 @@ Looks good overall.
 
 You seem to have duplicate attributes called activity in your PetStats model, even though one of them is supposed to represent gender.
 
-Is there a reason breed is represented as a foreign key in PetStats? Will there eventually be another model Breed?
+Is there a reason breed is represented as a foreign key in PetStats? Will there eventually be another model Breed?. Yes
 
 ### Wireframes or Mock-ups (10/10)
 

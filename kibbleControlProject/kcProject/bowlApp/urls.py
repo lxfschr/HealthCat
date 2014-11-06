@@ -6,7 +6,8 @@ urlpatterns = patterns('',
     # url(r'^$', 'kcProject.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', include('bowlApp.urls')),
+    url(r'^openornot/(?P<catID>\d+)/(?P<timeNow>\d\d\d\d)/(?P<YYYYMMDD>\d\d\d\d\d\d\d\d)$','bowlApp.views.openornot'),
+    url(r'^rfidtopetid/(?P<rfid>\d+)$','bowlApp.views.rfidtopetid'),
+    url(r'^', include('bowlApp.urls')),
 
 )

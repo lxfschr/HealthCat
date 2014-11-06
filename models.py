@@ -72,7 +72,7 @@ class FoodSchedule(models.Model):
     nameOfSchedule = models.CharField(max_length=20)
     maxAmountPerDay = models.IntegerField()
     def getScheduleQuerySet(self):
-        return TimeWindow.objects.filter(relatedSchedule=self)
+        return TimeAmountWindow.objects.filter(relatedSchedule=self)
 
 
 class TimeAmountWindow(models.Model):
