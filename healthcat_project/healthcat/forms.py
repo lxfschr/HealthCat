@@ -78,7 +78,7 @@ class RegistrationForm(forms.Form):
                                     attrs={'class':'form-control' + ' ' + error_css_class, 
                                            'placeholder':'eg: 15213'})
                                 )
-    photo = forms.FileField(required=False,
+    photo = forms.ImageField(required=False,
                                   label='Photo',
                                  )
     class Meta:
@@ -88,7 +88,7 @@ class RegistrationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(forms.Form, self).__init__(*args, **kwargs)
         self.fields['zip_code'].icon_name = 'glyphicon glyphicon-question-sign'
-        self.fields['zip_code'].tooltip = 'To compare your pets to pets in your area.'
+        self.fields['zip_code'].tooltip = 'To compare your pets to other pets in your area.'
 
     def clean(self):
         cleaned_data = super(RegistrationForm,self).clean()

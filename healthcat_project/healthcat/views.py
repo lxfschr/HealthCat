@@ -173,7 +173,12 @@ def get_owner_photo(request, user_id):
 
 @login_required
 def statistics(request):
-    return redirect('/')
+    context = {}
+    user = request.user
+    context['user'] = user
+    owner = Owner.objects.get(user = user)
+    context['owner'] = owner
+    return render(request, 'healthcat/statistics.html', context)
 
 
 @login_required

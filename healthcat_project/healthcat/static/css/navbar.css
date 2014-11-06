@@ -31,17 +31,6 @@ body {
   background-color: transparent;
 }
 
-.navbar-brand {
-  float: left;
-  height: 50px;
-  padding: 15px 15px;
-  font-size: 54px;
-  line-height: 20px;
-  color: Crimson;
-  font-family: Tahoma, Verdana, sans-serif;
-  font-weight: bold;
-}
-
 .navbar-brand:hover,
 .navbar-brand:focus {
   text-decoration: none;
@@ -56,3 +45,34 @@ body {
   background-color: #fff;
 }
 
+.navbar-icon {
+  padding-right: 6px;
+}
+
+.nav>li>a {
+  padding-right: 15px;
+}
+
+.navbar-nav>li>a {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-right: 24px;
+  padding-left: 18px;
+  margin-top: 18px;
+  border-radius: 12px 12px 0 0;
+}
+
+.navbar-brand {
+  float: left;
+  height: 48px;
+  padding: 0px 24px;
+  padding-top: 0px;
+  padding-right: 24px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  font-size: 54px;
+  line-height: 20px;
+  color: Crimson;
+  font-family: Tahoma, Verdana, sans-serif;
+  font-weight: bold;
+}
