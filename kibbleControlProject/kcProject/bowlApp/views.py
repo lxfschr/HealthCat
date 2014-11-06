@@ -25,15 +25,18 @@ from django.core import serializers
 
 from django.contrib.auth.tokens import default_token_generator
 
+
+# to make http requests. 
+import urllib2,urllib,httplib
+
 ###########################################################################
 
 
-def openornot(catID,timenow,YYYYMMDD):
+def openornot(rfidID,timenow,YYYYMMDD):
 
 	responseDict= {}
 
 	if openornotLogic(catID,timenow,YYYYMMDD):
-
 		responseDict['result'] = 'true'
 
 		return HttpResponse(json.dumps(responseDict),
@@ -45,12 +48,27 @@ def openornot(catID,timenow,YYYYMMDD):
 			content_type='application/json')		
 
 
-
+# this holds the logic
 def openornotLogic(catID,timenow,YYYYMMDD):
 	# having a simple logic now. 
 	# if its day time open else close for any cat. 
 	return timenow >800 and timenow< 2200
 
 
-def rfidToPetid(rfid):
+# making logs of when the cat ate.
+def catJustAte(amount,timeStart,timeEnd,YYYYMMDD):
+	urltopost="http://healthcat.herokuapp.com/record"
+	data= urllib2.urlencode({'amount':amount, 'tStart':timeStart, 
+							'tEnd':timeEnd, 'YYYYMMDD':YYYYMMDD})
+	headers = {"content_type": "application/x-www-form-urlencoded",
+				"Accept":"text/plain"}
+
+	h.request('POST', urltopost ,data,headers)
+
+
+	pass
+
+
+
+
 
