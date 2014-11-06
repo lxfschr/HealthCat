@@ -25,35 +25,32 @@
 
 <body>
         <!-- Static navbar -->
+        {% block user_dropdown %}
+            <div class="row">
+                <div class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle color-777 user-dropdown" data-toggle="dropdown"> {{user.username}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{% url 'home' %}"> Profile </a></li>
+                        <li><a href="{% url 'statistics' %}"> Statistics </a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'edit_profile' %}"> Edit Profile </a></li>
+                        <li><a href="{% url 'change_password' %}"> Change Password </a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout' %}"> Sign Out </a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endblock user_dropdown %}
         <div class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a class="navbar-brand" href="/healthcat/"> HealthCat </a>
             </div>
             {% block logged_in_navbar %}
-            <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li {% block profileActive %}{% endblock %} > <a href="{% url 'home' %}"> <i class="glyphicon glyphicon-user navbar-icon"></i> Profile </a></li>
-                    <li {% block statisticsActive %}{% endblock %} > <a href="/healthcat/statistics"> <i class="glyphicon glyphicon glyphicon-stats navbar-icon"></i> Statistics </a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{user.username}} <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{% url 'home' %}"> Profile </a></li>
-                            <li><a href="{% url 'statistics' %}"> Statistics </a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url 'edit_profile' %}"> Edit Profile </a></li>
-                            <li><a href="{% url 'change_password' %}"> Change Password </a></li>
-                            <li><a href="{% url 'logout' %}"> Sign Out </a></li>
-                        </ul>
-                    </li>
+                    <li {% block statisticsActive %}{% endblock %} > <a href="{% url 'statistics' %}"> <i class="glyphicon glyphicon glyphicon-stats navbar-icon"></i> Statistics </a></li>
+                    
                 </ul>
-                
-            </div><!--/.nav-collapse -->
             {% endblock logged_in_navbar %}
         </div><!-- navbar -->
 
