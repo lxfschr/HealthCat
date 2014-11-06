@@ -29,3 +29,9 @@ def runserver():
 def flush():
     # With both
     local('python manage.py flush')
+
+def git(commit_message='No commit message supplied.'):
+    local('git add .')
+    local('git commit -m ' + commit_message)
+    local('git pull')
+    local('git push')

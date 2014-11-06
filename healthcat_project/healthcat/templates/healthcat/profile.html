@@ -2,11 +2,15 @@
 
 {% block title %} 
     Profile 
-{% endblock %}
+{% endblock title %}
+
+{% block styles %} 
+    <link href="/static/css/tab.css" rel="stylesheet">
+{% endblock styles %}
 
 {% block profileActive %} 
         class="active" 
-{% endblock %}
+{% endblock profileActive %}
 
 <!--Body -->
 {% block body %}
@@ -19,7 +23,7 @@
                 <img id="owner_photo" src="/static/images/default_owner_photo.jpg" alt="default owner photo" title="default owner photo" />
             {% endif %}
 
-            <div id="name"> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
+            <div id="owner_name"> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
 
         </div> <!-- sidebar -->
 

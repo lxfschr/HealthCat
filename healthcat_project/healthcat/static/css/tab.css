@@ -1,0 +1,12 @@
+#sidebar {
+  padding-left: 0px;
+}
+
+#owner_photo {
+	max-width: 100%;
+	margin-bottom: 12px;
+}
+
+#owner_name {
+	font-size: 12pt;
+}

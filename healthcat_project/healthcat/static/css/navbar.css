@@ -1,11 +1,16 @@
 body {
-  padding: 24px;
+  padding: 6px 24px 24px 24px;
   background-color: #eee;
+}
+
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
 }
 
 .page-container {
     background-color: white;
-    padding: 12pt;
+    padding: 24px;
     height: auto;
 }
 
@@ -74,6 +79,9 @@ body {
   line-height: 48px;
   color: Crimson;
   font-family: Tahoma, Verdana, sans-serif;
+  font-family: 'Dosis', sans-serif;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-family: 'Comfortaa', cursive;
   font-weight: bold;
 }
 
@@ -99,7 +107,7 @@ body {
 }
 
 .user-dropdown {
-  padding-right: 18px;
+  padding-right: 0px;
 }
 
 .user-dropdown:focus {
@@ -121,7 +129,7 @@ body {
   float: right;
   min-width: 128px;
   padding: 6px 0px 6px 0px;
-  margin: 0px 14px 0px 0px;
+  margin: 0px;
   font-size: 14px;
   text-align: left;
   list-style: none;
