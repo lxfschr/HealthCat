@@ -23,14 +23,21 @@
                 <img id="owner_photo" src="/static/images/default_owner_photo.jpg" alt="default owner photo" title="default owner photo" />
             {% endif %}
 
-            <div id="owner_name"> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
+            <div id='owner_name' class='owner_info'> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
+            <div class='owner_info'> {{ owner.zip_code }} </div>
 
         </div> <!-- sidebar -->
 
         <div class="row">
-            <div class="col-sm-6 col-sm-offset-1 col-md-6 col-md-offset-1">
-
+            <div class="col-sm-9 col-sm-offset-1 col-md-9 col-md-offset-1">
+                <div id='add_bowl_text'> 
+                    <h2 onClick="add_add_bowl_form();" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> <h2> 
+                </div>
             </div>
         </div>
     </div>
 {% endblock body %}
+
+{% block javascript %}
+    <script src="/static/js/profile.js"></script>
+{% endblock javascript %}   

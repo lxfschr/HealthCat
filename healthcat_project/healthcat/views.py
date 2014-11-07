@@ -184,3 +184,15 @@ def statistics(request):
 @login_required
 def edit_profile(request):
     return redirect('/')
+
+@login_required
+def add_bowl_form(request):
+    context={}
+    form = AddBowlForm()
+    context['form'] = form;
+    return render(request, 'healthcat/add_bowl_form.html', context)
+
+@login_required
+def add_bowl(request):
+    context={}
+    return render(request, 'healthcat/profile.html', context)

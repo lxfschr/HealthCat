@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'healthcat.views.home', name='home'),
+    url(r'^$', 'healthcat.views.home', name='profile'),
     # Route for built-in authentication with our own custom login page
     url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'healthcat/login.html'}, name='login'),
     # Route to logout a user and send them back to the login page
@@ -20,4 +21,6 @@ urlpatterns = patterns('',
     url(r'^get_owner_photo/(?P<user_id>\d+)$', 'healthcat.views.get_owner_photo', name='get_owner_photo'),
     url(r'^statistics', 'healthcat.views.statistics', name='statistics'),
     url(r'^edit-profile$', 'healthcat.views.edit_profile', name='edit_profile'),
+    url(r'^add-bowl-form$', 'healthcat.views.add_bowl_form', name='add_bowl_form'),
+    url(r'^add-bowl$', 'healthcat.views.add_bowl', name='add_bowl'),
 )
