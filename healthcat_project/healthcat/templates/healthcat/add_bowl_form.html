@@ -1,0 +1,28 @@
+{% if form.is_multipart %}
+    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_bowl' %}">
+{% else %}
+    <form class="form-horizontal" role="form" method="POST" action="{% url 'add_bowl' %}">
+{% endif %}
+        {% for field in form.visible_fields %}
+            <div class="block">
+                <label for='{{ field.id_for_label }}' class={{ field.css_classes }}> {{ field.label }} </label>
+                {% if field.field.icon_name and field.field.tooltip %}
+                    <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
+                {% elif field.field.icon_name %}
+                    <i class="{{ field.field.icon_name }} color-aaa"></i>
+                {% endif %}
+                {% for error in field.errors %}
+                        <span class='text-danger'> {{ error }} </span>
+                {% endfor %}
+            </div>
+            {{ field }}
+        {% endfor %}
+
+        <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Connect </button></span>
+
+        <a href="{% url 'profile' %}"> Cancel </a>
+
+                
+        {% csrf_token %}
+
+    </form>

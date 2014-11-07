@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth.models import User
 from models import *
 
+error_css_class = 'error'
+required_css_class = 'required'
+
 class IconName(object):
     def get_icon_name(self):
         return self._icon_name
@@ -22,6 +25,18 @@ class Tooltip(object):
 class CharFieldWithIconAndTooltip(forms.CharField, IconName, Tooltip):
     pass
 
+class AddBowlForm(forms.ModelForm):
+    
+    class Meta:
+        model = Bowl
+        exclude = ('name', 'owner')
+        widgets = {
+                   'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
+                  }
+        labels = {
+            "ip_address": "Bowl IP Address",
+        }
+
 class ProfileForm(forms.ModelForm):
     username = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Email Address...'}))
     password2 = forms.CharField(max_length = 200,
@@ -39,13 +54,12 @@ class ProfileForm(forms.ModelForm):
                   }
 
 class RegistrationForm(forms.Form):
-    error_css_class = 'error'
-    required_css_class = 'required'
     username = forms.EmailField(max_length = 40, 
                                 label='Email', 
                                 widget=forms.TextInput(
                                     attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 
-                                           'placeholder':'eg: alex@healthcat.com'})
+                                           'placeholder':'eg: alex@healthcat.com',
+                                           'autofocus': 'autofocus'})
                                 )
     password1 = forms.CharField(max_length = 16, 
                                 label='Password', 
@@ -134,3 +148,4 @@ class ChangePasswordForm(forms.Form):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords did not match.")
         return cleaned_data
+
