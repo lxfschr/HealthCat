@@ -15,7 +15,7 @@ class Owner(models.Model):
     return self.user.username
 
 class Bowl(models.Model):
-    ip_address = models.CharField(max_length=16, unique=True)
+    ip_address = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
 

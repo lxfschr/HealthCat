@@ -36,6 +36,10 @@ class AddBowlForm(forms.ModelForm):
         labels = {
             "ip_address": "Bowl IP Address",
         }
+        
+    def clean(self):
+        cleaned_data = super(AddBowlForm,self).clean()
+        return cleaned_data
 
 class ProfileForm(forms.ModelForm):
     username = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Email Address...'}))

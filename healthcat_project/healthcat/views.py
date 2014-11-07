@@ -195,4 +195,9 @@ def add_bowl_form(request):
 @login_required
 def add_bowl(request):
     context={}
+    form = AddBowlForm(request.POST)
+    if not form.is_valid():
+        return render(request, 'healthcat/profile.html', context)
+    ip_address = form.cleaned_data['ip_address']
+    
     return render(request, 'healthcat/profile.html', context)
