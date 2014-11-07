@@ -23,8 +23,8 @@ from mimetypes import guess_type
 # Needed to manually create HttpResponses or raise an Http404 exception
 from django.http import HttpResponse, Http404
 
-import json
-
+# making http requests and json
+import urllib2,urllib,httplib,json
 
 # Create your views here.
 @login_required
