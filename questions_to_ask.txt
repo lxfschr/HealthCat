@@ -9,3 +9,5 @@ keep every unit-based value with a unit field and compute results based on the p
 
 How to do it. ? is there any other way ?
 
+Can we use django-schedule package for makeing a cat feed schedule. ?
+Do we need that sophistication . is it a better way ?
