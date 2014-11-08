@@ -31,10 +31,7 @@ import urllib2,urllib,httplib,json
 def home(request):
     # Sets up list of just the logged-in user's (request.user's) items
     context = {}
-    user = request.user
-    context['user'] = user
-    owner = Owner.objects.get(user = user)
-    context['owner'] = owner
+    context = _add_profile_context(request, context)
     return render(request, 'healthcat/profile.html', context)
 
 def register(request):
@@ -188,24 +185,52 @@ def edit_profile(request):
 @login_required
 def add_bowl_form(request):
     context={}
-    form = AddBowlForm()
-    context['form'] = form;
+    add_bowl_form = AddBowlForm()
+    context['add_bowl_form'] = add_bowl_form;
     return render(request, 'healthcat/add_bowl_form.html', context)
 
 @login_required
 def add_bowl(request):
     context={}
-    form = AddBowlForm(request.POST)
+    context = _add_profile_context(request, context)
+
+    if request.method=='GET':
+        context['add_bowl_form'] = AddBowlForm()
+        return render(request,'healthcat/profile.html',context)
+
+    owner = Owner.objects.get(user=request.user)
+    new_bowl = Bowl(owner=owner)
+
+    add_bowl_form = AddBowlForm(request.POST, instance=new_bowl)
     
-    if not form.is_valid():
-        context['form'] = form
+    if not add_bowl_form.is_valid():
+        context['add_bowl_form'] = add_bowl_form
         return render(request, 'healthcat/profile.html', context)
 
 
-    ip_address = form.cleaned_data['ip_address']
+    ip_address = add_bowl_form.cleaned_data['ip_address']
 
     print "ip address: " + ip_address
     
-    r = urllib2.urlopen(ip_address+'connect').read()
+    #r = urllib2.urlopen(ip_address+'connect').read()
+
+    add_bowl_form.save()
+
+    new_bowl = Bowl.objects.get(ip_address=ip_address)
+    if new_bowl:
+        print "bowl saved"
+    else:
+        print 'no bowl'
+
+    context = _add_profile_context(request, context)
 
     return render(request, 'healthcat/profile.html', context)
+
+def _add_profile_context(request, context):
+    user = request.user
+    context['user'] = user
+    owner = Owner.objects.get(user = user)
+    context['owner'] = owner
+
+    return context
+

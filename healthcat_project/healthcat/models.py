@@ -19,6 +19,10 @@ class Bowl(models.Model):
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
 
+    def __unicode__(self):
+        return self.ip_address
+
+
 """
 class Pet(models.Model):
     # one owner per pet
