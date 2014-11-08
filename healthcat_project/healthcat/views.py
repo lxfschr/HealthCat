@@ -198,16 +198,12 @@ def add_bowl(request):
     form = AddBowlForm(request.POST)
     if not form.is_valid():
         return render(request, 'healthcat/profile.html', context)
+
+
     ip_address = form.cleaned_data['ip_address']
 
 
-    conn= httplib.HTTPConnection(ip_address)
+    print ip_address
+    r= urllib2.urlopen(ip_address+'connect').read()
 
-    headers = {"content_type": "application/x-www-form-urlencoded",
-                "Accept":"text/plain"}
-
-    conn.request('GET','/connect',data,headers)
-    response= conn.getresponse()
-    print response
-    
     return render(request, 'healthcat/profile.html', context)
