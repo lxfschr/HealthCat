@@ -31,7 +31,7 @@ def flush():
     local("python manage.py flush")
 
 def git(commit_message="No commit message supplied."):
-    #local("git config --global credential.helper \'cache --timeout=3600\'")
+    local('git config --global credential.helper "cache --timeout=3600"')
     local("git add .")
     local('git commit -m "' + commit_message + '"')
     local("git pull")
