@@ -30,11 +30,17 @@
 
         <div class="row">
             <div class="col-sm-9 col-sm-offset-1 col-md-9 col-md-offset-1">
-                <div id='add_bowl_text'> 
-                    <h2 onClick="add_add_bowl_form();" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> <h2> 
-                </div>
-            </div>
-        </div>
+                {% if form %}
+                    {% include "healthcat/add_bowl_form.html" with pageToRender="/healthcat/profile" %}
+                {% else %}
+                    <div id='add_bowl_text'> 
+                        <h2 onClick="add_add_bowl_form();" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> </h2> 
+                    </div>
+                {% endif %}
+                <hr>
+            </div> <!-- col -->
+            
+        </div> <!-- row -->
     </div>
 {% endblock body %}
 

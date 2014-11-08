@@ -30,3 +30,24 @@
 	padding-right: 0px;
 	padding-left: 0px;
 }
+
+hr {
+    display: block;
+    height: 3px;
+    border: 0;
+    border-top: 3px solid #000;
+    margin: 6px 0px 0px 0pc;
+    padding: 0;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+	margin-top: 40px;
+	margin-bottom: 0px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: inherit;
+	font-weight: 500;
+	line-height: 20px;
+	color: inherit;
+}

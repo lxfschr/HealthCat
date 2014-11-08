@@ -196,14 +196,16 @@ def add_bowl_form(request):
 def add_bowl(request):
     context={}
     form = AddBowlForm(request.POST)
+    
     if not form.is_valid():
+        context['form'] = form
         return render(request, 'healthcat/profile.html', context)
 
 
     ip_address = form.cleaned_data['ip_address']
 
-
-    print ip_address
-    r= urllib2.urlopen(ip_address+'connect').read()
+    print "ip address: " + ip_address
+    
+    r = urllib2.urlopen(ip_address+'connect').read()
 
     return render(request, 'healthcat/profile.html', context)

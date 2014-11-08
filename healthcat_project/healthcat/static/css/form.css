@@ -90,7 +90,7 @@ label {
 }
 
 .btn-lg {
-  padding: 3px 12px;
+  padding: 6px 12px;
   font-size: 18px;
   line-height: 1.33;
   border-radius: 6px;
@@ -98,7 +98,7 @@ label {
 
 .btn-inline {
   margin-right: 6px;
-  margin-bottom: 3px;
+  margin-bottom: 0px;
 }
 
 .width-200 {
