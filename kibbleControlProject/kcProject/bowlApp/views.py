@@ -179,5 +179,7 @@ def registerRFID(request,rfid):
 
 	r= urllib2.urlopen("http://frozen-brushlands-8463.herokuapp.com/new-rfid-detected/"+BOWLID+"/"+rfid)
 	response = r.read()
-	pass
+	responseDict={}
+	responseDict['result']='Success'
+	return HttpResponse(json.dumps(responseDict),content_type='application/json')
 
