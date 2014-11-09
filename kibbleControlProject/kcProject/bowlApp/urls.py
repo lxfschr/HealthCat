@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     	'bowlApp.views.updateScheduleRemove'),
     url(r'^createpet/(?P<rfid>\d+)','bowlApp.views.createPet'),
     url(r'^connect','bowlApp.views.connect'),
-    url(r'^register-rfid','bowlApp.views.registerRFID'),
+    url(r'^register-rfid/(?P<rfid>\d+)','bowlApp.views.registerRFID'),
 
 
 )

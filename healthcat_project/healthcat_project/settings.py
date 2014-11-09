@@ -111,14 +111,15 @@ MEDIA_URL = '/media/'
 
 # Configures Django to merely print emails rather than sending them.
 # Comment out this line to enable real email-sending.
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # To enable real email-sending, you should uncomment and 
 # configure the settings below.
-# EMAIL_HOST = 'Your-SMTP-host'               # perhaps 'smtp.andrew.cmu.edu'
-# EMAIL_HOST_USER = 'Your-SMTP-username'      # perhaps your Andrew ID
-# EMAIL_HOST_PASSWORD = 'Your-SMTP-password'
-# EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'               # perhaps 'smtp.andrew.cmu.edu'
+EMAIL_HOST_USER = 'healthcat15637@gmail.com'      # perhaps your Andrew ID
+EMAIL_HOST_PASSWORD = 'webapps15637'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
