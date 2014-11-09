@@ -32,7 +32,7 @@ class AddBowlForm(forms.ModelForm):
     
     class Meta:
         model = Bowl
-        exclude = ('owner',)
+        exclude = ('owner','serial_number', 'pets')
         widgets = {
                    'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Cat Bowl'}),
                    'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
