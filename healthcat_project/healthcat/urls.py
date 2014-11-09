@@ -26,5 +26,7 @@ urlpatterns = patterns('',
     url(r'^edit-bowl$', 'healthcat.views.edit_bowl', name='edit_bowl'),
     url(r'^new-rfid-detected/(?P<bowlSerial>[a-zA-Z0-9]+)/(?P<rfid>\d+)$', 
         'healthcat.views.registerRfid'),
+    url(r'^add-pet-form$', 'healthcat.views.add_pet_form', name='add_pet_form'),
+    url(r'^add-pet$', 'healthcat.views.add_pet', name='add_pet'),
 
 )

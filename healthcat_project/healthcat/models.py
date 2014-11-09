@@ -18,26 +18,24 @@ class Bowl(models.Model):
     ip_address = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
-
+    pets = models.ManyToManyField('Pet')
     def __unicode__(self):
         return self.ip_address
 
 
-"""
 class Pet(models.Model):
     # one owner per pet
-    owner = models.ForeignKey('Person', related_name='pet_owner')
+    owner = models.ForeignKey('Owner', related_name='pet_owner')
     name = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='pet_photos', blank=True)
-    species = models.CharField(max_length=3,
-        choices=(('C':'Cat'),('D':'Dog')))
     rfid = models.IntegerField(max_length=30, unique=True)
-    statistics = models.OneToOneField('PetStats')
-    schedule = models.ForeignKey('FoodSchedule')
 
+"""
 # pet stats classification for all forms of health stats.
 # a distinct class for organization. 
 class PetStats(models.Model):
+    species = models.CharField(max_length=3,
+        choices=(('C':'Cat'),('D':'Dog')))
     weight = models.IntegerField(max_length=5)
     weightUnit = models.CharField(choices=(('KG':'Kilogram'),('LB':'Pound')))
     birthDay = models.DateField()
@@ -69,4 +67,4 @@ class FoodSchedule(models.Model):
     maxAmountPerDay = models.IntegerField()
     def getScheduleQuerySet(self):
         return TimeAmountWindow.objects.filter(relatedSchedule=self)
-        """
+"""
