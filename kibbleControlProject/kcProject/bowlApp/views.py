@@ -34,7 +34,7 @@ import time, datetime
 
 ###########################################################################
 
-BOWLID = 1
+BOWLID = ABC12
 
 def openornot(request,rfid,timenow,YYYYMMDD):
 
@@ -171,5 +171,10 @@ def connect(request):
 	return HttpResponse(json.dumps(responseDict),
 		content_type='application/json')
 
-
+# this function is called upon a connection of new rfid at the bowl.
+# it should send a request to webserver saying this rfid is detected at bowl.
+def registerRFID(request,rfid):
+	r= urllib2.urlopen("http://frozen-brushlands-8463.herokuapp.com/new-rfid-detected/"+BOWLID+"/"+rfid)
+	response = r.read()
+	pass
 
