@@ -19,6 +19,15 @@
 	font-size: 12px;
 }
 
+.header2 {
+	margin-top: 40px;
+	line-height: 20px;
+}
+
+.header3 {
+	line-height: 14px;
+}
+
 .header_icon {
 	font-size: 18px;
 	vertical-align: 3px;
@@ -36,12 +45,12 @@ hr {
     height: 3px;
     border: 0;
     border-top: 3px solid #000;
-    margin: 6px 0px 0px 0pc;
+    margin: 6px 0px 12px 0pc;
     padding: 0;
 }
 
 h1, .h1, h2, .h2, h3, .h3 {
-	margin-top: 40px;
+	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
@@ -50,6 +59,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	font-weight: 500;
 	line-height: 20px;
 	color: inherit;
+	display: inline-block;
 }
 
 @media (min-width: 590px) {
@@ -209,4 +219,12 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   .col-md-offset-0 {
     margin-left: 0;
   }
+}
+
+.bowl_ip {
+	margin: 48px 0 0 0;
+}
+
+.pets_container {
+	margin-left: 24px;
 }

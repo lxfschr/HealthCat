@@ -1,3 +1,8 @@
+function add_edit_bowl_form(bowl_id) {
+	id = bowl_id + "_bowl_name"
+	$( "#" + id ).load( "/healthcat/add-bowl-form");
+}
+
 function add_add_bowl_form() {
 	$( "#add_bowl_text" ).load( "/healthcat/add-bowl-form");
 }

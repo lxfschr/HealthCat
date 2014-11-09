@@ -85,6 +85,10 @@ label {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .field-icon {
   margin-top: 4px;
 }

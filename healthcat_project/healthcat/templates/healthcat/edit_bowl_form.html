@@ -1,10 +1,10 @@
-{% if add_bowl_form.is_multipart %}
-    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_bowl' %}">
+{% if edit_bowl_form.is_multipart %}
+    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{% url 'edit_bowl' %}">
 {% else %}
-    <form class="form-horizontal" role="form" method="POST" action="{% url 'add_bowl' %}">
+    <form class="form-horizontal" role="form" method="POST" action="{% url 'edit_bowl' %}">
 {% endif %}
-        {% for field in add_bowl_form.visible_fields %}
-            <div class="inline-block">
+        {% for field in edit_bowl_form.visible_fields %}
+            <div class="block">
                 <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
                 {% if field.field.icon_name and field.field.tooltip %}
                     <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
@@ -18,7 +18,7 @@
             {{ field }}
         {% endfor %}
 
-        <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Connect </button></span>
+        <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Complete </button></span>
 
         <a href="{% url 'profile' %}"> Cancel </a>
                 

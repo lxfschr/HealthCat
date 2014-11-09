@@ -34,6 +34,16 @@ def home(request):
     context = _add_profile_context(request, context)
     return render(request, 'healthcat/profile.html', context)
 
+
+def _add_profile_context(request, context):
+    user = request.user
+    context['user'] = user
+    owner = Owner.objects.get(user=user)
+    context['owner'] = owner
+    bowls = Bowl.objects.filter(owner=owner)
+    context['bowls'] = bowls
+    return context
+
 def register(request):
     context = {}
     errors = []
@@ -212,25 +222,37 @@ def add_bowl(request):
 
     print "ip address: " + ip_address
     
-    #r = urllib2.urlopen(ip_address+'connect').read()
+    r = urllib2.urlopen(ip_address+'connect').read()
 
-    add_bowl_form.save()
-
-    new_bowl = Bowl.objects.get(ip_address=ip_address)
-    if new_bowl:
-        print "bowl saved"
+    exisiting_bowl = Bowl.objects.filter(ip_address=ip_address)
+    if exisiting_bowl:
+        print "bowl model already exists"
+        exisiting_bowl[0].owner = owner #Todo add caretaker
     else:
-        print 'no bowl'
-
-    context = _add_profile_context(request, context)
+        print "creating new bowl model"
+        add_bowl_form.save()
 
     return render(request, 'healthcat/profile.html', context)
 
-def _add_profile_context(request, context):
-    user = request.user
-    context['user'] = user
-    owner = Owner.objects.get(user = user)
-    context['owner'] = owner
+@login_required
+def edit_bowl(request):
+    context={}
 
-    return context
+    context = _add_profile_context(request, context)
 
+    if request.method=='GET':
+        context['edit_bowl_form'] = AddBowlForm()
+        return render(request,'healthcat/profile.html',context)
+
+    owner = Owner.objects.get(user=request.user)
+    exisiting_bowl = Bowl.objects.get(owner=owner)
+
+    edit_bowl_form = EditBowlForm(request.POST, instance=exisiting_bowl)
+    
+    if not edit_bowl_form.is_valid():
+        context['edit_bowl_form'] = edit_bowl_form
+        return render(request, 'healthcat/profile.html', context)
+
+    edit_bowl_form.save()
+
+    return render(request, 'healthcat/profile.html', context)

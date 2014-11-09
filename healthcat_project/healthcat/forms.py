@@ -32,44 +32,47 @@ class AddBowlForm(forms.ModelForm):
     
     class Meta:
         model = Bowl
-        exclude = ('name', 'owner')
+        exclude = ('owner',)
         widgets = {
+                   'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Cat Bowl'}),
                    'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
                   }
         labels = {
+            "name": "Bowl Name",
             "ip_address": "Bowl IP Address",
         }
         
     def clean(self):
-        print "in clean"
         cleaned_data = super(AddBowlForm,self).clean()
         return cleaned_data
 
-    # def clean_ip_address(self):
-    #     print "in clean_ip_address"
-    #     ip_address = self.cleaned_data.get('ip_address')
-    #     try:
-    #         r = urllib2.urlopen(ip_address+'connect').read()
-    #     except:
-    #         raise forms.ValidationError("Could not connect to " + ip_address)
+    def clean_ip_address(self):
+        print "in clean_ip_address"
+        ip_address = self.cleaned_data.get('ip_address')
+        try:
+            r = urllib2.urlopen(ip_address+'connect').read()
+            print r
+        except:
+            raise forms.ValidationError("Could not connect to " + ip_address)
         
-    #     return ip_address
+        return ip_address
 
-class ProfileForm(forms.ModelForm):
-    username = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Email Address...'}))
-    password2 = forms.CharField(max_length = 200,
-                                label='Confirm Password',
-                                widget=forms.PasswordInput(attrs={'class':'input-block-level', 'placeholder':'Confirm Password...'}))
-    password1 = forms.CharField(max_length = 200, 
-                                label='Password', 
-                                widget=forms.PasswordInput(attrs={'class':'input-block-level', 'placeholder':'Password...'}))
+class EditBowlForm(forms.ModelForm):
+
     class Meta:
-        model = Owner
-        exclude = ('user',)
+        model = Bowl
+        exclude = ('ip_address', 'owner')
         widgets = {
-                   'zip_code': forms.TextInput(attrs={'placeholder': 'Zip Code...'}),
-                   'photo': forms.FileInput(),
+                   'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + required_css_class, 'placeholder':'eg: Cat Bowl'}),
                   }
+        labels = {
+            "name": "Bowl Name",
+        }
+        
+    def clean(self):
+        cleaned_data = super(EditBowlForm,self).clean()
+        return cleaned_data
+
 
 class RegistrationForm(forms.Form):
     username = forms.EmailField(max_length = 40, 
