@@ -1,9 +1,9 @@
-{% if add_bowl_form.is_multipart %}
-    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_pet' %}">
+{% if pet_form.is_multipart %}
+    <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_pet' %}">
 {% else %}
-    <form class="form-horizontal" role="form" method="POST" action="{% url 'add_pet' %}">
+    <form class="form-pet form-signin" role="form" method="POST" action="{% url 'add_pet' %}">
 {% endif %}
-        {% for field in add_bowl_form.visible_fields %}
+        {% for field in pet_form.visible_fields %}
             <div class="inline-block">
                 <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
                 {% if field.field.icon_name and field.field.tooltip %}

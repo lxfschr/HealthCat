@@ -19,6 +19,12 @@
 	font-size: 12px;
 }
 
+.pet_photo {
+  max-width: 100%;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
 .header2 {
 	margin-top: 40px;
 	line-height: 20px;
