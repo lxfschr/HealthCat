@@ -243,3 +243,21 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .color-555:hover {
   color: #000;
 }
+
+.pet_info_container {
+  margin: 12px;
+}
+
+.pet-name {
+  display: block;
+}
+
+ul {
+  list-style-type: none;
+  list-style: none
+}
+
+.pet_info_list {
+  margin: 0;
+  padding: 0;
+}

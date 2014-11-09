@@ -38,32 +38,59 @@
                     </div>
                     <hr>
                     <div class="pets_container">
-                        {% for pet in pets %}
-                            {% if pet.photo %}
-                                <img class="pet_photo" id="{{ pet.id }}_photo" src={% url 'get_pet_photo' pet.id %} alt=" {{ pet.name }}'s photo" title="{{ pet.name }}'s photo" />
+                        <div class="row">
+                            {% for pet in pets %}
+                                <div class="row">
+                                    <div class="col col-md-3 col-xs-3">
+                                        {% if pet.photo %}
+                                            <img class="pet_photo" id="{{ pet.id }}_photo" src={% url 'get_pet_photo' pet.id %} alt=" {{ pet.name }}'s photo" title="{{ pet.name }}'s photo" />
+                                        {% else %}
+                                            <img class="pet_photo" id="{{ pet.id }}_photo" src="/static/images/default_pet_photo.jpg" alt="default pet photo" title="default pet photo" />
+                                        {% endif %}
+                                    </div>
+                                    <div class="col col-md-8 col-xs-8">
+                                        <div class="pet_info_container">
+                                            <div id="{{ pet.id }}_pet_info">
+                                                <ul class="pet_info_list">
+                                                    <li>
+                                                        <h3 class="header3 color-555" onClick="add_edit_pet_form( '{{ pet.id }}_pet_info', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> {{ pet.name }} <i class='glyphicon glyphicon-edit header_icon'></i> </h3>
+                                                    </li>
+                                                    <li>
+                                                        RFID Tag #: {{ pet.rfid }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="row">
+                            {% if pet_form %}
+
+                                {% include "healthcat/pet_form.html" with pageToRender="/healthcat/profile" %}
                             {% else %}
-                                <img class="pet_photo" id="{{ pet.id }}_photo" src="/static/images/default_pet_photo.jpg" alt="default pet photo" title="default pet photo" />
+                                <div id="{{ bowl.id }}_add_pet_text">
+                                    <h3 class="header3 color-555" onClick="add_add_pet_form( '{{ bowl.id }}', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
+                                </div>
                             {% endif %}
-                        {% endfor %}
-                        {% if pet_form %}
-                            {% include "healthcat/pet_form.html" with pageToRender="/healthcat/profile" %}
-                        {% else %}
-                            <div id="{{ bowl.id }}_add_pet_text">
-                                <h3 class="header3 color-555" onClick="add_add_pet_form( '{{ bowl.id }}', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
-                            </div>
-                        {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
 
-                {% if add_bowl_form %}
-                    {% include "healthcat/add_bowl_form.html" with pageToRender="/healthcat/profile" %}
-                {% elif edit_bowl_form %}
-                    {% include "healthcat/edit_bowl_form.html" with pageToRender="/healthcat/profile" %}
-                {% else %}
-                    <div id='add_bowl_text'> 
-                        <h2 class="header2 color-555" onClick="add_add_bowl_form('add_bowl_text', '{% url 'add_bowl_form' %}' );" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> </h2>
-                    </div>
-                {% endif %}
+                <div class="row">
+                    {% if add_bowl_form %}
+                        {% include "healthcat/add_bowl_form.html" with pageToRender="/healthcat/profile" %}
+                    {% elif edit_bowl_form %}
+                        {% include "healthcat/edit_bowl_form.html" with pageToRender="/healthcat/profile" %}
+                    {% else %}
+                        <div id='add_bowl_text'> 
+                            <h2 class="header2 color-555" onClick="add_add_bowl_form('add_bowl_text', '{% url 'add_bowl_form' %}' );" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> </h2>
+                        </div>
+                    {% endif %}
+                </div>
                 <hr>
             </div> <!-- col -->
             

@@ -119,3 +119,8 @@ label {
   display: inline;
   margin-right: 6px;
 }
+
+.btn-col {
+  position: relative;
+  top: 21px;
+}

@@ -46,16 +46,16 @@ class AddBowlForm(forms.ModelForm):
         cleaned_data = super(AddBowlForm,self).clean()
         return cleaned_data
 
-    def clean_ip_address(self):
-        print "in clean_ip_address"
-        ip_address = self.cleaned_data.get('ip_address')
-        try:
-            r = urllib2.urlopen(ip_address+'connect').read()
-            print r
-        except:
-            raise forms.ValidationError("Could not connect to " + ip_address)
+    # def clean_ip_address(self):
+    #     print "in clean_ip_address"
+    #     ip_address = self.cleaned_data.get('ip_address')
+    #     try:
+    #         r = urllib2.urlopen(ip_address+'connect').read()
+    #         print r
+    #     except:
+    #         raise forms.ValidationError("Could not connect to " + ip_address)
         
-        return ip_address
+    #     return ip_address
 
 class EditBowlForm(forms.ModelForm):
 

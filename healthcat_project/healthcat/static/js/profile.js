@@ -1,3 +1,7 @@
+function add_edit_pet_form(id, url) {
+	$( "#" + id ).load( url );
+}
+
 function add_add_pet_form(bowl_id, url) {
 	id = bowl_id + "_add_pet_text"
 	$( "#" + id ).load( url );
