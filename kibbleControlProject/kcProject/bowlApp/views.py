@@ -175,6 +175,6 @@ def connect(request):
 # it should send a request to webserver saying this rfid is detected at bowl.
 def registerRFID(request,rfid):
 	r= urllib2.urlopen("http://frozen-brushlands-8463.herokuapp.com/new-rfid-detected/"+BOWLID+"/"+rfid)
-	
+	response = r.read()
 	pass
 
