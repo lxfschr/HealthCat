@@ -34,7 +34,7 @@ import time, datetime
 
 ###########################################################################
 
-BOWLID = 'ABC12'
+BOWLID = 'CAT123'
 
 def openornot(request,rfid,timenow,YYYYMMDD):
 
@@ -176,10 +176,20 @@ def connect(request):
 # it should send a request to webserver saying this rfid is detected at bowl.
 def registerRFID(request,rfid):
 	print ' In request making'
-
-	r= urllib2.urlopen("http://frozen-brushlands-8463.herokuapp.com/new-rfid-detected/"+BOWLID+"/"+rfid)
-	response = r.read()
 	responseDict={}
+	try:
+
+		r= urllib2.urlopen("http://frozen-brushlands-8463.herokuapp.com/healthcat/new-rfid-detected/"+BOWLID+"/"+rfid)
+		response =r.read()
+		print response
+
+	except:
+		responseDict['result']='Fail'
+		return HttpResponse(json.dumps(responseDict),content_type='application/json')
+		
+	
 	responseDict['result']='Success'
+
+	print  ''
 	return HttpResponse(json.dumps(responseDict),content_type='application/json')
 
