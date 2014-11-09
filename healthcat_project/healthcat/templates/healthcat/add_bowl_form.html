@@ -3,37 +3,37 @@
 {% else %}
     <form class="form-horizontal" role="form" method="POST" action="{% url 'add_bowl' %}">
 {% endif %}
-        <div class="row">
-            {% for field in add_bowl_form.visible_fields %}
-                <div class="col col-md-4">
-                    <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
-                    {% if field.field.icon_name and field.field.tooltip %}
-                        <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
-                    {% elif field.field.icon_name %}
-                        <i class="{{ field.field.icon_name }} color-aaa"></i>
-                    {% endif %}
-                    {% for error in field.errors %}
-                            <span class='text-danger'> {{ error }} </span>
-                    {% endfor %}
-                </div>
+    {% csrf_token %}
+    <div class="row">
+        {% for field in add_bowl_form.visible_fields %}
+            <div class="col col-md-4">
+                <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
+                {% if field.field.icon_name and field.field.tooltip %}
+                    <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
+                {% elif field.field.icon_name %}
+                    <i class="{{ field.field.icon_name }} color-aaa"></i>
+                {% endif %}
+                {% for error in field.errors %}
+                        <span class='text-danger'> {{ error }} </span>
+                {% endfor %}
+                {{ field }}
+            </div>
             
-            {% endfor %}
-        </div>
+        {% endfor %}
 
-        <div class="row">
-            {% for field in add_bowl_form.visible_fields %}
-                <div class="col col-md-4">
-                    {{ field }}
-                </div>
-            {% endfor %}
-            
+        <div class="col col-md-4">
+        
             <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Connect </button></span>
 
             <a href="{% url 'profile' %}"> Cancel </a>
         </div>
 
+    </div>
+
+        
+
         
                 
-        {% csrf_token %}
+        
 
     </form>
