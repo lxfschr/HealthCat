@@ -19,6 +19,8 @@ class Bowl(models.Model):
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
     pets = models.ManyToManyField('Pet')
+    serial_number = models.CharField(max_length=100, unique=True)
+
     def __unicode__(self):
         return self.ip_address
 
