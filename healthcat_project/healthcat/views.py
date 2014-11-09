@@ -256,3 +256,14 @@ def edit_bowl(request):
     edit_bowl_form.save()
 
     return render(request, 'healthcat/profile.html', context)
+
+# this function is called when there is a request from a bowl with new rfid.
+def registerRfid(request,bowlSerial,rfid):
+    responseDict= {}
+
+    # get the user with the bowl.
+    try: 
+        bowl=Bowl.objects.get(serial_number=bowlSerial)
+    except:
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
