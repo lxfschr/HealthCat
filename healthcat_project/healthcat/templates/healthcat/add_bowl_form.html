@@ -6,7 +6,7 @@
     {% csrf_token %}
     <div class="row">
         {% for field in add_bowl_form.visible_fields %}
-            <div class="col col-md-4">
+            <div class="col col-xs-4">
                 <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
                 {% if field.field.icon_name and field.field.tooltip %}
                     <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
@@ -21,10 +21,15 @@
             
         {% endfor %}
 
-        <div class="col col-md-4">
+        <div class="col col-xs-2">
             <div class="btn-col">
                 <button class="btn btn-lg btn-primary btn-inline" type="submit"> Connect </button>
             
+                
+            </div>
+        </div>
+        <div class="col col-xs-2">
+            <div class="btn-col pull-right">
                 <a href="{% url 'profile' %}"> Cancel </a>
             </div>
         </div>

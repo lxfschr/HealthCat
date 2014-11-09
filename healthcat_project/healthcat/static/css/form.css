@@ -112,6 +112,7 @@ label {
 .btn-inline {
   margin-right: 6px;
   margin-bottom: 0px;
+  max-width: 100px;
 }
 
 .width-200 {
