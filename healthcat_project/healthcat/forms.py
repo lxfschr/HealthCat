@@ -176,17 +176,17 @@ class PetForm(forms.ModelForm):
         model = Pet
         exclude = ('owner',)
         widgets = {
-                   'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Mr. Bigglesworth'}),
-                   'rfid': forms.TextInput(attrs={'label':'RFID #', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: C02002F18538AE2DFDC1C35'}),
+                   'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Mr. Bigglesworth'}),
+                   'rfid': forms.TextInput(attrs={'label':'RFID #', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: C02002F18538AE2DFDC1C35'}),
                    'photo': forms.FileInput(),
                   }
         labels = {
             "name": "Pet Name",
-            "ip_address": "Bowl IP Address",
+            "rfid": "RFID #",
             "photo": "Pet Photo"
         }
         
     def clean(self):
-        cleaned_data = super(AddBowlForm,self).clean()
+        cleaned_data = super(PetForm,self).clean()
         return cleaned_data
 

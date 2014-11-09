@@ -38,9 +38,20 @@
                     </div>
                     <hr>
                     <div class="pets_container">
-                        <div id="{{ bowl.id }}_add_pet_text">
-                            <h3 class="header3" onClick="add_add_pet_form( '{{ bowl.id }}', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
-                        </div>
+                        {% for pet in pets %}
+                            {% if pet.photo %}
+                                <img class="pet_photo" id="{{ pet.id }}_photo" src={% url 'get_pet_photo' pet.id %} alt=" {{ pet.name }}'s photo" title="{{ pet.name }}'s photo" />
+                            {% else %}
+                                <img class="pet_photo" id="{{ pet.id }}_photo" src="/static/images/default_pet_photo.jpg" alt="default pet photo" title="default pet photo" />
+                            {% endif %}
+                        {% endfor %}
+                        {% if pet_form %}
+                            {% include "healthcat/pet_form.html" with pageToRender="/healthcat/profile" %}
+                        {% else %}
+                            <div id="{{ bowl.id }}_add_pet_text">
+                                <h3 class="header3" onClick="add_add_pet_form( '{{ bowl.id }}', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
 

@@ -42,6 +42,8 @@ def _add_profile_context(request, context):
     context['owner'] = owner
     bowls = Bowl.objects.filter(owner=owner)
     context['bowls'] = bowls
+    pets = Pet.objects.filter(owner=owner)
+    context['pets'] = pets
     return context
 
 def register(request):
@@ -179,6 +181,14 @@ def get_owner_photo(request, user_id):
     return HttpResponse(owner.photo, content_type=content_type)
 
 @login_required
+def get_pet_photo(request, pet_id):
+    pet = get_object_or_404(Pet, id = pet_id)
+    if not pet.photo:
+        return Http404
+    content_type = guess_type(pet.photo.name)
+    return HttpResponse(pet.photo, content_type=content_type)
+
+@login_required
 def statistics(request):
     context = {}
     user = request.user
@@ -210,6 +220,22 @@ def add_pet_form(request):
 def add_pet(request):
     context={}
     context = _add_profile_context(request, context)
+
+    if request.method=='GET':
+        context['pet_form'] = PetForm()
+        return render(request,'healthcat/profile.html',context)
+
+    owner = Owner.objects.get(user=request.user)
+    new_pet = Pet(owner=owner)
+
+    pet_form = PetForm(request.POST, request.FILES, instance=new_pet)
+    
+    if not pet_form.is_valid():
+        print "pet form not valid"
+        context['pet_form'] = pet_form
+        return render(request, 'healthcat/profile.html', context)
+
+    pet_form.save()
 
     return render(request, 'healthcat/profile.html', context)
 
