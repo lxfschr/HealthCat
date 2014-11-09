@@ -34,7 +34,7 @@ import time, datetime
 
 ###########################################################################
 
-BOWLID = ABC12
+BOWLID = 'ABC12'
 
 def openornot(request,rfid,timenow,YYYYMMDD):
 
