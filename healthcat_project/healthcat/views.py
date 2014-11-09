@@ -234,7 +234,6 @@ def add_bowl(request):
 
     ip_address = add_bowl_form.cleaned_data['ip_address']
 
-    print "ip address: " + ip_address
     
     r = urllib2.urlopen(ip_address+'connect').read()
 
