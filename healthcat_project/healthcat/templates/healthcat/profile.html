@@ -33,13 +33,13 @@
 
                 {% for bowl in bowls %}
                     <div id="{{ bowl.id }}_bowl_name"> 
-                        <h2 class="header2" onClick="add_edit_bowl_form( {{ bowl.id }} );" style="cursor: pointer; cursor: hand;"> {{ bowl.name }} <i class='glyphicon glyphicon-edit header_icon'></i> </h2>
+                        <h2 class="header2" onClick="add_edit_bowl_form( '{{ bowl.id }}', '{% url 'add_bowl_form' %}' );" style="cursor: pointer; cursor: hand;"> {{ bowl.name }} <i class='glyphicon glyphicon-edit header_icon'></i> </h2>
                         <span class="pull-right bowl_ip" > KibbleControl {{ bowl.ip_address }} </span>
                     </div>
                     <hr>
                     <div class="pets_container">
-                        <div id="{{ bowl.id }}_add_pet">
-                            <h3 class="header3" onClick="add_add_pet_form( {{ bowl.id }} );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
+                        <div id="{{ bowl.id }}_add_pet_text">
+                            <h3 class="header3" onClick="add_add_pet_form( '{{ bowl.id }}', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
                         </div>
                     </div>
                 {% endfor %}
@@ -50,7 +50,7 @@
                     {% include "healthcat/edit_bowl_form.html" with pageToRender="/healthcat/profile" %}
                 {% else %}
                     <div id='add_bowl_text'> 
-                        <h2 class="header2" onClick="add_add_bowl_form();" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> </h2>
+                        <h2 class="header2" onClick="add_add_bowl_form('add_bowl_text', '{% url 'add_bowl_form' %}' );" style="cursor: pointer; cursor: hand;"> Add Bowl <i class='glyphicon glyphicon-plus header_icon'></i> </h2>
                     </div>
                 {% endif %}
                 <hr>

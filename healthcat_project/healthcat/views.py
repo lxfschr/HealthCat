@@ -200,6 +200,20 @@ def add_bowl_form(request):
     return render(request, 'healthcat/add_bowl_form.html', context)
 
 @login_required
+def add_pet_form(request):
+    context={}
+    pet_form = PetForm()
+    context['pet_form'] = pet_form;
+    return render(request, 'healthcat/pet_form.html', context)
+
+@login_required
+def add_pet(request):
+    context={}
+    context = _add_profile_context(request, context)
+
+    return render(request, 'healthcat/profile.html', context)
+
+@login_required
 def add_bowl(request):
     context={}
     context = _add_profile_context(request, context)

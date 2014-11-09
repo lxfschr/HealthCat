@@ -1,10 +1,15 @@
-function add_edit_bowl_form(bowl_id) {
-	id = bowl_id + "_bowl_name"
-	$( "#" + id ).load( "/healthcat/add-bowl-form");
+function add_add_pet_form(bowl_id, url) {
+	id = bowl_id + "_add_pet_text"
+	$( "#" + id ).load( url );
 }
 
-function add_add_bowl_form() {
-	$( "#add_bowl_text" ).load( "/healthcat/add-bowl-form");
+function add_edit_bowl_form(bowl_id, url) {
+	id = bowl_id + "_bowl_name"
+	$( "#" + id ).load( url );
+}
+
+function add_add_bowl_form(id, url) {
+	$( "#add_bowl_text" ).load( url );
 }
 
 function add_comment(event, grumbl_id) {
