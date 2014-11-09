@@ -36,3 +36,8 @@ def git(commit_message="No commit message supplied."):
     local('git commit -m "' + commit_message + '"')
     local("git pull")
     local("git push")
+
+def deploy(commit_message="No commit message supplied."):
+    local("git add .")
+    local('git commit -m "' + commit_message + '"')
+    local("git push heroku master")
