@@ -217,6 +217,37 @@ def add_pet_form(request):
     return render(request, 'healthcat/pet_form.html', context)
 
 @login_required
+def edit_pet(request):
+    pet_id = request.GET.get("pet_id")
+    if not pet_id:
+        pet_id = request.POST.get("pet_id")
+    print "pet_id: " + str(pet_id)
+    pet = get_object_or_404(Pet, id=pet_id)
+    initial = {}
+    initial['name'] = pet.name
+    initial['rfid'] = pet.rfid
+    context={}
+    pet_form = PetForm(initial=initial)
+    context = _add_profile_context(request, context)
+
+    if request.method=='GET':
+        context['pet_form'] = PetForm(initial=initial)
+        return render(request,'healthcat/edit_pet_form.html',context)
+
+    #pet_form = PetForm(request.POST, request.FILES, instance=pet)
+    pet.name = request.POST['name']
+    pet.rfid = request.POST['rfid']
+    pet.save()
+    # if not pet_form.is_valid():
+    #     print "pet form not valid"
+    #     context['pet_form'] = pet_form
+    #     return render(request, 'healthcat/pet_form.html', context)
+
+    # pet_form.save()
+
+    return render(request, 'healthcat/profile.html', context)
+
+@login_required
 def add_pet(request):
     context={}
     context = _add_profile_context(request, context)

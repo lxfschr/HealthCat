@@ -1,0 +1,29 @@
+{% if pet_form.is_multipart %}
+    <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action={% url 'edit_pet' %}>
+{% else %}
+    <form class="form-pet form-signin" role="form" method="POST" action={% url 'edit_pet' %}>
+{% endif %}
+        {% for field in pet_form.visible_fields %}
+            <div class="inline-block">
+                <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
+                {% if field.field.icon_name and field.field.tooltip %}
+                    <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
+                {% elif field.field.icon_name %}
+                    <i class="{{ field.field.icon_name }} color-aaa"></i>
+                {% endif %}
+                {% for error in field.errors %}
+                        <span class='text-danger'> {{ error }} </span>
+                {% endfor %}
+            </div>
+            {{ field }}
+        {% endfor %}
+
+        <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button></span>
+
+        <a href="{% url 'profile' %}"> Cancel </a>
+
+        <input type="hidden" name="pet_id" value="1" /> <!-- Todo use {{ pet.id }}
+                
+        {% csrf_token %}
+
+    </form>

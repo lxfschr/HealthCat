@@ -29,5 +29,5 @@ urlpatterns = patterns('',
         'healthcat.views.registerRfid'),
     url(r'^add-pet-form$', 'healthcat.views.add_pet_form', name='add_pet_form'),
     url(r'^add-pet$', 'healthcat.views.add_pet', name='add_pet'),
-
+    url(r'^edit-pet$', 'healthcat.views.edit_pet', name='edit_pet'),
 )

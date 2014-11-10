@@ -1,5 +1,7 @@
-function add_edit_pet_form(id, url) {
-	$( "#" + id ).load( url );
+function add_edit_pet_form(pet_id, url) {
+	id = pet_id + "_pet_info"
+	console.log(url + "?pet_id=" + pet_id)
+	$( "#" + id ).load( url + "?pet_id=" + pet_id);
 }
 
 function add_add_pet_form(bowl_id, url) {

@@ -11,3 +11,5 @@ How to do it. ? is there any other way ?
 
 Can we use django-schedule package for makeing a cat feed schedule. ?
 Do we need that sophistication . is it a better way ?
+
+How to edit pet info. pet.id not working
