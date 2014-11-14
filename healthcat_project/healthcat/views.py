@@ -229,7 +229,7 @@ def edit_pet(request):
     context={}
     pet_form = PetForm(initial=initial)
     context = _add_profile_context(request, context)
-
+    context['pet_id'] = pet_id
     if request.method=='GET':
         context['pet_form'] = PetForm(initial=initial)
         return render(request,'healthcat/edit_pet_form.html',context)
