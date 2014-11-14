@@ -205,7 +205,7 @@ def edit_profile(request):
 @login_required
 def add_bowl_form(request):
     context={}
-    add_bowl_form = AddBowlForm()
+    add_bowl_form = BowlForm()
     context['add_bowl_form'] = add_bowl_form;
     return render(request, 'healthcat/add_bowl_form.html', context)
 
@@ -276,13 +276,13 @@ def add_bowl(request):
     context = _add_profile_context(request, context)
 
     if request.method=='GET':
-        context['add_bowl_form'] = AddBowlForm()
+        context['add_bowl_form'] = BowlForm()
         return render(request,'healthcat/profile.html',context)
 
     owner = Owner.objects.get(user=request.user)
     new_bowl = Bowl(owner=owner)
 
-    add_bowl_form = AddBowlForm(request.POST, instance=new_bowl)
+    add_bowl_form = BowlForm(request.POST, instance=new_bowl)
     
     if not add_bowl_form.is_valid():
         context['add_bowl_form'] = add_bowl_form
@@ -314,7 +314,7 @@ def edit_bowl(request):
     context = _add_profile_context(request, context)
 
     if request.method=='GET':
-        context['edit_bowl_form'] = AddBowlForm()
+        context['edit_bowl_form'] = BowlForm()
         return render(request,'healthcat/profile.html',context)
 
     owner = Owner.objects.get(user=request.user)

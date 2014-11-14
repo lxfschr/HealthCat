@@ -31,6 +31,18 @@ class Pet(models.Model):
     name = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='pet_photos', blank=True)
     rfid = models.IntegerField(max_length=30, unique=True)
+    #feeding_schedule = models.ForeignKey('FeedingSchedule', related_name="pet_feeding_schedule")
+    feeding_interval = models.ForeignKey('FeedingInterval', related_name="pet_feeding_interval")
+
+#Users can create multiple food schedules and save them to their
+#profile, and assign them to pets. 
+class FeedingSchedule(models.Model):
+    feeding_intervals = models.ManyToManyField('FeedingInterval')
+
+class FeedingInterval(models.Model):
+    amount = models.PositiveSmallIntegerField(max_length=5)
+    start = models.TimeField()
+    end = models.TimeField()
 
 """
 # pet stats classification for all forms of health stats.

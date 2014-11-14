@@ -5,8 +5,7 @@ from models import *
 # making http requests and json
 import urllib2,urllib,httplib,json
 
-error_css_class = 'error'
-required_css_class = 'required'
+
 
 class IconName(object):
     def get_icon_name(self):
@@ -28,13 +27,21 @@ class Tooltip(object):
 class CharFieldWithIconAndTooltip(forms.CharField, IconName, Tooltip):
     pass
 
-class AddBowlForm(forms.ModelForm):
-    
+class BowlForm(forms.ModelForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
     class Meta:
+        error_css_class = 'error'
+        required_css_class = 'required'
+
         model = Bowl
         exclude = ('owner','serial_number', 'pets')
         widgets = {
-                   'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Cat Bowl'}),
+                   'name': forms.TextInput(attrs={'label':'Name', 
+                                          'autofocus': 'autofocus', 
+                                          'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 
+                                          'placeholder':'eg: Cat Bowl'}),
                    'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
                   }
         labels = {
@@ -57,24 +64,11 @@ class AddBowlForm(forms.ModelForm):
         
         return ip_address'''
 
-class EditBowlForm(forms.ModelForm):
-
-    class Meta:
-        model = Bowl
-        exclude = ('ip_address', 'owner')
-        widgets = {
-                   'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + required_css_class, 'placeholder':'eg: Cat Bowl'}),
-                  }
-        labels = {
-            "name": "Bowl Name",
-        }
-        
-    def clean(self):
-        cleaned_data = super(EditBowlForm,self).clean()
-        return cleaned_data
-
 
 class RegistrationForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
     username = forms.EmailField(max_length = 40, 
                                 label='Email', 
                                 widget=forms.TextInput(
@@ -117,6 +111,9 @@ class RegistrationForm(forms.Form):
                                   label='Photo',
                                  )
     class Meta:
+        error_css_class = 'error'
+        required_css_class = 'required'
+
         model = User
         fields = ("first_name","last_name", "username", "password1", "password2")
     
@@ -140,6 +137,9 @@ class RegistrationForm(forms.Form):
         return username
 
 class ResetPasswordForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
     email = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Email Address...'}))
 
     def clean_email(self):
@@ -149,6 +149,9 @@ class ResetPasswordForm(forms.Form):
         return email
 
 class ChangePasswordForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
     error_css_class = 'error'
     required_css_class = 'required'
 
@@ -171,14 +174,19 @@ class ChangePasswordForm(forms.Form):
         return cleaned_data
 
 class PetForm(forms.ModelForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
 
     class Meta:
+        error_css_class = 'error'
+        required_css_class = 'required'
+
         model = Pet
         exclude = ('owner',)
         widgets = {
                    'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Mr. Bigglesworth'}),
                    'rfid': forms.TextInput(attrs={'label':'RFID #', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: C02002F18538AE2DFDC1C35'}),
-                   'photo': forms.FileInput(),
+                   'photo': forms.FileInput()
                   }
         labels = {
             "name": "Pet Name",
