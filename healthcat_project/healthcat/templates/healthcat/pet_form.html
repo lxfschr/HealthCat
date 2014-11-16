@@ -18,6 +18,8 @@
             {{ field }}
         {% endfor %}
 
+        <input type ="hidden" name ="bowl_id" value={{ bowl_id }}>
+
         <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button></span>
 
         <a href="{% url 'profile' %}"> Cancel </a>

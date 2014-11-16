@@ -33,15 +33,8 @@
                 </div>
             {% endfor %}
         </div> <!-- row -->
+
+        {% include "healthcat/add_pet_button.html" with pageToRender="/healthcat/profile" %}
         
-        <div class="row">
-            {% if pet_form %}
-                {% include "healthcat/pet_form.html" with pageToRender="/healthcat/profile" %}
-            {% else %}
-                <div id="{{ bowl.id }}_add_pet_text">
-                    <h3 class="header3 color-555" onClick="add_add_pet_form( '{{ bowl.id }}', '{% url 'add_pet_form' %}'  );" style="cursor: pointer; cursor: hand;"> Add Pet <i class='glyphicon glyphicon-plus header_icon'></i> </h3>
-                </div>
-            {% endif %}
-        </div>
     </div> <!-- pets container -->
 {% endfor %}

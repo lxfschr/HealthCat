@@ -306,8 +306,12 @@ def add_pet(request):
 
     if request.method=='GET':
         context['pet_form'] = PetForm()
-        return render(request,'healthcat/profile.html',context)
+        bowl_id = request.GET.get("bowl_id")
+        context['bowl_id'] = bowl_id
+        return render(request,'healthcat/pet_form.html',context)
 
+    bowl_id = request.POST.get("bowl_id")
+    bowl = get_object_or_404(Bowl, id=bowl_id)
     owner = Owner.objects.get(user=request.user)
     new_pet = Pet(owner=owner)
 
@@ -316,9 +320,12 @@ def add_pet(request):
     if not pet_form.is_valid():
         print "pet form not valid"
         context['pet_form'] = pet_form
+        context['bowl_id'] = bowl_id
         return render(request, 'healthcat/profile.html', context)
 
     pet_form.save()
+
+    bowl.pets.add(Pet.objects.get(id=new_pet.id))
 
     return render(request, 'healthcat/profile.html', context)
 

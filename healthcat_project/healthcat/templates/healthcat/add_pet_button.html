@@ -1,0 +1,17 @@
+<div class="row">
+	{% if pet_form and bowl_id == bowl.id|stringformat:"s" %}
+        {% include "healthcat/pet_form.html" with pageToRender="/healthcat/profile" %}
+    {% else %}
+	    <form id="{{ bowl.id }}_add_pet_form" class="pet" onsubmit="add_bowl_form(event, '{{ bowl.id }}_add_pet_form', '{% url 'add_pet' %}')" >
+		    {% csrf_token %}
+		    <h3> 
+		    	<button class="add_button"> 
+		    		Add Pet 
+		    		<i class='glyphicon glyphicon-plus header_icon'></i> 
+		    	</button> 
+		    </h3>
+
+		    <input type ="hidden" name ="bowl_id" value={{ bowl.id }}>
+		</form>
+	{% endif %}
+</div>
