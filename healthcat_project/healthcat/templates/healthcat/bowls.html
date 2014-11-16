@@ -17,7 +17,7 @@
                             <div id="{{ pet.id }}_pet_info">
                                 <ul class="pet_info_list">
                                     <li>
-                                        <h3 class="header3 color-555" onClick="add_edit_pet_form( '{{ pet.id }}', '{% url 'edit_pet' %}'  );" style="cursor: pointer; cursor: hand;"> {{ pet.name }} <i class='glyphicon glyphicon-edit header_icon'></i> </h3>
+                                        {% include "healthcat/edit_pet_button.html" with pageToRender="/healthcat/profile" %}
                                     </li>
                                     <li>
                                         RFID Tag #: {{ pet.rfid }}

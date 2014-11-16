@@ -278,6 +278,14 @@ ul {
   color: #000;
 }
 
+.add_button:hover .glyphicon-edit{
+  display: inline;
+}
+
+.glyphicon-edit {
+  display: none;
+}
+
 .bowl {
   margin-top: 36px;
 }
