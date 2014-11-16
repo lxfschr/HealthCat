@@ -26,6 +26,9 @@ from django.http import HttpResponse, Http404
 # making http requests and json
 import urllib2,urllib,httplib,json
 
+#debug
+import random
+
 # Create your views here.
 @login_required
 def home(request):
@@ -324,26 +327,12 @@ def add_bowl(request):
     context={}
     context = _add_profile_context(request, context)
 
-    try:
-        bowl_id = request.GET.get("bowl_id")
-        bowl = get_object_or_404(Bowl, id=bowl_id)
-        initial = {}
-        initial['ip_address'] = bowl.ip_address
-        initial['name'] = bowl.name
-        context={}
-        bowl_form = BowlForm(initial=initial)
-        context['add_bowl_form'] = bowl_form
-        print "bowl exists"
-        return render(request,'healthcat/add_bowl_form.html',context)
-    except:
-        pass
-
     if request.method=='GET':
         context['add_bowl_form'] = BowlForm()
         return render(request,'healthcat/add_bowl_form.html',context)
 
     owner = Owner.objects.get(user=request.user)
-    new_bowl = Bowl(owner=owner)
+    new_bowl = Bowl(owner=owner, serial_number=random.random()) #todo implement serial
 
     add_bowl_form = BowlForm(request.POST, instance=new_bowl)
     
@@ -372,24 +361,36 @@ def add_bowl(request):
 
 @login_required
 def edit_bowl(request):
+    print "in edit bowl"
     context={}
-
     context = _add_profile_context(request, context)
 
     if request.method=='GET':
-        context['edit_bowl_form'] = BowlForm()
-        return render(request,'healthcat/profile.html',context)
-
-    owner = Owner.objects.get(user=request.user)
-    exisiting_bowl = Bowl.objects.get(owner=owner)
-
-    edit_bowl_form = EditBowlForm(request.POST, instance=exisiting_bowl)
+        print "method == GET"
+        bowl_id = request.GET.get("bowl_id")
+        bowl = get_object_or_404(Bowl, id=bowl_id)
+        initial = {}
+        initial['ip_address'] = bowl.ip_address
+        print bowl.ip_address
+        initial['name'] = bowl.name
+        print bowl.name
+        context={}
+        bowl_form = BowlForm(initial=initial)
+        context['bowl_form'] = bowl_form
+        context['bowl_id'] = bowl_id
+        return render(request,'healthcat/edit_bowl_form.html',context)
     
-    if not edit_bowl_form.is_valid():
-        context['edit_bowl_form'] = edit_bowl_form
+    bowl_id = request.POST.get("bowl_id")
+    context['bowl_id'] = bowl_id
+    bowl = get_object_or_404(Bowl, id=bowl_id)
+    bowl_form = BowlForm(request.POST, instance=bowl)
+    
+    if not bowl_form.is_valid():
+        context['bowl_form'] = bowl_form
+        context['bowl_form_id'] = bowl_id
         return render(request, 'healthcat/profile.html', context)
 
-    edit_bowl_form.save()
+    bowl_form.save()
 
     return render(request, 'healthcat/profile.html', context)
 

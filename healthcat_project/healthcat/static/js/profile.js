@@ -25,7 +25,7 @@ function add_add_bowl_form(id, url) {
 	$( "#add_bowl_text" ).load( url );
 }
 
-function add_add_bowl_form(event, id, url) {
+function add_bowl_form(event, id, url) {
 	event.preventDefault();
 	//select form element
 	form = $("#"+id);
@@ -52,7 +52,9 @@ function add_add_bowl_form(event, id, url) {
 	    // code to run if the request succeeds;
 	    // the response is passed to the function
 	    success: function( response ) {
+	    	console.log(response)
 	    	$("#" + id).replaceWith(response)
+	    	console.log("success")
 	    },
 	 
 	    // code to run if the request fails; the raw request and

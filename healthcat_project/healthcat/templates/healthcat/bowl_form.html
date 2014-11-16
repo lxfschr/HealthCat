@@ -1,9 +1,9 @@
-<form class="form-horizontal" role="form" method="POST" action="{% url 'edit_bowl' %}">
+<form id="bowl_form" class="form-horizontal" role="form" method="POST" action="{% url 'bowl' %}">
     {% csrf_token %}
     <div class="row">
         {% for field in bowl_form.visible_fields %}
             <div class="col col-xs-4">
-                <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
+                <label for='{{ field.id_for_label }}' class={{ field.css_classes }}> {{ field.label }} </label>
                 {% if field.field.icon_name and field.field.tooltip %}
                     <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
                 {% elif field.field.icon_name %}
@@ -17,20 +17,25 @@
             
         {% endfor %}
 
-        <input type ="hidden" name ="bowl_id" value={{ bowl_id }}>
-
         <div class="col col-xs-2">
             <div class="btn-col">
-                <button class="btn btn-lg btn-primary btn-inline" type="submit"> Complete </button>
+                <button class="btn btn-lg btn-primary btn-inline" type="submit"> Connect </button>
+            
+                
             </div>
         </div>
-
         <div class="col col-xs-2">
             <div class="btn-col pull-right">
-               <a href="{% url 'profile' %}"> Cancel </a>
+                <a href="{% url 'profile' %}"> Cancel </a>
             </div>
         </div>
-            
-    
 
-</form>
+    </div>
+
+        
+
+        
+                
+        
+
+    </form>
