@@ -29,6 +29,9 @@ import urllib2,urllib,httplib,json
 #debug
 import random
 
+# serializing data to send back to bowl.
+from django.core import serializers
+
 # Create your views here.
 @login_required
 def home(request):
@@ -246,17 +249,23 @@ def add_feeding_interval(request):
     if not pet_id:
         pet_id = request.POST.get("pet_id")
     print "pet_id: " + str(pet_id)
+
     pet = get_object_or_404(Pet, id=pet_id)
+
     initial = {}
     initial['name'] = pet.name
     initial['rfid'] = pet.rfid
     context={}
+
     feeding_interval_form = FeedingIntervalForm(initial=initial)
     context = _add_profile_context(request, context)
     context['pet_id'] = pet_id
+
     if request.method=='GET':
         context['feeding_interval_form'] = FeedingIntervalForm(initial=initial)
         return render(request,'healthcat/feeding_interval_form.html',context)
+    # need to add handler for POST requests.
+
 
     return render(request, 'healthcat/profile.html', context)
 
@@ -414,3 +423,28 @@ def registerRfid(request,bowlSerial,rfid):
       recipient_list=['lxfschr@gmail.com'])
     print 'success'
     return
+
+# this function is used to retrieve cat's food schedule.
+def retrieveFeedingIntervals(request,rfid):
+
+    responseDict={}
+
+    #get the cat exists based on the rfid.
+    try:
+        p=Pet.Objects.get(rfid=rfid)
+    except ObjectDoesNotExist:
+        responseDict["result"]="FAIL"
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
+
+    #get the feeding interval based on rfid
+    intervals= FeedingInterval.Objects.filter(pet=p)
+    return HttpResponse(intervals,content_type="application/json")
+
+
+
+
+
+
+
+

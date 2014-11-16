@@ -30,4 +30,7 @@ urlpatterns = patterns('',
     url(r'^edit-pet$', 'healthcat.views.edit_pet', name='edit_pet'),
     #url(r'^add-feeding-interval-form$', 'healthcat.views.add_feeding_interval_form', name='add_feeding_interval_form'),
     url(r'^add-feeding-interval$', 'healthcat.views.add_feeding_interval', name='add_feeding_interval'),
+    url(r'^get-feeding-intervals/(?P<rfid>\d+)$',
+        'healthcat.views.retrieveFeedingIntervals',
+            name='get_feeding_intervals')
 )
