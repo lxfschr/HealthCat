@@ -1,0 +1,19 @@
+<div class="row">
+	{% if add_bowl_form %}
+        {% include "healthcat/add_bowl_form.html" with pageToRender="/healthcat/profile" %}
+    {% elif edit_bowl_form %}
+        {% include "healthcat/edit_bowl_form.html" with pageToRender="/healthcat/profile" %}
+    {% else %}
+	    <form id="{{ bowl.id }}_bowl_name" class="bowl" onsubmit="add_add_bowl_form(event, '{{ bowl.id }}_bowl_name', '{% url 'add_bowl' %}')" >
+		    {% csrf_token %}
+		    <h2> 
+		    	<button class="add_button"> 
+		    		{{ bowl.name }} 
+		    		<i class='glyphicon glyphicon-edit header_icon'></i>
+		    	</button> 
+		    </h2>
+		    <input type = "hidden" name = "bowl_id" value={{ bowl.id }}>
+		    <span class="pull-right bowl_ip" > KibbleControl {{ bowl.ip_address }} </span>
+		</form>
+	{% endif %}
+</div>

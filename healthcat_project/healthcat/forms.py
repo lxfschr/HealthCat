@@ -50,7 +50,7 @@ class BowlForm(forms.ModelForm):
         }
         
     def clean(self):
-        cleaned_data = super(AddBowlForm,self).clean()
+        cleaned_data = super(BowlForm,self).clean()
         return cleaned_data
 
     '''def clean_ip_address(self):
@@ -198,3 +198,24 @@ class PetForm(forms.ModelForm):
         cleaned_data = super(PetForm,self).clean()
         return cleaned_data
 
+class FeedingIntervalForm(forms.ModelForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
+    
+    class Meta:
+        error_css_class = 'error'
+        required_css_class = 'required'
+
+        model = FeedingInterval
+        exclude = ('pet',)
+        widgets = {
+                   'amount': forms.NumberInput(attrs={'label':'Amount (g)', 'autofocus': 'autofocus', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 10'}),
+                   'start': forms.TimeInput(attrs={'label':'Start', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 12:00 am'}),
+                   'end': forms.TimeInput(attrs={'label':'End', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 11:59 pm'}),
+                  }
+        labels = {
+        }
+
+    def clean(self):
+        cleaned_data = super(FeedingIntervalForm,self).clean()
+        return cleaned_data

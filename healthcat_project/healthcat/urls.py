@@ -30,4 +30,6 @@ urlpatterns = patterns('',
     url(r'^add-pet-form$', 'healthcat.views.add_pet_form', name='add_pet_form'),
     url(r'^add-pet$', 'healthcat.views.add_pet', name='add_pet'),
     url(r'^edit-pet$', 'healthcat.views.edit_pet', name='edit_pet'),
+    #url(r'^add-feeding-interval-form$', 'healthcat.views.add_feeding_interval_form', name='add_feeding_interval_form'),
+    url(r'^add-feeding-interval$', 'healthcat.views.add_feeding_interval', name='add_feeding_interval'),
 )

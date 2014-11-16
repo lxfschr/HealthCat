@@ -1,3 +1,5 @@
+
+
 function add_edit_pet_form(pet_id, url) {
 	id = pet_id + "_pet_info"
 	console.log(url + "?pet_id=" + pet_id)
@@ -6,6 +8,11 @@ function add_edit_pet_form(pet_id, url) {
 
 function add_add_pet_form(bowl_id, url) {
 	id = bowl_id + "_add_pet_text"
+	$( "#" + id ).load( url );
+}
+
+function add_add_feeding_interval_form(pet_id, url) {
+	id = pet_id + "_feeding_intervals"
 	$( "#" + id ).load( url );
 }
 
@@ -18,28 +25,26 @@ function add_add_bowl_form(id, url) {
 	$( "#add_bowl_text" ).load( url );
 }
 
-function add_comment(event, grumbl_id) {
+function add_add_bowl_form(event, id, url) {
 	event.preventDefault();
 	//select form element
-	formid = grumbl_id + "_comment_form";
-	form = $("#"+formid);
+	form = $("#"+id);
 	console.log("form: " + form);
 	//serialize it
 	form = form.serialize();
 	console.log("event: ", event);
 	var input_form = event.target;
-	
 	//jquery ajax
 	// Using the core $.ajax() method
 	$.ajax({
 	    // the URL for the request
-	    url: "/grumblrApp/comment/"+grumbl_id,
+	    url: url,
 	 
 	    // the data to send (will be converted to a query string)
 	    data: form,
 	 
 	    // whether this is a POST or GET request
-	    type: "POST",
+	    type: "GET",
 	 
 	    // the type of data we expect back
 	    dataType : "html",
@@ -47,12 +52,7 @@ function add_comment(event, grumbl_id) {
 	    // code to run if the request succeeds;
 	    // the response is passed to the function
 	    success: function( response ) {
-	    	//select grumbl_id comments
-	    	comments = $("#"+grumbl_id+"_comments");
-	    	//append html
-	    	comments.append(response);
-	    	console.log(input_form);
-	    	$(input_form).find("input[type=text], textarea").val("");
+	    	$("#" + id).replaceWith(response)
 	    },
 	 
 	    // code to run if the request fails; the raw request and

@@ -1,0 +1,17 @@
+<div class="row">
+	{% if add_bowl_form %}
+        {% include "healthcat/add_bowl_form.html" with pageToRender="/healthcat/profile" %}
+    {% elif edit_bowl_form %}
+        {% include "healthcat/edit_bowl_form.html" with pageToRender="/healthcat/profile" %}
+    {% else %}
+	    <form id="add_add_bowl_form" class="bowl" onsubmit="add_add_bowl_form(event, 'add_add_bowl_form', '{% url 'add_bowl' %}')" >
+		    {% csrf_token %}
+		    <h2> 
+		    	<button class="add_button"> 
+		    		Add Bowl 
+		    		<i class='glyphicon glyphicon-plus header_icon'></i> 
+		    	</button> 
+		    </h2>
+		</form>
+	{% endif %}
+</div>

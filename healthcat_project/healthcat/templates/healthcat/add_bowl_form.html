@@ -1,8 +1,4 @@
-{% if add_bowl_form.is_multipart %}
-    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_bowl' %}">
-{% else %}
-    <form class="form-horizontal" role="form" method="POST" action="{% url 'add_bowl' %}">
-{% endif %}
+<form id="add_bowl_form" class="form-horizontal" role="form" method="POST" action="{% url 'add_bowl' %}">
     {% csrf_token %}
     <div class="row">
         {% for field in add_bowl_form.visible_fields %}

@@ -1,0 +1,8 @@
+{% if owner.photo %}
+    <img id="owner_photo" src={% url 'get_owner_photo' owner.user.id %} alt=" {{ owner.user.first_name }}'s photo" title="{{ owner.user.first_name }}'s photo" />
+{% else %}
+    <img id="owner_photo" src="/static/images/default_owner_photo.jpg" alt="default owner photo" title="default owner photo" />
+{% endif %}
+
+<div id='owner_name' class='owner_info'> {{ owner.user.first_name }} {{ owner.user.last_name }} </div>
+<div class='owner_info'> {{ owner.zip_code }} </div>

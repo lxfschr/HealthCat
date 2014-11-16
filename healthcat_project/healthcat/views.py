@@ -206,14 +206,69 @@ def edit_profile(request):
 def add_bowl_form(request):
     context={}
     add_bowl_form = BowlForm()
-    context['add_bowl_form'] = add_bowl_form;
+    context['add_bowl_form'] = add_bowl_form
     return render(request, 'healthcat/add_bowl_form.html', context)
+
+"""@login_required
+def add_feeding_interval_form(request):
+    context = {}
+    feeding_interval_form = FeedingIntervalForm()
+    context['feeding_interval_form'] = feeding_interval_form
+    return render(request, 'healthcat/feeding_interval_form.html', context)
+
+@login_required
+def add_feeding_interval(request):
+    context={}
+    context = _add_profile_context(request, context)
+
+    if request.method=='GET':
+        context['feeding_interval_form'] = FeedingIntervalForm()
+        return render(request,'healthcat/profile.html',context)
+
+    pet_id = request.GET.get("pet_id")
+    if not pet_id:
+        pet_id = request.POST.get("pet_id")
+    print "pet_id: " + str(pet_id)
+    pet = get_object_or_404(Pet, id=pet_id)
+
+    new_feeding_interval = FeedingInterval(pet=pet)
+
+    feeding_interval_form = FeedingIntervalForm(request.POST, instance=new_feeding_interval)
+    
+    if not feeding_interval_form.is_valid():
+        print "pet form not valid"
+        context['feeding_interval_form'] = feeding_interval_form
+        return render(request, 'healthcat/profile.html', context)
+
+    feeding_interval_form.save()
+
+    return render(request, 'healthcat/profile.html', context)"""
+
+@login_required
+def add_feeding_interval(request):
+    pet_id = request.GET.get("pet_id")
+    if not pet_id:
+        pet_id = request.POST.get("pet_id")
+    print "pet_id: " + str(pet_id)
+    pet = get_object_or_404(Pet, id=pet_id)
+    initial = {}
+    initial['name'] = pet.name
+    initial['rfid'] = pet.rfid
+    context={}
+    feeding_interval_form = FeedingIntervalForm(initial=initial)
+    context = _add_profile_context(request, context)
+    context['pet_id'] = pet_id
+    if request.method=='GET':
+        context['feeding_interval_form'] = FeedingIntervalForm(initial=initial)
+        return render(request,'healthcat/feeding_interval_form.html',context)
+
+    return render(request, 'healthcat/profile.html', context)
 
 @login_required
 def add_pet_form(request):
     context={}
     pet_form = PetForm()
-    context['pet_form'] = pet_form;
+    context['pet_form'] = pet_form
     return render(request, 'healthcat/pet_form.html', context)
 
 @login_required
@@ -238,12 +293,6 @@ def edit_pet(request):
     pet.name = request.POST['name']
     pet.rfid = request.POST['rfid']
     pet.save()
-    # if not pet_form.is_valid():
-    #     print "pet form not valid"
-    #     context['pet_form'] = pet_form
-    #     return render(request, 'healthcat/pet_form.html', context)
-
-    # pet_form.save()
 
     return render(request, 'healthcat/profile.html', context)
 
@@ -275,9 +324,23 @@ def add_bowl(request):
     context={}
     context = _add_profile_context(request, context)
 
+    try:
+        bowl_id = request.GET.get("bowl_id")
+        bowl = get_object_or_404(Bowl, id=bowl_id)
+        initial = {}
+        initial['ip_address'] = bowl.ip_address
+        initial['name'] = bowl.name
+        context={}
+        bowl_form = BowlForm(initial=initial)
+        context['add_bowl_form'] = bowl_form
+        print "bowl exists"
+        return render(request,'healthcat/add_bowl_form.html',context)
+    except:
+        pass
+
     if request.method=='GET':
         context['add_bowl_form'] = BowlForm()
-        return render(request,'healthcat/profile.html',context)
+        return render(request,'healthcat/add_bowl_form.html',context)
 
     owner = Owner.objects.get(user=request.user)
     new_bowl = Bowl(owner=owner)
