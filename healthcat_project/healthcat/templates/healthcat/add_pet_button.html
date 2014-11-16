@@ -1,5 +1,5 @@
 <div class="row">
-	{% if pet_form and bowl_id == bowl.id|stringformat:"s" %}
+	{% if pet_form and bowl_id == bowl.id|stringformat:"s" and pet_id == pet.id|stringformat:"s" %}
         {% include "healthcat/pet_form.html" with pageToRender="/healthcat/profile" %}
     {% else %}
 	    <form id="{{ bowl.id }}_add_pet_form" class="pet" onsubmit="add_bowl_form(event, '{{ bowl.id }}_add_pet_form', '{% url 'add_pet' %}')" >

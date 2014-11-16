@@ -2,39 +2,7 @@
     {% include "healthcat/edit_bowl_button.html" with pageToRender="/healthcat/profile" %}
     <hr>
     <div class="pets_container">
-        <div class="row">
-            {% for pet in bowl.pets.all %}
-                <div class="row">
-                    <div class="col col-md-3 col-xs-3">
-                        {% if pet.photo %}
-                            <img class="pet_photo" id="{{ pet.id }}_photo" src={% url 'get_pet_photo' pet.id %} alt=" {{ pet.name }}'s photo" title="{{ pet.name }}'s photo" />
-                        {% else %}
-                            <img class="pet_photo" id="{{ pet.id }}_photo" src="/static/images/default_pet_photo.jpg" alt="default pet photo" title="default pet photo" />
-                        {% endif %}
-                    </div>
-                    <div class="col col-md-8 col-xs-8">
-                        <div class="pet_info_container">
-                            <div id="{{ pet.id }}_pet_info">
-                                <ul class="pet_info_list">
-                                    <li>
-                                        {% include "healthcat/edit_pet_button.html" with pageToRender="/healthcat/profile" %}
-                                    </li>
-                                    <li>
-                                        RFID Tag #: {{ pet.rfid }}
-                                    </li>
-                                </ul>
-                                <div id="{{ pet.id }}_feeding_intervals">
-                                    <h4 class="color-555" onClick="add_add_feeding_interval_form( '{{ pet.id }}', '{% url 'add_feeding_interval' %}'  );" style="cursor: pointer; cursor: hand;"> Add Feeding Interval <i class='glyphicon glyphicon-plus header_icon'></i> </h4>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div> <!-- row -->
-
+        {% include "healthcat/pets.html" with pageToRender="/healthcat/profile" %}
         {% include "healthcat/add_pet_button.html" with pageToRender="/healthcat/profile" %}
-        
     </div> <!-- pets container -->
 {% endfor %}

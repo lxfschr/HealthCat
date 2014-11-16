@@ -18,11 +18,14 @@
             {{ field }}
         {% endfor %}
 
+        <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
+        <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
+
         <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button></span>
 
         <a href="{% url 'profile' %}"> Cancel </a>
 
-        <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
+        
                 
         {% csrf_token %}
 

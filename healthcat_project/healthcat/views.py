@@ -205,13 +205,6 @@ def statistics(request):
 def edit_profile(request):
     return redirect('/')
 
-@login_required
-def add_bowl_form(request):
-    context={}
-    add_bowl_form = BowlForm()
-    context['add_bowl_form'] = add_bowl_form
-    return render(request, 'healthcat/add_bowl_form.html', context)
-
 """@login_required
 def add_feeding_interval_form(request):
     context = {}
@@ -268,34 +261,39 @@ def add_feeding_interval(request):
     return render(request, 'healthcat/profile.html', context)
 
 @login_required
-def add_pet_form(request):
-    context={}
-    pet_form = PetForm()
-    context['pet_form'] = pet_form
-    return render(request, 'healthcat/pet_form.html', context)
-
-@login_required
 def edit_pet(request):
-    pet_id = request.GET.get("pet_id")
-    if not pet_id:
-        pet_id = request.POST.get("pet_id")
-    print "pet_id: " + str(pet_id)
-    pet = get_object_or_404(Pet, id=pet_id)
-    initial = {}
-    initial['name'] = pet.name
-    initial['rfid'] = pet.rfid
-    context={}
-    pet_form = PetForm(initial=initial)
+    context = {}
     context = _add_profile_context(request, context)
-    context['pet_id'] = pet_id
-    if request.method=='GET':
-        context['pet_form'] = PetForm(initial=initial)
+
+    if request.method == 'GET':
+        pet_id = request.GET.get("pet_id")
+        bowl_id = request.GET.get("bowl_id")
+        pet = get_object_or_404(Pet, id=pet_id)
+        initial = {}
+        initial['name'] = pet.name
+        initial['rfid'] = pet.rfid
+        initial['photo'] = pet.photo
+        pet_form = PetForm(initial=initial)
+        context['pet_form'] = pet_form
+        context['pet_id'] = pet_id
+        context['bowl_id'] = bowl_id
         return render(request,'healthcat/edit_pet_form.html',context)
 
-    #pet_form = PetForm(request.POST, request.FILES, instance=pet)
-    pet.name = request.POST['name']
-    pet.rfid = request.POST['rfid']
-    pet.save()
+    pet_id = request.POST.get("pet_id")
+    bowl_id = request.POST.get("bowl_id")
+    pet = get_object_or_404(Pet, id=pet_id)
+    
+    context['pet_id'] = pet_id
+
+    pet_form = PetForm(request.POST, request.FILES, instance=pet)
+
+    if not pet_form.is_valid():
+        context['pet_form'] = pet_form
+        context['pet_id'] = pet_id
+        context['bowl_id'] = bowl_id
+        return render(request, 'healthcat/profile.html', context)
+
+    pet_form.save()
 
     return render(request, 'healthcat/profile.html', context)
 
@@ -373,15 +371,11 @@ def edit_bowl(request):
     context = _add_profile_context(request, context)
 
     if request.method=='GET':
-        print "method == GET"
         bowl_id = request.GET.get("bowl_id")
         bowl = get_object_or_404(Bowl, id=bowl_id)
         initial = {}
         initial['ip_address'] = bowl.ip_address
-        print bowl.ip_address
         initial['name'] = bowl.name
-        print bowl.name
-        context={}
         bowl_form = BowlForm(initial=initial)
         context['bowl_form'] = bowl_form
         context['bowl_id'] = bowl_id
