@@ -37,10 +37,10 @@ class FeedingSchedule(models.Model):
     feeding_intervals = models.ManyToManyField('FeedingInterval')
 
 class FeedingInterval(models.Model):
-    pet = models.ForeignKey('Pet', related_name="feeding_interval_pet")
-    amount = models.PositiveSmallIntegerField(max_length=5)
+    pet = models.ForeignKey('Pet', related_name="feeding_interval")
     start = models.TimeField()
     end = models.TimeField()
+    amount = models.PositiveSmallIntegerField(max_length=5)
 
 
 

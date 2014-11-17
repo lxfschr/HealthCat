@@ -25,6 +25,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+TIME_INPUT_FORMATS = ('%H:%M', '%I:%M%p', '%I:%M %p')
 
 # Application definition
 DEFAULT_APPS = (
