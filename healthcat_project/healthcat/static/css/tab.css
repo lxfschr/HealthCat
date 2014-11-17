@@ -299,6 +299,7 @@ ul {
 th {
   font-weight: normal;
   font-size: 16px;
+  width: 33%;
 }
 
 h4 {
@@ -313,7 +314,7 @@ h4 {
 
 .form-table {
   display: inline;
-  width: 30%;
+  width: 100%;
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
