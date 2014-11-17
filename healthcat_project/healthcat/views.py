@@ -29,6 +29,9 @@ import urllib2,urllib,httplib,json
 #debug
 import random
 
+# serializing data to send back to bowl.
+from django.core import serializers
+
 # Create your views here.
 @login_required
 def home(request):
@@ -426,3 +429,20 @@ def registerRfid(request,bowlSerial,rfid):
       recipient_list=['lxfschr@gmail.com'])
     print 'success'
     return
+
+# this function is used to retrieve cat's food schedule.
+def retrieveFeedingIntervals(request,rfid):
+
+    responseDict={}
+
+    #get the cat exists based on the rfid.
+    try:
+        p=Pet.Objects.get(rfid=rfid)
+    except ObjectDoesNotExist:
+        responseDict["result"]="FAIL"
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
+
+    #get the feeding interval based on rfid
+    intervals= FeedingInterval.Objects.filter(pet=p)
+    return HttpResponse(intervals,content_type="application/json")
