@@ -1,30 +1,20 @@
-{% if feeding_interval_form.is_multipart %}
-    <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_feeding_interval' %}">
-{% else %}
-    <form class="form-pet form-signin" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
-{% endif %}
-        {% for field in feeding_interval_form.visible_fields %}
-            <div class="inline-block">
-                <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
-                {% if field.field.icon_name and field.field.tooltip %}
-                    <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
-                {% elif field.field.icon_name %}
-                    <i class="{{ field.field.icon_name }} color-aaa"></i>
-                {% endif %}
-                {% for error in field.errors %}
-                        <span class='text-danger'> {{ error }} </span>
-                {% endfor %}
-            </div>
-            {{ field }}
-        {% endfor %}
+<tr>
+<form class="form-table" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
+    {% for field in feeding_interval_form.visible_fields %}
+        <td> {{ field }} </td>
+    {% endfor %}
 
-        <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
-        <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
-        
-        <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button></span>
+    <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
+    <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
+            
+    {% csrf_token %}
+</tr>
+<tr>
+    <td> <a href="{% url 'profile' %}"> Cancel </a> </td>
+    <td colspan="2"> 
+        <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit </button> 
+    </td>
 
-        <a href="{% url 'profile' %}"> Cancel </a>
-                
-        {% csrf_token %}
-
-    </form>
+    
+</tr>
+</form>

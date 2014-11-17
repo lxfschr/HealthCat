@@ -23,24 +23,26 @@
                                 </li>
                             </ul>
                             <div id="{{ pet.id }}_feeding_intervals">
-                                {% if pet.feeding_interval.all %}
-                                    <h4> Feeding Intervals </h4>
-                                    <table class="table table-responsive">
+                                <h4> Feeding Intervals </h4>
+                                <table class="table table-responsive table-bordered">
+                                    <thead>
                                         <tr>
                                             <th> Start </th> <th> End </th> <th> Amount (g) </th>
                                         </tr>
-                            
-                                        {% for feeding_interval in pet.feeding_interval.all %}
-                                            <tr>
-                                                <td> {{ feeding_interval.start|time:"g:i a" }} </td>
-                                                <td> {{ feeding_interval.end|time:"g:i a" }} </td>
-                                                <td> {{ feeding_interval.amount }} </td>
-                                            </tr>
-                                        {% endfor %}
-                                        
-                                    </table>
-                                {% endif %}
-                                {% include "healthcat/add_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
+                                    </thead>
+                                    <tfoot>
+                                        {% include "healthcat/add_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
+                                    </tfoot>
+                                    <tbody>
+                                    {% for feeding_interval in pet.feeding_interval.all %}
+                                        <tr>
+                                            <td> {{ feeding_interval.start|time:"g:i a" }} </td>
+                                            <td> {{ feeding_interval.end|time:"g:i a" }} </td>
+                                            <td> {{ feeding_interval.amount }} </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     {% endif %}

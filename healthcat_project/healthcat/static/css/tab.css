@@ -300,3 +300,13 @@ th {
   font-weight: normal;
   font-size: 16px;
 }
+
+h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.add_feeding_interval_button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
