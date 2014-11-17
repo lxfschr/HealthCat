@@ -418,17 +418,16 @@ def registerRfid(request,bowlSerial,rfid):
     # try: 
     #     bowl=Bowl.objects.get(serial_number=bowlSerial)
     # except:
-    #     print bowlSerial
-    #     print rfid
+    #     responseDict['result']='FAIL'
     #     return HttpResponse(json.dumps(responseDict),
     #         content_type="application/json")
+
     email_body = "We have found a new RFID on bowl %s.\
      The RFID is %s"%(bowlSerial,rfid)
     # send_mail(subject="New RFID Detected",
     #   message= email_body,
     #   from_email="healthcat15637@gmail.com",
     #   recipient_list=['lxfschr@gmail.com'])
-    # print 'success'
     responseDict['result']='SUCCESS'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
@@ -452,3 +451,21 @@ def retrieveFeedingIntervals(request,rfid):
     jsonIntervals =serializers.serialize('json',intervals,
         fields=('start','end','amount',))
     return HttpResponse(jsonIntervals,content_type="application/json")
+
+def addConsumptionRecord(request,rfid,amount,dateAndTime):
+
+    #based on get request consumption record is added. 
+    # needs authentication and POST ??
+    #get the cat exists based on the rfid.
+    responseDict={}
+    try:
+        p=Pet.objects.get(rfid=rfid)
+    except ObjectDoesNotExist:
+        responseDict["result"]="FAIL"
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
+
+    #extract date and time.
+    
+
+    pass

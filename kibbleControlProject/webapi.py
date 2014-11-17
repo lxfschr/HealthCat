@@ -62,6 +62,7 @@ indexToRfidFileName='itr.txt'
 rfidToIndexFileName='rti.txt'
 schedulesFileName='sch.txt'
 
+
 #global data Variables
 indexToRfid={}
 rfidToIndex={}
@@ -128,7 +129,7 @@ def openOrNot(index):
 
 	# for each interval check if the current time falls in it.
 	timenow = datetime.datetime.now().strftime("%H:%M")
-	timenow = datetime.datetime(2009, 1, 6, 19, 8, 24, 78915).strftime("%H:%M")
+	# timenow = datetime.datetime(2009, 1, 6, 19, 8, 24, 78915).strftime("%H:%M")
 
 	timenowRE=re.match(r'^(?P<hour>\d\d):(?P<minute>\d\d)$',timenow)
 	timenowHH=timenowRE.group('hour')
@@ -157,7 +158,11 @@ def openOrNot(index):
 			return amount
 	return 0
 
-
+def petJustAte(index,amount):
+	#tries to send the info right away. if the internet connection fails
+	# stores in a local log file
+	timenow= datetime.datetime.now().strftime("%Y%m%d%H%M")
+	
 
 
 

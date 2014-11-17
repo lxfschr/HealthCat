@@ -139,7 +139,7 @@ def processJSONResponse(response,rfid):
 ####################################################################
 
 def getOrCreateDumps():
-	print 'reading dumps...'
+	# print 'reading dumps...'
 	cwd = os.getcwd()
 	indexToRfidExists= os.path.exists(os.path.join(os.getcwd(),
 		indexToRfidFileName))
@@ -170,7 +170,7 @@ def getOrCreateDumps():
 
 def loadDumps():
 
-	print 'loading files....'
+	# print 'loading files....'
 	global indexToRfid,rfidToIndex,schedules
 
 	# open the files and dump
@@ -193,7 +193,7 @@ def loadDumps():
 
 def stashDumps():
 
-	print 'saving files....'
+	# print 'saving files....'
 	global indexToRfid,rfidToIndex,schedules
 
 	# open the files and dump
