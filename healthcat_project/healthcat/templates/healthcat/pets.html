@@ -23,7 +23,24 @@
                                 </li>
                             </ul>
                             <div id="{{ pet.id }}_feeding_intervals">
-                                <h4 class="color-555" onClick="add_add_feeding_interval_form( '{{ pet.id }}', '{% url 'add_feeding_interval' %}'  );" style="cursor: pointer; cursor: hand;"> Add Feeding Interval <i class='glyphicon glyphicon-plus header_icon'></i> </h4>
+                                {% if pet.feeding_interval.all %}
+                                    <h4> Feeding Intervals </h4>
+                                    <table class="table table-responsive">
+                                        <tr>
+                                            <th> Start </th> <th> End </th> <th> Amount (g) </th>
+                                        </tr>
+                            
+                                        {% for feeding_interval in pet.feeding_interval.all %}
+                                            <tr>
+                                                <td> {{ feeding_interval.start|time:"g:i a" }} </td>
+                                                <td> {{ feeding_interval.end|time:"g:i a" }} </td>
+                                                <td> {{ feeding_interval.amount }} </td>
+                                            </tr>
+                                        {% endfor %}
+                                        
+                                    </table>
+                                {% endif %}
+                                {% include "healthcat/add_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
                             </div>
                         </div>
                     {% endif %}

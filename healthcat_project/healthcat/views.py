@@ -45,8 +45,9 @@ def _add_profile_context(request, context):
     context['owner'] = owner
     bowls = Bowl.objects.filter(owner=owner)
     context['bowls'] = bowls
-    pets = Pet.objects.filter(owner=owner)
-    context['pets'] = pets
+    feeding_intervals = FeedingInterval.objects.all()
+    print "feeding intervals: "
+    print feeding_intervals
     return context
 
 def register(request):
@@ -242,21 +243,32 @@ def add_feeding_interval(request):
 
 @login_required
 def add_feeding_interval(request):
-    pet_id = request.GET.get("pet_id")
-    if not pet_id:
-        pet_id = request.POST.get("pet_id")
-    print "pet_id: " + str(pet_id)
-    pet = get_object_or_404(Pet, id=pet_id)
-    initial = {}
-    initial['name'] = pet.name
-    initial['rfid'] = pet.rfid
     context={}
-    feeding_interval_form = FeedingIntervalForm(initial=initial)
     context = _add_profile_context(request, context)
-    context['pet_id'] = pet_id
+
     if request.method=='GET':
-        context['feeding_interval_form'] = FeedingIntervalForm(initial=initial)
+        context['feeding_interval_form'] = FeedingIntervalForm()
+        bowl_id = request.GET.get("bowl_id")
+        context['bowl_id'] = bowl_id
+        pet_id = request.GET.get("pet_id")
+        context['pet_id'] = pet_id
         return render(request,'healthcat/feeding_interval_form.html',context)
+
+    bowl_id = request.POST.get("bowl_id")
+    bowl = get_object_or_404(Bowl, id=bowl_id)
+    pet_id = request.POST.get("pet_id")
+    pet = get_object_or_404(Pet, id=pet_id)
+
+    feeding_interval = FeedingInterval(pet=pet)
+    feeding_interval_form = FeedingIntervalForm(request.POST, instance=feeding_interval)
+    
+    if not feeding_interval_form.is_valid():
+        context['feeding_interval_form'] = feeding_interval_form
+        context['pet_id'] = pet_id
+        context['bowl_id'] = bowl_id
+        return render(request, 'healthcat/profile.html', context)
+
+    feeding_interval_form.save()
 
     return render(request, 'healthcat/profile.html', context)
 

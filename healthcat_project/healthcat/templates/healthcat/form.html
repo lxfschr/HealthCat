@@ -1,9 +1,12 @@
-{% if feeding_interval_form.is_multipart %}
-    <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_feeding_interval' %}">
+Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}
+
+{% if form.is_multipart %}
+    <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action="{% url 'add_pet' %}">
 {% else %}
-    <form class="form-pet form-signin" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
+    <form class="form-pet form-signin" role="form" method="POST" action="{% url 'add_pet' %}">
 {% endif %}
-        {% for field in feeding_interval_form.visible_fields %}
+    {{ wizard.mangement_form }}
+        {% for field in wizard.form.visible_fields %}
             <div class="inline-block">
                 <label for='{{ field.id_for_label }}' class="{{ field.css_classes }}"> {{ field.label }} </label>
                 {% if field.field.icon_name and field.field.tooltip %}
@@ -18,9 +21,13 @@
             {{ field }}
         {% endfor %}
 
-        <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
-        <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
-        
+        <input type ="hidden" name ="bowl_id" value={{ bowl_id }}>
+
+        {% if wizard.steps.prev %}
+            <button name="wizard_goto_step" class="btn btn-lg btn-primary btn-inline" type="submit" value="{{ wizard.steps.first }}"> First Step </button>
+            <button name="wizard_goto_step" class="btn btn-lg btn-primary btn-inline" type="submit" value="{{ wizard.steps.prev }}"> Prev Step </button>
+        {% endif %}
+
         <span><button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button></span>
 
         <a href="{% url 'profile' %}"> Cancel </a>
