@@ -59,6 +59,8 @@ petJustAte(index,amount)
 HOST= "http://localhost:8000/"
 # HOST= "http://frozen-brushlands-8463.herokuapp.com/"
 RFID_LENGTH = 6
+# make a request for getting all the schedules every 1 hour.
+TIMEGAP=3600 
 
 
 #pickle file names
@@ -66,15 +68,10 @@ indexToRfidFileName='itr'
 rfidToIndexFileName='rti'
 schedulesFileName='sch'
 
-
-
-
 #global data Variables
 indexToRfid=dict()
 rfidToIndex=dict()
 schedules = dict()
-
-
 
 
 
@@ -96,6 +93,7 @@ def connectRFID(index):
 	# assign the unique ID to the current index and update dicts.
 	indexToRfid[index]=a
 	rfidToIndex[a]=index
+	schedules[a]=[]
 
 	try:
 		# send a request to application on web.
@@ -105,6 +103,7 @@ def connectRFID(index):
 		# rollback: delete the newly added keys to the dicts.
 		indexToRfid.pop(index,None)
 		rfidToIndex.pop(a,None)
+		schedules.pop(a,None)
 		print "No Internet Connection"
 		return 0
 
@@ -122,20 +121,46 @@ def init():
 	# while loop
 	while (True):
 
-		#make a request to get schedules.
-		r=urllib2.urlopen(HOST+'get-/'+str(rfid)).read()
-		
-
-
-
-
-		# make a request for getting all the schedules every 1 hour.
-		time.sleep(3600)
+		updateSchedules()
+		time.sleep(TIMEGAP) 
 
 
 
 def updateSchedules():
-	pass
+
+	#make a request to get schedules for all cats in dict.
+	for rfid in rfidToIndex:
+		try:
+			r=urllib2.urlopen(HOST+'get-feeding-intervals/'+str(rfid)).read()
+			processJSONResponse(r,rfid)
+		except:
+			continue
+
+def processJSONResponse(response,rfid):
+	inputDict=json.loads(response)
+	newIntervalList=[]
+	for entry in inputDict:
+		#see the fields of the JSON object
+		fieldsDict= entry.get('fields',None)
+		if fieldsDict==None	:
+			print "No fields in 'fields' ...."
+			continue
+		try:
+
+			amount= fieldsDict['amount']
+			timeStart= fieldsDict['start']
+			timeEnd= fieldsDict['end']
+		except:
+			print 'problem in JSON. check dict.'
+			continue
+
+		interval= [amount,timeStart,timeEnd]
+		newIntervalList.append(interval)
+
+	#replace the existing list for the pet.
+	schedules[rfid]=newIntervalList
+
+
 
 def getOrCreateDumps():
 	cwd = os.getcwd()
@@ -149,25 +174,34 @@ def getOrCreateDumps():
 	# if paths dont exist create a file
 	if not indexToRfidExists:
 		f= open(indexToRfidFileName,'r+')
-		json.dumps(indexToRfid,f)
+		json.dump(indexToRfid,f)
+		f.close()
 
 	if not rfidToIndexExists:
 		f= open(rfidToIndexFileName,'r+')
-		json.dumps(rfidToIndex,f)
+		json.dump(rfidToIndex,f)
+		f.close()
 
 	if not schedulesExists:
 		f= open(schedulesFileName,'r+')
 		json.dumps(schedules,f)
-
+		f.close()
 
 	# if paths exist. load from the dumps.
+	stashDumps()
+
+
+def stashDumps():
+	# open the files and dump
 	f1= open(indexToRfidFileName,'r+')
 	indexToRfid=json.load(f1)
+	f1.close()
 
 	f2= open(rfidToIndexFileName,'r+')
 	rfidToIndex=json.load(f2)
+	f2.close()
 
 	f3= open(schedulesFileName,'r+')
 	schedules=json.load(f3)
-
+	f3.close()
 
