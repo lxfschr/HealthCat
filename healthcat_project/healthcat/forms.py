@@ -209,9 +209,9 @@ class FeedingIntervalForm(forms.ModelForm):
         model = FeedingInterval
         exclude = ('pet',)
         widgets = {
-                   'start': forms.TimeInput(attrs={'autofocus': 'autofocus', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 12:00 am'}),
-                   'end': forms.TimeInput(attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 11:59 pm'}),
-                   'amount': forms.NumberInput(attrs={'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 10'}),
+                   'start': forms.TimeInput(attrs={'autofocus': 'autofocus', 'class':'form-table' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 12:00 am'}),
+                   'end': forms.TimeInput(attrs={'class':'form-table' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 11:59 pm'}),
+                   'amount': forms.NumberInput(attrs={'class':'form-table' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 10'}),
                   }
         labels = {
             "amount": "Amount (grams)",

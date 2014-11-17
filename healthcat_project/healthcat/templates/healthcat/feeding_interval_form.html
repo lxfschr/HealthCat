@@ -1,20 +1,15 @@
-<tr>
-<form class="form-table" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
-    {% for field in feeding_interval_form.visible_fields %}
-        <td> {{ field }} </td>
-    {% endfor %}
+<form class="form-pet form-horizontal" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
+        {% for field in feeding_interval_form.visible_fields %}
+            {{ field }}
+        {% endfor %}
 
-    <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
-    <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
-            
-    {% csrf_token %}
-</tr>
-<tr>
-    <td> <a href="{% url 'profile' %}"> Cancel </a> </td>
-    <td colspan="2"> 
-        <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit </button> 
-    </td>
+        <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
+        <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
+        
+        <button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button>
 
-    
-</tr>
-</form>
+        <a href="{% url 'profile' %}"> Cancel </a>
+                
+        {% csrf_token %}
+
+    </form>
