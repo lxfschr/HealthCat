@@ -302,11 +302,6 @@ th {
   width: 33%;
 }
 
-h4 {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
 .add_feeding_interval_button {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -329,4 +324,12 @@ h4 {
   -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.no_padding {
+  padding: 0 !important;
+}
+
+.padding_left {
+  padding-left: 8px;
 }
