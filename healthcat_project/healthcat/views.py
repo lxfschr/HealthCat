@@ -431,16 +431,19 @@ def registerRfid(request,bowlSerial,rfid):
     # try: 
     #     bowl=Bowl.objects.get(serial_number=bowlSerial)
     # except:
-    #     print bowlSerial
-    #     print rfid
+    #     responseDict['result']='FAIL'
     #     return HttpResponse(json.dumps(responseDict),
     #         content_type="application/json")
-    email_body = "We have found a new RFID on bowl %s. The RFID is %s"%(bowlSerial,rfid)
-    send_mail(subject="New RFID Detected",
-      message= email_body,
-      from_email="healthcat15637@gmail.com",
-      recipient_list=['lxfschr@gmail.com'])
-    print 'success'
+
+    email_body = "We have found a new RFID on bowl %s.\
+     The RFID is %s"%(bowlSerial,rfid)
+    # send_mail(subject="New RFID Detected",
+    #   message= email_body,
+    #   from_email="healthcat15637@gmail.com",
+    #   recipient_list=['lxfschr@gmail.com'])
+    responseDict['result']='SUCCESS'
+    return HttpResponse(json.dumps(responseDict),
+        content_type="application/json")
     return
 
 # this function is used to retrieve cat's food schedule.
@@ -450,12 +453,32 @@ def retrieveFeedingIntervals(request,rfid):
 
     #get the cat exists based on the rfid.
     try:
-        p=Pet.Objects.get(rfid=rfid)
+        p=Pet.objects.get(rfid=rfid)
     except ObjectDoesNotExist:
         responseDict["result"]="FAIL"
         return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
 
     #get the feeding interval based on rfid
-    intervals= FeedingInterval.Objects.filter(pet=p)
-    return HttpResponse(intervals,content_type="application/json")
+    intervals= FeedingInterval.objects.filter(pet=p)
+    jsonIntervals =serializers.serialize('json',intervals,
+        fields=('start','end','amount',))
+    return HttpResponse(jsonIntervals,content_type="application/json")
+
+def addConsumptionRecord(request,rfid,amount,dateAndTime):
+
+    #based on get request consumption record is added. 
+    # needs authentication and POST ??
+    #get the cat exists based on the rfid.
+    responseDict={}
+    try:
+        p=Pet.objects.get(rfid=rfid)
+    except ObjectDoesNotExist:
+        responseDict["result"]="FAIL"
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
+
+    #extract date and time.
+    
+
+    pass
