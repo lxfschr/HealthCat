@@ -122,6 +122,9 @@ label {
 }
 
 .btn-col {
-  position: relative;
-  top: 21px;
+  margin-top: 18px;
+}
+
+.cancel-col {
+  margin-top: 36px;
 }

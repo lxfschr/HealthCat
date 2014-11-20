@@ -1,22 +1,17 @@
-<tr>
-	<th colspan="3" class="no_padding">
-		<div id="{{ bowl.id }}_{{ pet.id }}_feeding_interval_row">
-		{% if feeding_interval_form and bowl_id == bowl.id|stringformat:"s" and pet_id == pet.id|stringformat:"s" %}
-	        {% include "healthcat/feeding_interval_form.html" with pageToRender="/healthcat/profile" %}
-	    {% else %}
-		    <form id="{{ bowl.id }}_{{ pet.id }}_feeding_interval_form" class="interval" onsubmit="add_pet_form(event, '{{ bowl.id }}_{{ pet.id }}_feeding_interval_form', '{{ bowl.id }}_{{ pet.id }}_feeding_interval_row', '{% url 'add_feeding_interval' %}')" >
-			    {% csrf_token %}
-			    <h4 class="padding_left"> 
-			    	<button class="add_button"> 
-			    		Add Feeding Interval 
-			    		<i class='glyphicon glyphicon-plus header_icon'></i> 
-			    	</button> 
-			    </h4>
+{% if feeding_interval_form and bowl_id == bowl.id|stringformat:"s" and pet_id == pet.id|stringformat:"s" %}
+    {% include "healthcat/feeding_interval_form.html" with pageToRender="/healthcat/profile" %}
+{% else %}
+    <form id="{{ bowl.id }}_{{ pet.id }}_feeding_interval_form" class="interval" onsubmit="add_pet_form(event, '{{ bowl.id }}_{{ pet.id }}_feeding_interval_form', '{{ bowl.id }}_{{ pet.id }}_feeding_interval_row', '{% url 'add_feeding_interval' %}')" >
+	    {% csrf_token %}
+	    <h4 class="padding_left"> 
+	    	<button class="add_button"> 
+	    		Add Feeding Interval 
+	    		<i class='glyphicon glyphicon-plus header_icon'></i> 
+	    	</button> 
+	    </h4>
 
-			    <input type ="hidden" name ="bowl_id" value={{ bowl.id }}>
-			    <input type ="hidden" name ="pet_id" value={{ pet.id }}>
-			</form>
-		{% endif %}
-	</div>
-	</th>
-</tr>
+	    <input type ="hidden" name ="bowl_id" value={{ bowl.id }}>
+	    <input type ="hidden" name ="pet_id" value={{ pet.id }}>
+	</form>
+{% endif %}
+</div>

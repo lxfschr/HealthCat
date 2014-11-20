@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Owner(models.Model):
   user = models.OneToOneField(User)
-  zip_code=models.IntegerField(max_length=5, help_text='To compare your pet to other pets in your area.')
+  zip_code=models.CharField(max_length=5, help_text='To compare your pet to other pets in your area.', blank=True)
   photo = models.ImageField(upload_to="owner_photos", blank=True)
   
   def __unicode__(self):

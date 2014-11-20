@@ -26,6 +26,8 @@ from django.http import HttpResponse, Http404
 # making http requests and json
 import urllib2,urllib,httplib,json
 
+import time
+
 #debug
 import random
 
@@ -209,41 +211,6 @@ def statistics(request):
 def edit_profile(request):
     return redirect('/')
 
-"""@login_required
-def add_feeding_interval_form(request):
-    context = {}
-    feeding_interval_form = FeedingIntervalForm()
-    context['feeding_interval_form'] = feeding_interval_form
-    return render(request, 'healthcat/feeding_interval_form.html', context)
-
-@login_required
-def add_feeding_interval(request):
-    context={}
-    context = _add_profile_context(request, context)
-
-    if request.method=='GET':
-        context['feeding_interval_form'] = FeedingIntervalForm()
-        return render(request,'healthcat/profile.html',context)
-
-    pet_id = request.GET.get("pet_id")
-    if not pet_id:
-        pet_id = request.POST.get("pet_id")
-    print "pet_id: " + str(pet_id)
-    pet = get_object_or_404(Pet, id=pet_id)
-
-    new_feeding_interval = FeedingInterval(pet=pet)
-
-    feeding_interval_form = FeedingIntervalForm(request.POST, instance=new_feeding_interval)
-    
-    if not feeding_interval_form.is_valid():
-        print "pet form not valid"
-        context['feeding_interval_form'] = feeding_interval_form
-        return render(request, 'healthcat/profile.html', context)
-
-    feeding_interval_form.save()
-
-    return render(request, 'healthcat/profile.html', context)"""
-
 @login_required
 def add_feeding_interval(request):
     context={}
@@ -269,6 +236,52 @@ def add_feeding_interval(request):
         context['feeding_interval_form'] = feeding_interval_form
         context['pet_id'] = pet_id
         context['bowl_id'] = bowl_id
+        return render(request, 'healthcat/profile.html', context)
+
+    feeding_interval_form.save()
+
+    return render(request, 'healthcat/profile.html', context)
+
+@login_required
+def edit_feeding_interval(request):
+    context = {}
+    context = _add_profile_context(request, context)
+    
+    print "in edit_feeding_interval"
+    if request.method == 'GET':
+        print "method == GET"
+        pet_id = request.GET.get("pet_id")
+        print "pet id: " + pet_id
+        bowl_id = request.GET.get("bowl_id")
+        print "bowl id: " + bowl_id
+        feeding_interval_id = request.GET.get("feeding_interval_id")
+        feeding_interval = get_object_or_404(FeedingInterval, id=feeding_interval_id)
+        initial = {}
+        start =  feeding_interval.start
+        print start
+        initial['start'] = start
+        
+        initial['end'] = feeding_interval.end
+        initial['amount'] = feeding_interval.amount
+        feeding_interval_form = FeedingIntervalForm(initial=initial)
+        context['feeding_interval_form'] = feeding_interval_form
+        context['pet_id'] = pet_id
+        context['bowl_id'] = bowl_id
+        context['feeding_interval_id'] = feeding_interval_id
+        return render(request,'healthcat/edit_feeding_interval_form.html',context)
+
+    pet_id = request.POST.get("pet_id")
+    bowl_id = request.POST.get("bowl_id")
+    feeding_interval_id = request.POST.get("feeding_interval_id")
+    feeding_interval = get_object_or_404(FeedingInterval, id=feeding_interval_id)
+
+    feeding_interval_form = FeedingIntervalForm(request.POST, instance=feeding_interval)
+
+    if not feeding_interval_form.is_valid():
+        context['feeding_interval_form'] = feeding_interval_form
+        context['pet_id'] = pet_id
+        context['bowl_id'] = bowl_id
+        context['feeding_interval_id'] = feeding_interval_id
         return render(request, 'healthcat/profile.html', context)
 
     feeding_interval_form.save()

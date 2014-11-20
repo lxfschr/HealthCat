@@ -22,27 +22,37 @@
                                     RFID Tag #: {{ pet.rfid }}
                                 </li>
                             </ul>
-                            <div id="{{ pet.id }}_feeding_intervals">
-                                <h4> Feeding Intervals </h4>
-                                <table class="table table-responsive table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th> Start </th> <th> End </th> <th> Amount (g) </th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        {% include "healthcat/add_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
-                                    </tfoot>
-                                    <tbody>
-                                    {% for feeding_interval in pet.feeding_interval.all %}
-                                        <tr>
-                                            <td> {{ feeding_interval.start|time:"g:i a" }} </td>
-                                            <td> {{ feeding_interval.end|time:"g:i a" }} </td>
-                                            <td> {{ feeding_interval.amount }} </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                            <h4> Feeding Intervals </h4>
+                            <div id="{{ pet.id }}_feeding_intervals" class="feeding_intervals_table">
+                                <div class="row feeding_interval_row">
+                                    <div class="col col-xs-4 feeding_interval_col">
+                                        Start
+                                    </div>
+                                    <div class="col col-xs-4 feeding_interval_col">
+                                        End
+                                    </div>
+                                    <div class="col col-xs-4 feeding_interval_col">
+                                        Amount (g)
+                                    </div>
+                                </div>
+                                {% for feeding_interval in pet.feeding_interval.all %}
+                                    <div class="row feeding_interval_row" id="{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval">
+                                        <div class="col col-xs-4 feeding_interval_col">
+                                            {{ feeding_interval.start|time:"g:i A" }}
+                                        </div>
+                                        <div class="col col-xs-4 feeding_interval_col">
+                                            {{ feeding_interval.end|time:"g:i A" }} 
+                                        </div>
+                                        <div class="col col-xs-4 feeding_interval_col">
+                                            {{ feeding_interval.amount }}
+                                            {% include "healthcat/edit_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <div class="row feeding_interval_row" id="{{ bowl.id }}_{{ pet.id }}_feeding_interval_row">
+                                    <div class="col col-xs-12 feeding_interval_col">
+                                    {% include "healthcat/add_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
+                                </div>
                             </div>
                         </div>
                     {% endif %}

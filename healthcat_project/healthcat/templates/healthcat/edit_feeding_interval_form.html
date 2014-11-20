@@ -1,4 +1,4 @@
-<form class="form-pet form-horizontal" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
+<form class="form-pet form-horizontal" role="form" method="POST" action="{% url 'edit_feeding_interval' %}">
     <div class="row">
         {% for field in feeding_interval_form.visible_fields %}
             <div class="col col-xs-4">
@@ -8,6 +8,7 @@
     </div>
         <input type="hidden" name="bowl_id" value={{ bowl_id }} /> <!-- Todo use {{ pet.id }} -->
         <input type="hidden" name="pet_id" value={{ pet_id }} /> <!-- Todo use {{ pet.id }} -->
+        <input type="hidden" name="feeding_interval_id" value={{ feeding_interval_id }} />
         
         <button class="btn btn-lg btn-primary btn-inline" type="submit"> Submit </button>
 
