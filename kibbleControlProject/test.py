@@ -1,9 +1,7 @@
 import webapi
 
-# webapi.validateBowl()
+# print webapi.validateBowl()
 
 
-
-
-print webapi.newRfidDetected(1)
-
+# print webapi.newRfidDetected(0)
+print webapi.openOrNot(0)

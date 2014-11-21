@@ -167,10 +167,10 @@ def petJustAte(index,amount):
 	
 
 def validateBowl():
-	validation_helper('True')
+	return validation_helper('True')
 
 def unValidateBowl():
-	validation_helper('False')
+	return validation_helper('False')
 
 
 def validation_helper(arg):
@@ -184,10 +184,6 @@ def validation_helper(arg):
 	req = urllib2.Request(url, data)
 	response = urllib2.urlopen(req)
 	return 1
-
-
-
-
 
 
 
