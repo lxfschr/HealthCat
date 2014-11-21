@@ -36,17 +36,19 @@ class BowlForm(forms.ModelForm):
         required_css_class = 'required'
 
         model = Bowl
-        exclude = ('owner','serial_number', 'pets')
+        # exclude = ('owner','serial_number', 'pets')
+        exclude = ('owner', 'pets')
+
         widgets = {
                    'name': forms.TextInput(attrs={'label':'Name', 
                                           'autofocus': 'autofocus', 
                                           'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 
                                           'placeholder':'eg: Cat Bowl'}),
-                   'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
+                   # 'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
                   }
         labels = {
             "name": "Bowl Name",
-            "ip_address": "Bowl IP Address",
+            # "ip_address": "Bowl IP Address",
         }
         
     def clean(self):

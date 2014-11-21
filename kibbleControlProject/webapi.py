@@ -5,6 +5,8 @@ import pickle,json
 import os
 import datetime
 import re
+from bowl_settings import *
+
 
 """
 Documentation:
@@ -36,6 +38,16 @@ openOrNot(index)
 			  0 indicates no food to be fed.
 
 
+
+validateBowl()
+	This function shall be called when a connect button is pressed on bowl
+
+unValidateBowl()
+	This function shall be called after a set time after a validateBowl() 
+	is called. this unvalidates the bowl.
+
+
+
 petJustAte(index,amount)
 	
 	This function shall be called when a pet moves away from the
@@ -49,18 +61,6 @@ petJustAte(index,amount)
 
 """
 
-
-HOST= "http://localhost:8000/healthcat/"
-# HOST= "http://frozen-brushlands-8463.herokuapp.com/healthcat/"
-RFID_LENGTH = 6
-# make a request for getting all the schedules every 3 secs
-TIMEGAP=3
-BOWLSERIAL='CAT123'
-
-#pickle file names
-indexToRfidFileName='itr.txt'
-rfidToIndexFileName='rti.txt'
-schedulesFileName='sch.txt'
 
 
 #global data Variables
@@ -81,6 +81,7 @@ def newRfidDetected(index):
 	getOrCreateDumps()
 	
 	if str(index) in indexToRfid:
+		print ' old index being used'
 		return 0 # an old index is not allowed
 
 	#get a unique random ID
@@ -93,7 +94,7 @@ def newRfidDetected(index):
 	indexToRfid[index]=a
 	rfidToIndex[a]=index
 	schedules[a]=[]
-
+	print  'ereaerea'
 	try:
 		# send a request to application on web.
 		r=urllib2.urlopen(HOST+'new-rfid-detected/'+BOWLSERIAL+'/'+str(a)).read()
@@ -162,8 +163,27 @@ def petJustAte(index,amount):
 	#tries to send the info right away. if the internet connection fails
 	# stores in a local log file
 	timenow= datetime.datetime.now().strftime("%Y%m%d%H%M")
+
 	
 
+def validateBowl():
+	validation_helper('True')
+
+def unValidateBowl():
+	validation_helper('False')
+
+
+def validation_helper(arg):
+	url = HOST+'validate-bowl'
+	values = {'bowlSerial' : BOWLSERIAL,
+	          'bowlKey' : BOWL_KEY,
+	          'validate':arg }
+
+
+	data = urllib.urlencode(values)
+	req = urllib2.Request(url, data)
+	response = urllib2.urlopen(req)
+	return 1
 
 
 

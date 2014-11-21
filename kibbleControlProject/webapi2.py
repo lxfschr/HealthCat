@@ -3,63 +3,20 @@ import time
 import random
 import pickle,json
 import os
+from bowl_settings import *
 
 """
 Documentation:
 
 Functions available. 
 
-newRfidDetected(index)
-	
-	This function shall be called whenever you detect a new RFID.
-	The index number should be a new number. 
-	REQUIRES: index to be integer.
-			  index should not have been an integer allocated 
-			  previously to a different pet.
-	ENSURES:  Sends a request to server if connected to internet
-			  Which then sends an email to user.
-			  returns 0 if fail, including internet disConnects.
-			  returns 1 if success
-
-
-openOrNot(index)
-
-	This function shall be called when a cat walks nearby/
-	an old rfid is detected.
-
-	REQUIRES: index to be integer.
-			  index must be an integer allocated
-
-	ENSURES:  returns an integer indicating amount of food to 
-			  be fed.
-			  0 indicates no food to be fed.
-
-
-petJustAte(index,amount)
-	
-	This function shall be called when a pet moves away from the
-	bowl.
-
-	REQUIRES: index to be integer.
-			  index must be an integer allocated
-
-	ENSURES:  An entry shall be added to the log.
+init()
+	This function shall be called to start the interval
+	pooling program.
 
 
 """
 
-
-HOST= "http://localhost:8000/healthcat/"
-# HOST= "http://frozen-brushlands-8463.herokuapp.com/healthcat/"
-RFID_LENGTH = 6
-# make a request for getting all the schedules every 3 secs
-TIMEGAP=3
-BOWLSERIAL='CAT123'
-
-#pickle file names
-indexToRfidFileName='itr.txt'
-rfidToIndexFileName='rti.txt'
-schedulesFileName='sch.txt'
 
 #global data Variables
 indexToRfid={}
@@ -120,6 +77,25 @@ def processJSONResponse(response,rfid):
 	#replace the existing list for the pet.
 	schedules[rfid]=newIntervalList
 
+
+def validateBowl():
+	validation_helper('True')
+
+def unValidateBowl():
+	validation_helper('False')
+
+
+def validation_helper(arg):
+	url = HOST+'validate-bowl'
+	values = {'bowlSerial' : BOWLSERIAL,
+	          'bowlKey' : BOWL_KEY,
+	          'validate':arg }
+
+
+	data = urllib.urlencode(values)
+	req = urllib2.Request(url, data)
+	response = urllib2.urlopen(req)
+	return 1
 
 
 

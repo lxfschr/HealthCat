@@ -33,4 +33,6 @@ urlpatterns = patterns('',
         'healthcat.views.retrieveFeedingIntervals',
             name='get_feeding_intervals'),
     url(r'^edit-feeding-interval$', 'healthcat.views.edit_feeding_interval', name='edit_feeding_interval'),
+    url(r'^validate-bowl','healthcat.views.validateBowl',name='validate_bowl'),
+
 )

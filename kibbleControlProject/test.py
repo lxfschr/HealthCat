@@ -1,4 +1,9 @@
 import webapi
 
-webapi.connectRFID(2435)
-print 'success from test'
+# webapi.validateBowl()
+
+
+
+
+print webapi.newRfidDetected(1)
+

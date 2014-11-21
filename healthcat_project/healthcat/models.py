@@ -15,14 +15,22 @@ class Owner(models.Model):
     return self.user.username
 
 class Bowl(models.Model):
-    ip_address = models.CharField(max_length=100, unique=True)
+    # ip_address = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
     pets = models.ManyToManyField('Pet')
     serial_number = models.CharField(max_length=100, unique=True)
+    # is_valid = models.BooleanField()
+    # pass_key = models.CharField(max_length=100)
 
     def __unicode__(self):
-        return self.ip_address
+        return self.serial_number
+
+class UnAssignedBowls(models.Model):
+    bowl_serial = models.CharField(max_length=100, unique=True)
+    bowl_key = models.CharField(max_length=100)
+    is_valid= models.BooleanField()
+
 
 
 class Pet(models.Model):

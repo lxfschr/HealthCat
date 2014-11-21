@@ -13,6 +13,7 @@ from django.db import transaction
 from healthcat.models import *
 from forms import *
 
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -33,6 +34,8 @@ import random
 
 # serializing data to send back to bowl.
 from django.core import serializers
+
+
 
 # Create your views here.
 @login_required
@@ -360,12 +363,16 @@ def add_bowl(request):
     context={}
     context = _add_profile_context(request, context)
 
+    print 'adding a bowl'
+
+
     if request.method=='GET':
         context['add_bowl_form'] = BowlForm()
         return render(request,'healthcat/add_bowl_form.html',context)
 
     owner = Owner.objects.get(user=request.user)
-    new_bowl = Bowl(owner=owner, serial_number=random.random()) #todo implement serial
+    # new_bowl = Bowl(owner=owner, serial_number=random.random()) #todo implement serial
+    new_bowl = Bowl(owner=owner) #todo implement serial
 
     add_bowl_form = BowlForm(request.POST, instance=new_bowl)
     
@@ -374,23 +381,39 @@ def add_bowl(request):
         return render(request, 'healthcat/profile.html', context)
 
 
-    ip_address = add_bowl_form.cleaned_data['ip_address']
+    # ip_address = add_bowl_form.cleaned_data['ip_address']
 
-    try:
-        r = urllib2.urlopen(ip_address+'connect').read()
-        print r
-    except:
-        print "Could not connect to " + ip_address
+    # try:
+    #     r = urllib2.urlopen(ip_address+'connect').read()
+    #     print r
+    # except:
+    #     print "Could not connect to " + ip_address
 
-    exisiting_bowl = Bowl.objects.filter(ip_address=ip_address)
-    if exisiting_bowl:
-        print "bowl model already exists"
-        exisiting_bowl[0].owner = owner #Todo add caretaker
-    else:
-        print "creating new bowl model"
+    # logic here
+    bowl_serial = add_bowl_form.cleaned_data['serial_number']
+
+    unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
+    # print unassigned_bowl
+
+    print unassigned_bowl[0].is_valid
+
+    if unassigned_bowl and unassigned_bowl[0].is_valid:
+        print 'creating new bowl from unassigned_bowl'
+        unassigned_bowl[0].is_valid=False
         add_bowl_form.save()
 
     return render(request, 'healthcat/profile.html', context)
+
+    #old code below
+    # exisiting_bowl = Bowl.objects.filter(ip_address=ip_address)
+    # if exisiting_bowl:
+    #     print "bowl model already exists"
+    #     exisiting_bowl[0].owner = owner #Todo add caretaker
+    # else:
+    #     print "creating new bowl model"
+    #     add_bowl_form.save()
+
+    # return render(request, 'healthcat/profile.html', context)
 
 @login_required
 def edit_bowl(request):
@@ -428,23 +451,26 @@ def registerRfid(request,bowlSerial,rfid):
     responseDict= {}
 
     # get the user with the bowl.
-    # try: 
-    #     bowl=Bowl.objects.get(serial_number=bowlSerial)
-    # except:
-    #     responseDict['result']='FAIL'
-    #     return HttpResponse(json.dumps(responseDict),
-    #         content_type="application/json")
+    try: 
+        bowl=Bowl.objects.get(serial_number=bowlSerial)
+        bowl_owner_email = bowl.owner.user.username
+        responseDict['result']='SUCCESS'
+    except:
+        print 'result is fail . '
+        responseDict['result']='FAIL'
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
 
     email_body = "We have found a new RFID on bowl %s.\
      The RFID is %s"%(bowlSerial,rfid)
-    # send_mail(subject="New RFID Detected",
-    #   message= email_body,
-    #   from_email="healthcat15637@gmail.com",
-    #   recipient_list=['lxfschr@gmail.com'])
+    send_mail(subject="New RFID Detected",
+      message= email_body,
+      from_email="healthcat15637@gmail.com",
+      recipient_list=[bowl_owner_email])
     responseDict['result']='SUCCESS'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
-    return
+
 
 # this function is used to retrieve cat's food schedule.
 def retrieveFeedingIntervals(request,rfid):
@@ -455,7 +481,7 @@ def retrieveFeedingIntervals(request,rfid):
     try:
         p=Pet.objects.get(rfid=rfid)
     except ObjectDoesNotExist:
-        responseDict["result"]="FAIL"
+        # responseDict["result"]="FAIL"
         return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
 
@@ -480,5 +506,38 @@ def addConsumptionRecord(request,rfid,amount,dateAndTime):
 
     #extract date and time.
     
+
+    pass
+
+@csrf_exempt
+def validateBowl(request):
+    responseDict={}
+
+    if request.method=='POST':
+        bowl_serial = request.POST.get('bowlSerial')
+        bowl_key = request.POST.get('bowlKey')
+        validate = request.POST.get('validate')
+
+        try:
+            unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial = bowl_serial)
+            print 'now '
+            if not unassigned_bowl.bowl_key == bowl_key:
+                raise bowlKeyMismatch
+            unassigned_bowl.is_valid = validate=='True'
+
+            responseDict['result']='PASS'
+            unassigned_bowl.save()
+            return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
+
+        except :
+            responseDict['result']='FAIL'
+            return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
+
+
+    responseDict['result'] = 'NOT PASSED : GET REQUEST'
+    return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
 
     pass
