@@ -27,15 +27,21 @@ schedules = {}
 def init():
 	# create a new file or read from the existing pickle.
 	# check for files
-	getOrCreateDumps()
 
 	# while loop
 	while (True):
-		updateSchedules()
-		stashDumps()
-		time.sleep(TIMEGAP)
+
+		acquireLock()
+		getOrCreateDumps()#loads files from the data.
+
+		updateSchedules()# makes a request to webapp and loads
 
 
+		stashDumps()# saves files back to data
+		releaseLock()
+
+
+		time.sleep(TIMEGAP) # waits.
 
 
 def updateSchedules():
@@ -63,7 +69,6 @@ def processJSONResponse(response,rfid):
 			print "No fields in 'fields' ...."
 			continue
 		try:
-
 			amount= fieldsDict['amount']
 			timeStart= fieldsDict['start']
 			timeEnd= fieldsDict['end']
@@ -76,35 +81,6 @@ def processJSONResponse(response,rfid):
 
 	#replace the existing list for the pet.
 	schedules[rfid]=newIntervalList
-
-
-def validateBowl():
-	validation_helper('True')
-
-def unValidateBowl():
-	validation_helper('False')
-
-
-def validation_helper(arg):
-	url = HOST+'validate-bowl'
-	values = {'bowlSerial' : BOWLSERIAL,
-	          'bowlKey' : BOWL_KEY,
-	          'validate':arg }
-
-
-	data = urllib.urlencode(values)
-	req = urllib2.Request(url, data)
-	response = urllib2.urlopen(req)
-	return 1
-
-
-
-
-
-
-
-
-
 
 
 
@@ -127,17 +103,17 @@ def getOrCreateDumps():
 	# if paths dont exist create a file
 	if not indexToRfidExists:
 		f1= open(indexToRfidFileName,'w+')
-		json.dump(indexToRfid,f1)
+		json.dump({},f1)
 		f1.close()
 
 	if not rfidToIndexExists:
 		f2= open(rfidToIndexFileName,'w+')
-		json.dump(rfidToIndex,f2)
+		json.dump({},f2)
 		f2.close()
 
 	if not schedulesExists:
 		f3= open(schedulesFileName,'w+')
-		json.dump(schedules,f3)
+		json.dump({},f3)
 		f3.close()
 
 	# if paths exist. load from the dumps.
@@ -184,5 +160,55 @@ def stashDumps():
 	f3= open(schedulesFileName,'w+')
 	json.dump(schedules,f3)
 	f3.close()
+
+
+
+
+def acquireLock():
+	# set the lock file to 1
+
+	print 'acquiring lock....',
+	lockExists= os.path.exists(os.path.join(os.getcwd(),
+		lockFileName))
+	if not lockExists:
+		print 'lock doesnt exist .. creating one..'
+		f3= open(lockFileName,'w+')
+		# lockdict={}
+		# lockdict['lock']='UNLOCKED'
+		# json.dump({},f3)
+		f3.write('UNLOCKED')
+		f3.close()
+
+
+	fLock= open(lockFileName,'r')
+
+	s=fLock.read()
+
+	while(s == 'LOCKED'):
+		fLock.close()
+		time.sleep(1)
+		fLock= open(lockFileName,'r')
+		s=fLock.read()
+		print 'trying to acquire lock'
+
+	fLock.close()
+
+	fLock =open(lockFileName,'w+')
+	fLock.write('LOCKED')
+	fLock.close()
+	print 'lock acquired'
+
+
+
+def releaseLock():
+	# set the lock to 0
+	print 'releasing lock...',
+
+	fLock= open(lockFileName,'w+')
+	fLock.write('UNLOCKED')
+	fLock.close()
+
+	print 'lockReleased'
+
 
 init()

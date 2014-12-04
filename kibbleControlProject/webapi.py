@@ -77,12 +77,21 @@ def generateRandomID():
 def newRfidDetected(index):
 
 	global indexToRfid,rfidToIndex,schedules
+	while(True):
+		try:
+			acquireLock()
+			getOrCreateDumps()
+			break
+		except:
+			time.sleep(2)
+			continue
 
-	getOrCreateDumps()
 	
 	if str(index) in indexToRfid:
 		print ' old index being used'
+		releaseLock()
 		return 0 # an old index is not allowed
+
 
 	#get a unique random ID
 	a=generateRandomID()
@@ -94,11 +103,12 @@ def newRfidDetected(index):
 	indexToRfid[index]=a
 	rfidToIndex[a]=index
 	schedules[a]=[]
-	print  'ereaerea'
 	try:
 		# send a request to application on web.
 		r=urllib2.urlopen(HOST+'new-rfid-detected/'+BOWLSERIAL+'/'+str(a)).read()
+
 		stashDumps()
+		releaseLock()
 		return 1
 	except:
 		# rollback: delete the newly added keys to the dicts.
@@ -106,9 +116,11 @@ def newRfidDetected(index):
 		rfidToIndex.pop(a,None)
 		schedules.pop(a,None)
 		print "No Internet Connection"
+		releaseLock()
 		return 0
 
 	print "ERR10: No Case should come here"
+	releaseLock()
 	return 0
 
 
@@ -267,6 +279,85 @@ def stashDumps():
 	f3= open(schedulesFileName,'w+')
 	json.dump(schedules,f3)
 	f3.close()
+
+
+def acquireLock():
+	# set the lock file to 1
+
+	print 'acquiring lock....',
+	lockExists= os.path.exists(os.path.join(os.getcwd(),
+		lockFileName))
+	if not lockExists:
+		print 'lock doesnt exist .. creating one..'
+		f3= open(lockFileName,'w+')
+		# lockdict={}
+		# lockdict['lock']='UNLOCKED'
+		# json.dump({},f3)
+		f3.write('UNLOCKED')
+		f3.close()
+
+
+	fLock= open(lockFileName,'r')
+
+	s=fLock.read()
+
+	while(s == 'LOCKED'):
+		fLock.close()
+		time.sleep(1)
+		fLock= open(lockFileName,'r')
+		s=fLock.read()
+		print 'trying to acquire lock'
+
+	fLock.close()
+
+	fLock =open(lockFileName,'w+')
+	fLock.write('LOCKED')
+	fLock.close()
+
+	print 'lock acquired'
+
+
+
+def releaseLock():
+	# set the lock to 0
+	print 'releasing lock...',
+
+	fLock= open(lockFileName,'w+')
+	fLock.write('UNLOCKED')
+	fLock.close()
+
+	print 'lockReleased'
+
+# def acquireLock():
+# 	# set the lock file to 1
+# 	fLock= open(lockFileName,'w+')
+# 	schedules=json.load(fLock)
+# 	while(schedules['lock'] == '0'):
+# 		fLock.close()
+# 		fLock= open(lockFileName,'w+')
+# 		schedules=json.load(fLock)
+# 		time.sleep(1)
+
+# 	json.dump({"lock":"1"},fLock)
+# 	fLock.close()
+
+
+# def releaseLock():
+# 	# set the lock to 0
+# 	fLock= open(lockFileName,'w+')
+# 	json.dump({"lock":"0"},fLock)
+# 	fLock.close()
+
+
+# def isFilesLocked():
+# 	# checks the lock file value and returns bool
+# 	fLock= open(schedulesFileName,'r')
+# 	schedules=json.load(fLock)
+# 	fLock.close()
+# 	print schedules['lock']
+# 	return schedules['lock'] == '1'
+
+
 
 
 #############################################

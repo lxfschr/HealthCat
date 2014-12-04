@@ -461,10 +461,11 @@ def registerRfid(request,bowlSerial,rfid):
 
     email_body = "We have found a new RFID on bowl %s.\
      The RFID is %s"%(bowlSerial,rfid)
-    send_mail(subject="New RFID Detected",
-      message= email_body,
-      from_email="healthcat15637@gmail.com",
-      recipient_list=[bowl_owner_email])
+    # send_mail(subject="New RFID Detected",
+    #   message= email_body,
+    #   from_email="healthcat15637@gmail.com",
+    #   recipient_list=[bowl_owner_email])
+    print email_body
     responseDict['result']='SUCCESS'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
