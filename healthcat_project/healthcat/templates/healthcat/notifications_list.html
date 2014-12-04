@@ -1,0 +1,5 @@
+{% for notification in notifications %}
+	<div notification_id="{{ notification.id }}"> 
+		{{ notification.timestamp }} {{ notification.text }}
+	</div>
+{% endfor %}

@@ -10,7 +10,7 @@ class Owner(models.Model):
   user = models.OneToOneField(User)
   zip_code=models.CharField(max_length=5, help_text='To compare your pet to other pets in your area.', blank=True)
   photo = models.ImageField(upload_to="owner_photos", blank=True)
-  
+  num_notifications = models.IntegerField(default=0)
   def __unicode__(self):
     return self.user.username
 
@@ -29,7 +29,7 @@ class Bowl(models.Model):
 class UnAssignedBowls(models.Model):
     bowl_serial = models.CharField(max_length=100, unique=True)
     bowl_key = models.CharField(max_length=100)
-    is_valid= models.BooleanField()
+    is_valid= models.BooleanField(default=False)
 
 
 
@@ -40,17 +40,17 @@ class Pet(models.Model):
     photo = models.ImageField(upload_to='pet_photos', blank=True)
     rfid = models.IntegerField(max_length=30, unique=True)
 
-
-class FeedingSchedule(models.Model):
-    feeding_intervals = models.ManyToManyField('FeedingInterval')
-
 class FeedingInterval(models.Model):
     pet = models.ForeignKey('Pet', related_name="feeding_interval")
     start = models.TimeField()
     end = models.TimeField()
     amount = models.PositiveSmallIntegerField(max_length=5)
 
-
+class Notification(models.Model):
+    owner = models.ForeignKey('Owner', related_name="notification")
+    bowl = models.ForeignKey('Bowl', related_name="bowl")
+    date = models.DateField()
+    text = models.CharField(max_length=200)
 
 """
 # pet stats classification for all forms of health stats.
