@@ -392,7 +392,6 @@ def add_bowl(request):
         newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
          owner=owner,initTime=cDateTime, name=bowl_name)
         newcpBowl.save()
-    
 
     return render(request, 'healthcat/profile.html', context)
 
@@ -502,13 +501,23 @@ def validateBowl(request):
 
         try:
             unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial = bowl_serial)
-            print 'now '
+
             if not unassigned_bowl.bowl_key == bowl_key:
                 raise bowlKeyMismatch
-            unassigned_bowl.is_valid = validate=='True'
+
+            cpBowl = ConnectionPendingBowls.objects.get(uaBowl=unassigned_bowl)
+
+            #create a connected bowl.
+            newBowl = Bowl(name=cpBowl.name,owner=cpBowl.owner,
+                serial_number=bowl_serial)
+            newBowl.save()
+
+            cpBowl.delete()
+            
+
 
             responseDict['result']='PASS'
-            unassigned_bowl.save()
+ 
             return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
 
