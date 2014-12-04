@@ -35,7 +35,8 @@ import random
 # serializing data to send back to bowl.
 from django.core import serializers
 
-
+#time out
+TIMEOUT = 120 #seconds
 
 # Create your views here.
 @login_required
@@ -524,12 +525,14 @@ def addConsumptionRecord(request,rfid,amount,dateAndTime):
 
 @csrf_exempt
 def validateBowl(request):
+
     responseDict={}
 
     if request.method=='POST':
         bowl_serial = request.POST.get('bowlSerial')
         bowl_key = request.POST.get('bowlKey')
         validate = request.POST.get('validate')
+        print 'validating bowl  : '+ bowl_serial
 
         try:
             unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial = bowl_serial)
@@ -538,6 +541,12 @@ def validateBowl(request):
                 raise bowlKeyMismatch
 
             cpBowl = ConnectionPendingBowls.objects.get(uaBowl=unassigned_bowl)
+
+            # check for time out. 
+            timenow = datetime.datetime.now()
+            dTime=datetime.timedelta(seconds=TIMEOUT)#magic number alert
+            if timenow- cpBowl >60:
+                raise bowlValidationTimeOut
 
             #create a connected bowl.
             newBowl = Bowl(name=cpBowl.name,owner=cpBowl.owner,
