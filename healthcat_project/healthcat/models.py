@@ -55,7 +55,7 @@ class FeedingInterval(models.Model):
 class Notification(models.Model):
     owner = models.ForeignKey('Owner', related_name="notification")
     bowl = models.ForeignKey('Bowl', related_name="bowl")
-    date = models.DateField()
+    date = models.DateTimeField()
     text = models.CharField(max_length=200)
 
 """

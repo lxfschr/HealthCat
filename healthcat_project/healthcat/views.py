@@ -219,19 +219,25 @@ def notifications(request):
 @transaction.commit_on_success
 def notifications(request):
     id = request.GET.get("id")
+    if id: 
+        id = int(id)
+        print("id: " + str(id))
     context = {}
     context = _add_profile_context(request, context)
 
     notifications = []
 
-    if id:
+    if id is not None:
+        print("id exists")
         notifications = Notification.objects.all().filter(owner = context['owner']).filter(id__gt=id).order_by('-date')
     else:
+        print("id does not exist")
         notifications = Notification.objects.all().filter(owner = context['owner']).order_by('-date')
+        print len(notifications)
 
     context['notifications'] = notifications
 
-    if id:
+    if id is not None:
         return render(request, 'healthcat/notifications_list.html', context)
     else:
         return render(request, 'healthcat/notifications.html', context)
