@@ -27,7 +27,7 @@ from django.http import HttpResponse, Http404
 # making http requests and json
 import urllib2,urllib,httplib,json
 
-import time
+import time,datetime
 
 #debug
 import random
@@ -380,14 +380,19 @@ def add_bowl(request):
 
     # logic here
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
+    bowl_name = add_bowl_form.cleaned_data['name']
+
 
     unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
 
-
-    if unassigned_bowl and unassigned_bowl[0].is_valid:
-        print 'creating new bowl from unassigned_bowl'
-        unassigned_bowl[0].is_valid=False
-        add_bowl_form.save()
+    if unassigned_bowl:
+        #get the current datetime
+        cDateTime = datetime.datetime.now()
+        #create a connection pending bowl.
+        newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
+         owner=owner,initTime=cDateTime, name=bowl_name)
+        newcpBowl.save()
+    
 
     return render(request, 'healthcat/profile.html', context)
 
