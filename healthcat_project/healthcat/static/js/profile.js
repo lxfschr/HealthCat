@@ -95,3 +95,8 @@ function add_bowl_form(event, id, url) {
 	});
 	return false;
 }
+
+$(document).ready(function() {
+	console.log("ready");
+    $('#myModal').modal()
+});

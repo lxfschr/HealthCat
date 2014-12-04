@@ -14,6 +14,9 @@
 
 <!--Body -->
 {% block body %}
+    {% if modal %}
+        {% include modal with pageToRender="/healthcat/profile" %}
+    {% endif %}
     <div class="page-container">
         <div id="sidebar" class="col-sm-2 col-md-2">
             {% include "healthcat/owner_profile.html" with pageToRender="/healthcat/profile" %}

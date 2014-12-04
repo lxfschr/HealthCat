@@ -362,7 +362,7 @@ def add_pet(request):
 def add_bowl(request):
     context={}
     context = _add_profile_context(request, context)
-
+    context['modal'] = "healthcat/press_button_modal.html"
     print 'adding a bowl'
 
 
@@ -394,8 +394,6 @@ def add_bowl(request):
 
     unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
     # print unassigned_bowl
-
-    print unassigned_bowl[0].is_valid
 
     if unassigned_bowl and unassigned_bowl[0].is_valid:
         print 'creating new bowl from unassigned_bowl'

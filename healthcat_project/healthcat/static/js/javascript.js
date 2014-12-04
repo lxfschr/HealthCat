@@ -1,3 +1,3 @@
 $(document).ready(function(){
-    $("[rel=tooltip]").tooltip({ placement: 'right'});
+    $("[rel=tooltip]").tooltip({ placement: 'top'});
 });

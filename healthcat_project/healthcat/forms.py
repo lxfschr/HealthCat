@@ -31,6 +31,13 @@ class BowlForm(forms.ModelForm):
     error_css_class = 'error'
     required_css_class = 'required'
 
+    serial_number = CharFieldWithIconAndTooltip(max_length = 6, 
+                                label='Serial Number', 
+                                widget=forms.TextInput(
+                                    attrs={'class':'width-200 form-control' + ' ' + error_css_class, 
+                                           'placeholder':'eg: 5GL32X'})
+                                )
+
     class Meta:
         error_css_class = 'error'
         required_css_class = 'required'
@@ -40,16 +47,20 @@ class BowlForm(forms.ModelForm):
         exclude = ('owner', 'pets')
 
         widgets = {
-                   'name': forms.TextInput(attrs={'label':'Name', 
+                   'name': forms.TextInput(attrs={ 
                                           'autofocus': 'autofocus', 
                                           'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 
                                           'placeholder':'eg: Cat Bowl'}),
-                   # 'ip_address': forms.TextInput(attrs={'label':'IP Address', 'autofocus': 'autofocus', 'class':'width-200 form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: 128.1.109.20'}),
                   }
         labels = {
             "name": "Bowl Name",
-            # "ip_address": "Bowl IP Address",
+            "serial_number": "Serial Number",
         }
+
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        self.fields['serial_number'].icon_name = 'glyphicon glyphicon-question-sign'
+        self.fields['serial_number'].tooltip = 'You can find this on the back of your KibbleControl bowl.'
         
     def clean(self):
         cleaned_data = super(BowlForm,self).clean()
