@@ -195,12 +195,13 @@ def validation_helper(arg):
 	data = urllib.urlencode(values)
 	req = urllib2.Request(url, data)
 	response = urllib2.urlopen(req)
+	print response.read()
 	return 1
 
 
 
 
-
+validateBowl()
 
 
 

@@ -545,7 +545,7 @@ def validateBowl(request):
             # check for time out. 
             timenow = datetime.datetime.now()
             dTime=datetime.timedelta(seconds=TIMEOUT)#magic number alert
-            if timenow- cpBowl >60:
+            if timenow- cpBowl >dTime:
                 raise bowlValidationTimeOut
 
             #create a connected bowl.
