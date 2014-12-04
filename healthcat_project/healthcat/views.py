@@ -209,6 +209,32 @@ def statistics(request):
     context['owner'] = owner
     return render(request, 'healthcat/statistics.html', context)
 
+@login_required
+def notifications(request):
+    context={}
+    context = _add_profile_context(request, context)
+    return render(request, 'healthcat/notifications.html', context)
+
+@login_required
+@transaction.commit_on_success
+def notifications(request):
+    id = request.GET.get("id")
+    context = {}
+    context = _add_profile_context(request, context)
+
+    notifications = []
+
+    if id:
+        notifications = Notification.objects.all().filter(owner = context['owner']).filter(id__gt=id).order_by('-date')
+    else:
+        notifications = Notification.objects.all().filter(owner = context['owner']).order_by('-date')
+
+    context['notifications'] = notifications
+
+    if id:
+        return render(request, 'healthcat/notifications_list.html', context)
+    else:
+        return render(request, 'healthcat/notifications.html', context)
 
 @login_required
 def edit_profile(request):

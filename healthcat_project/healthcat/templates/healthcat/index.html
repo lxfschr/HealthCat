@@ -34,6 +34,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="{% url 'home' %}"> Profile </a></li>
                         <li><a href="{% url 'statistics' %}"> Statistics </a></li>
+                        <li><a href="{% url 'notifications' %}"> Notifications </a></li>
                         <li class="divider"></li>
                         <li><a href="{% url 'edit_profile' %}"> Edit Profile </a></li>
                         <li><a href="{% url 'change_password' %}"> Change Password </a></li>
@@ -49,8 +50,15 @@
             </div>
             {% block logged_in_navbar %}
                 <ul class="nav navbar-nav">
-                    <li {% block profileActive %}{% endblock %} > <a href="{% url 'home' %}"> <i class="glyphicon glyphicon-user navbar-icon"></i> Profile </a></li>
-                    <li {% block statisticsActive %}{% endblock %} > <a href="{% url 'statistics' %}"> <i class="glyphicon glyphicon glyphicon-stats navbar-icon"></i> Statistics </a></li>
+                    <li 
+                        {% block profileActive %}{% endblock %} > <a href="{% url 'home' %}"> <i class="glyphicon glyphicon-user navbar-icon"></i> Profile </a>
+                    </li>
+                    <li 
+                        {% block statisticsActive %}{% endblock %} > <a href="{% url 'statistics' %}"> <i class="glyphicon glyphicon glyphicon-stats navbar-icon"></i> Statistics </a>
+                    </li>
+                    <li 
+                        {% block notificationsActive %}{% endblock %} > <a href="{% url 'notifications' %}"> <span class="badge"> {{ owner.num_notifications }} </span> Notifications </a>
+                    </li>
                     
                 </ul>
             {% endblock logged_in_navbar %}
