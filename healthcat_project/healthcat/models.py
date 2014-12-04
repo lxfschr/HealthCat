@@ -39,7 +39,6 @@ class UnAssignedBowls(models.Model):
     bowl_key = models.CharField(max_length=100)
 
 
-
 class Pet(models.Model):
     # one owner per pet
     owner = models.ForeignKey('Owner', related_name='pet_owner')
