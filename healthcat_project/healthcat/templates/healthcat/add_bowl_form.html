@@ -3,16 +3,22 @@
     <div class="row">
         {% for field in add_bowl_form.visible_fields %}
             <div class="col col-xs-4">
-                <label for='{{ field.id_for_label }}' class={{ field.css_classes }}> {{ field.label }} </label>
-                {% if field.field.icon_name and field.field.tooltip %}
-                    <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
-                {% elif field.field.icon_name %}
-                    <i class="{{ field.field.icon_name }} color-aaa"></i>
-                {% endif %}
-                {% for error in field.errors %}
-                        <span class='text-danger'> {{ error }} </span>
-                {% endfor %}
-                {{ field }}
+                <div class="row">
+                    <label for='{{ field.id_for_label }}' class={{ field.css_classes }}> {{ field.label }} </label>
+                    {% if field.field.icon_name and field.field.tooltip %}
+                        <i class="{{ field.field.icon_name }} color-aaa" rel="tooltip" title="{{ field.field.tooltip }}"></i>
+                    {% elif field.field.icon_name %}
+                        <i class="{{ field.field.icon_name }} color-aaa"></i>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    {% for error in field.errors %}
+                            <span class='text-danger'> {{ error }} </span>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    {{ field }}
+                </div>
             </div>
             
         {% endfor %}
@@ -39,3 +45,6 @@
         
 
     </form>
+
+
+<script src="/static/js/javascript.js"></script>

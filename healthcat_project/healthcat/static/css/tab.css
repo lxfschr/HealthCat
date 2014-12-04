@@ -312,7 +312,7 @@ tr:hover .glyphicon-edit {
 }
 
 .bowl {
-  margin-top: 36px;
+  margin-top: 24px;
 }
 
 .table {
@@ -361,4 +361,11 @@ th {
 
 .feeding_interval_button_form {
   display: inline;
+}
+
+.modal img {
+  max-width:300px;
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
 }
