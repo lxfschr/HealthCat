@@ -3,8 +3,8 @@ HOST= "http://localhost:8000/healthcat/"
 RFID_LENGTH = 6
 # make a request for getting all the schedules every 15 secs
 TIMEGAP=20
-BOWLSERIAL='PAT123'
-BOWL_KEY = 'thething123'
+BOWLSERIAL='CAT123'
+BOWL_KEY = 'alpha'
 
 #pickle file names
 indexToRfidFileName='itr.txt'
