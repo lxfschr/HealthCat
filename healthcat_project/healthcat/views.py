@@ -513,8 +513,6 @@ def validateBowl(request):
             newBowl.save()
 
             cpBowl.delete()
-            
-
 
             responseDict['result']='PASS'
  
@@ -532,3 +530,16 @@ def validateBowl(request):
             content_type="application/json")
 
     pass
+
+def isBowlConnected(request,serial_number):
+    responseDict={}
+
+    try:
+        b = Bowl.objects.get(serial_number=serial_number)
+        responseDict['result'] = 'SUCCESS'
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")    
+    except:
+        responseDict['result'] = 'FAIL'
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")
