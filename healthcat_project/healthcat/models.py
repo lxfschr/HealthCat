@@ -37,7 +37,7 @@ class ConnectionPendingBowls(models.Model):
 class UnAssignedBowls(models.Model):
     bowl_serial = models.CharField(max_length=100, unique=True)
     bowl_key = models.CharField(max_length=100)
-    is_valid= models.BooleanField(default=False)
+
 
 class Pet(models.Model):
     # one owner per pet
