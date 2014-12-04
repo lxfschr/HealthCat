@@ -14,22 +14,28 @@ class Owner(models.Model):
   def __unicode__(self):
     return self.user.username
 
+#Bowl are bowls that connected and being used
 class Bowl(models.Model):
     # ip_address = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
     pets = models.ManyToManyField('Pet')
     serial_number = models.CharField(max_length=100, unique=True)
-    # is_valid = models.BooleanField()
-    # pass_key = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.serial_number
 
+# bowls that used wanted to connect to , but
+# the button on the bowl is not hit yet
+class ConnectionPendingBowls(models.Model):
+    initTime = models.DateTimeField()
+    name = models.CharField(max_length=20)
+    owner=models.ForeignKey('Owner',related_name='cpbowl_owner')
+
+
 class UnAssignedBowls(models.Model):
     bowl_serial = models.CharField(max_length=100, unique=True)
     bowl_key = models.CharField(max_length=100)
-    is_valid= models.BooleanField()
 
 
 
@@ -49,8 +55,6 @@ class FeedingInterval(models.Model):
     start = models.TimeField()
     end = models.TimeField()
     amount = models.PositiveSmallIntegerField(max_length=5)
-
-
 
 """
 # pet stats classification for all forms of health stats.

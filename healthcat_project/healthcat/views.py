@@ -365,13 +365,11 @@ def add_bowl(request):
 
     print 'adding a bowl'
 
-
     if request.method=='GET':
         context['add_bowl_form'] = BowlForm()
         return render(request,'healthcat/add_bowl_form.html',context)
 
     owner = Owner.objects.get(user=request.user)
-    # new_bowl = Bowl(owner=owner, serial_number=random.random()) #todo implement serial
     new_bowl = Bowl(owner=owner) #todo implement serial
 
     add_bowl_form = BowlForm(request.POST, instance=new_bowl)
@@ -380,22 +378,10 @@ def add_bowl(request):
         context['add_bowl_form'] = add_bowl_form
         return render(request, 'healthcat/profile.html', context)
 
-
-    # ip_address = add_bowl_form.cleaned_data['ip_address']
-
-    # try:
-    #     r = urllib2.urlopen(ip_address+'connect').read()
-    #     print r
-    # except:
-    #     print "Could not connect to " + ip_address
-
     # logic here
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
 
     unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
-    # print unassigned_bowl
-
-    print unassigned_bowl[0].is_valid
 
     if unassigned_bowl and unassigned_bowl[0].is_valid:
         print 'creating new bowl from unassigned_bowl'
@@ -404,16 +390,7 @@ def add_bowl(request):
 
     return render(request, 'healthcat/profile.html', context)
 
-    #old code below
-    # exisiting_bowl = Bowl.objects.filter(ip_address=ip_address)
-    # if exisiting_bowl:
-    #     print "bowl model already exists"
-    #     exisiting_bowl[0].owner = owner #Todo add caretaker
-    # else:
-    #     print "creating new bowl model"
-    #     add_bowl_form.save()
 
-    # return render(request, 'healthcat/profile.html', context)
 
 @login_required
 def edit_bowl(request):
@@ -506,8 +483,6 @@ def addConsumptionRecord(request,rfid,amount,dateAndTime):
             content_type="application/json")
 
     #extract date and time.
-    
-
     pass
 
 @csrf_exempt
