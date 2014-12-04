@@ -27,7 +27,7 @@ from django.http import HttpResponse, Http404
 # making http requests and json
 import urllib2,urllib,httplib,json
 
-import time
+import time,datetime
 
 #debug
 import random
@@ -391,13 +391,11 @@ def add_bowl(request):
     context['modal'] = "healthcat/press_button_modal.html"
     print 'adding a bowl'
 
-
     if request.method=='GET':
         context['add_bowl_form'] = BowlForm()
         return render(request,'healthcat/add_bowl_form.html',context)
 
     owner = Owner.objects.get(user=request.user)
-    # new_bowl = Bowl(owner=owner, serial_number=random.random()) #todo implement serial
     new_bowl = Bowl(owner=owner) #todo implement serial
 
     add_bowl_form = BowlForm(request.POST, instance=new_bowl)
@@ -406,38 +404,24 @@ def add_bowl(request):
         context['add_bowl_form'] = add_bowl_form
         return render(request, 'healthcat/profile.html', context)
 
-
-    # ip_address = add_bowl_form.cleaned_data['ip_address']
-
-    # try:
-    #     r = urllib2.urlopen(ip_address+'connect').read()
-    #     print r
-    # except:
-    #     print "Could not connect to " + ip_address
-
     # logic here
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
+    bowl_name = add_bowl_form.cleaned_data['name']
+
 
     unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
-    # print unassigned_bowl
 
-    if unassigned_bowl and unassigned_bowl[0].is_valid:
-        print 'creating new bowl from unassigned_bowl'
-        unassigned_bowl[0].is_valid=False
-        add_bowl_form.save()
+    if unassigned_bowl:
+        #get the current datetime
+        cDateTime = datetime.datetime.now()
+        #create a connection pending bowl.
+        newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
+         owner=owner,initTime=cDateTime, name=bowl_name)
+        newcpBowl.save()
 
     return render(request, 'healthcat/profile.html', context)
 
-    #old code below
-    # exisiting_bowl = Bowl.objects.filter(ip_address=ip_address)
-    # if exisiting_bowl:
-    #     print "bowl model already exists"
-    #     exisiting_bowl[0].owner = owner #Todo add caretaker
-    # else:
-    #     print "creating new bowl model"
-    #     add_bowl_form.save()
 
-    # return render(request, 'healthcat/profile.html', context)
 
 @login_required
 def edit_bowl(request):
@@ -530,8 +514,6 @@ def addConsumptionRecord(request,rfid,amount,dateAndTime):
             content_type="application/json")
 
     #extract date and time.
-    
-
     pass
 
 @csrf_exempt
@@ -545,13 +527,21 @@ def validateBowl(request):
 
         try:
             unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial = bowl_serial)
-            print 'now '
+
             if not unassigned_bowl.bowl_key == bowl_key:
                 raise bowlKeyMismatch
-            unassigned_bowl.is_valid = validate=='True'
+
+            cpBowl = ConnectionPendingBowls.objects.get(uaBowl=unassigned_bowl)
+
+            #create a connected bowl.
+            newBowl = Bowl(name=cpBowl.name,owner=cpBowl.owner,
+                serial_number=bowl_serial)
+            newBowl.save()
+
+            cpBowl.delete()
 
             responseDict['result']='PASS'
-            unassigned_bowl.save()
+ 
             return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
 
@@ -566,3 +556,16 @@ def validateBowl(request):
             content_type="application/json")
 
     pass
+
+def isBowlConnected(request,serial_number):
+    responseDict={}
+
+    try:
+        b = Bowl.objects.get(serial_number=serial_number)
+        responseDict['result'] = 'SUCCESS'
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")    
+    except:
+        responseDict['result'] = 'FAIL'
+        return HttpResponse(json.dumps(responseDict),
+            content_type="application/json")

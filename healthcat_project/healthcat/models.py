@@ -14,24 +14,30 @@ class Owner(models.Model):
   def __unicode__(self):
     return self.user.username
 
+#connected bowls
 class Bowl(models.Model):
     # ip_address = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=20)
     owner = models.ForeignKey('Owner', related_name="bowl_owner")
     pets = models.ManyToManyField('Pet')
     serial_number = models.CharField(max_length=100, unique=True)
-    # is_valid = models.BooleanField()
-    # pass_key = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.serial_number
 
+# bowls that used wanted to connect to , but
+# the button on the bowl is not hit yet
+class ConnectionPendingBowls(models.Model):
+    uaBowl=models.ForeignKey('UnAssignedBowls',related_name='ua_bowl')
+    owner=models.ForeignKey('Owner',related_name='cpbowl_owner')
+    initTime = models.DateTimeField()
+    name = models.CharField(max_length=20)
+
+# all bowls serial and key table.
 class UnAssignedBowls(models.Model):
     bowl_serial = models.CharField(max_length=100, unique=True)
     bowl_key = models.CharField(max_length=100)
     is_valid= models.BooleanField(default=False)
-
-
 
 class Pet(models.Model):
     # one owner per pet
