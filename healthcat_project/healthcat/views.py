@@ -592,3 +592,9 @@ def isBowlConnected(request):
         responseDict['result'] = 'FAIL'
         return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
+
+
+def add_bully(request):
+    responseDict['result'] = 'NOT IMPLEMENTED'
+    return HttpResponse(json.dumps(responseDict),
+        content_type="application/json")
