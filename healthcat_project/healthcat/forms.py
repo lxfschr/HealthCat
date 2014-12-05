@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from models import *
+from django.core.exceptions import ObjectDoesNotExist
 
 # making http requests and json
 import urllib2,urllib,httplib,json
@@ -66,17 +67,13 @@ class BowlForm(forms.ModelForm):
         cleaned_data = super(BowlForm,self).clean()
         return cleaned_data
 
-    '''def clean_ip_address(self):
-        print "in clean_ip_address"
-        ip_address = self.cleaned_data.get('ip_address')
+    def clean_serial_number(self):
+        bowl_serial = self.cleaned_data.get('serial_number')
         try:
-            r = urllib2.urlopen(ip_address+'connect').read()
-            print r
-        except:
-            raise forms.ValidationError("Could not connect.")
-        
-        return ip_address'''
-
+            bowl = UnAssignedBowls.objects.get(bowl_serial=bowl_serial)
+        except ObjectDoesNotExist:
+            raise forms.ValidationError("No record of this serial.")
+        return bowl_serial
 
 class RegistrationForm(forms.Form):
     error_css_class = 'error'
@@ -233,5 +230,14 @@ class FeedingIntervalForm(forms.ModelForm):
         }
 
     def clean(self):
+        start = self.cleaned_data.get('start')
+        end = self.cleaned_data.get('end')
+        if end <= start:
+            raise forms.ValidationError("End must come after start.")
+        starts_between = FeedingInterval.objects.filter(start__lte=start, end__gt=start).exists()
+        ends_between = FeedingInterval.objects.filter(start__lt=end, end__gte=end).exists()
+        between = FeedingInterval.objects.filter(start__lte=start, end__gte=end).exists()
+        if between or ends_between or starts_between:
+            raise forms.ValidationError("Period already exists between this interval")
         cleaned_data = super(FeedingIntervalForm,self).clean()
         return cleaned_data

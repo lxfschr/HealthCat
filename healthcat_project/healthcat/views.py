@@ -218,30 +218,20 @@ def statistics(request):
     return render(request, 'healthcat/statistics.html', context)
 
 @login_required
-def notifications(request):
-    context={}
-    context = _add_profile_context(request, context)
-    return render(request, 'healthcat/notifications.html', context)
-
-@login_required
 @transaction.commit_on_success
 def notifications(request):
     id = request.GET.get("id")
     if id: 
         id = int(id)
-        print("id: " + str(id))
     context = {}
     context = _add_profile_context(request, context)
 
     notifications = []
 
     if id is not None:
-        print("id exists")
         notifications = Notification.objects.all().filter(owner = context['owner']).filter(id__gt=id).order_by('-date')
     else:
-        print("id does not exist")
         notifications = Notification.objects.all().filter(owner = context['owner']).order_by('-date')
-        print len(notifications)
 
     context['notifications'] = notifications
 
@@ -332,6 +322,23 @@ def edit_feeding_interval(request):
     return render(request, 'healthcat/profile.html', context)
 
 @login_required
+def delete_feeding_interval(request):
+    context = {}
+    context = _add_profile_context(request, context)
+    response = {}
+    feeding_interval_id = request.POST.get("feeding_interval_id")
+    # Deletes the item if present in the todo-list database.
+    try:
+        item_to_delete = FeedingInterval.objects.get(id=feeding_interval_id)
+        item_to_delete.delete()
+    except ObjectDoesNotExist:
+        pass
+
+    response['result']='SUCCESS'
+    return HttpResponse(json.dumps(response),
+        content_type="application/json")
+
+@login_required
 def edit_pet(request):
     context = {}
     context = _add_profile_context(request, context)
@@ -420,15 +427,13 @@ def add_bowl(request):
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
     bowl_name = add_bowl_form.cleaned_data['name']
 
-    unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
-
-    if unassigned_bowl:
-        #get the current datetime
-        cDateTime = datetime.datetime.now()
-        #create a connection pending bowl.
-        newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
-         owner=owner,initTime=cDateTime, name=bowl_name)
-        newcpBowl.save()
+    unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial=bowl_serial)
+    #get the current datetime
+    cDateTime = datetime.datetime.now()
+    #create a connection pending bowl.
+    newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl,
+     owner=owner,initTime=cDateTime, name=bowl_name)
+    newcpBowl.save()
 
     context['modal'] = "healthcat/press_button_modal.html"
     context['serial_number'] = bowl_serial

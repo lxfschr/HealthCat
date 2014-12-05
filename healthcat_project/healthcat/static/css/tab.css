@@ -287,10 +287,6 @@ ul {
   display: inline;
 }
 
-tr:hover .glyphicon-edit {
-  display: inline;
-}
-
 .feeding_intervals_table {
 }
 
@@ -303,12 +299,26 @@ tr:hover .glyphicon-edit {
   border: 1px solid #ddd;
   padding: 6px 12px;
 }
+
+.add_feeding_interval_col {
+  border: 1px solid #ddd;
+}
+
 .feeding_interval_row:hover .glyphicon-edit {
+  display: inline;
+}
+
+.feeding_interval_row:hover .glyphicon-remove {
   display: inline;
 }
 
 .glyphicon-edit {
   display: none;
+}
+
+.glyphicon-remove {
+  display: none;
+  margin-left: 6px;
 }
 
 .bowl {

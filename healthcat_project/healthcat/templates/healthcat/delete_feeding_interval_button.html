@@ -1,0 +1,17 @@
+<form 
+	id="{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_delete_feeding_interval_button_form" 
+	class="feeding_interval_button_form pull-right" 
+	onsubmit="delete_item(event, 
+				'{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_delete_feeding_interval_button_form', '{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval', 
+				'{% url 'delete_feeding_interval' %}')"
+>
+	{% csrf_token %}
+    
+	<button class="add_button"> 
+		<i class='glyphicon glyphicon-remove inline_icon pull-right'></i>
+	</button> 
+    
+    <input type = "hidden" name = "bowl_id" value={{ bowl.id }}>
+    <input type = "hidden" name = "pet_id" value={{ pet.id }}>
+    <input type = "hidden" name = "feeding_interval_id" value={{ feeding_interval.id }}>
+</form>

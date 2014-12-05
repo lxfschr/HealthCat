@@ -58,6 +58,33 @@ class Notification(models.Model):
     date = models.DateTimeField()
     text = models.CharField(max_length=200)
 
+class ConsumptionRecord(models.Model):
+    pet = models.ForeignKey('Pet', related_name="consumption_pet")
+    amount = models.PositiveSmallIntegerField(max_length=5)
+    date = models.DateTimeField()
+    duration = models.PositiveIntegerField()
+    bowl = models.ForeignKey('Bowl', related_name="consumption_bowl")
+    notification_text = models.CharField(max_length=200)
+
+class BullyingRecord(models.Model):
+    pet = models.ForeignKey('Pet', related_name="bullied_pet")
+    bully = models.ForeignKey('Pet', related_name="bully_pet")
+    date = models.DateTimeField()
+    bowl = models.ForeignKey('Bowl', related_name="bully_bowl")
+    notification_text = models.CharField(max_length=200)
+
+class NewRFIDRecord(models.Model):
+    rfid = models.CharField(max_length=32)
+    date = models.DateTimeField()
+    bowl = models.ForeignKey('Bowl', related_name="new_rfid_bowl")
+    notification_text = models.CharField(max_length=200)
+
+class RefilledBowlRecord(models.Model):
+    amount = models.PositiveSmallIntegerField(max_length=5)
+    date = models.DateTimeField()
+    bowl = models.ForeignKey('Bowl', related_name="refilled_bowl")
+    notification_text = models.CharField(max_length=200)
+
 """
 # pet stats classification for all forms of health stats.
 # a distinct class for organization. 
