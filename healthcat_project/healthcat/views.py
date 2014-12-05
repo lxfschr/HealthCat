@@ -420,15 +420,13 @@ def add_bowl(request):
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
     bowl_name = add_bowl_form.cleaned_data['name']
 
-    unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
-
-    if unassigned_bowl:
-        #get the current datetime
-        cDateTime = datetime.datetime.now()
-        #create a connection pending bowl.
-        newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
-         owner=owner,initTime=cDateTime, name=bowl_name)
-        newcpBowl.save()
+    unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial=bowl_serial)
+    #get the current datetime
+    cDateTime = datetime.datetime.now()
+    #create a connection pending bowl.
+    newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
+     owner=owner,initTime=cDateTime, name=bowl_name)
+    newcpBowl.save()
 
     context['modal'] = "healthcat/press_button_modal.html"
     context['serial_number'] = bowl_serial
