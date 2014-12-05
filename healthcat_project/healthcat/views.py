@@ -424,7 +424,7 @@ def add_bowl(request):
     #get the current datetime
     cDateTime = datetime.datetime.now()
     #create a connection pending bowl.
-    newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
+    newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl,
      owner=owner,initTime=cDateTime, name=bowl_name)
     newcpBowl.save()
 
