@@ -21,7 +21,9 @@
             </div>
             <div class="col col-xs-4 feeding_interval_col">
                 {{ feeding_interval.amount }}
+                {% include "healthcat/delete_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
                 {% include "healthcat/edit_feeding_interval_button.html" with pageToRender="/healthcat/profile" %}
+
             </div>
         </div>
     {% endfor %}

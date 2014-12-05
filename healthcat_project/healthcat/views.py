@@ -322,6 +322,23 @@ def edit_feeding_interval(request):
     return render(request, 'healthcat/profile.html', context)
 
 @login_required
+def delete_feeding_interval(request):
+    context = {}
+    context = _add_profile_context(request, context)
+    response = {}
+    feeding_interval_id = request.POST.get("feeding_interval_id")
+    # Deletes the item if present in the todo-list database.
+    try:
+        item_to_delete = FeedingInterval.objects.get(id=feeding_interval_id)
+        item_to_delete.delete()
+    except ObjectDoesNotExist:
+        pass
+
+    response['result']='SUCCESS'
+    return HttpResponse(json.dumps(response),
+        content_type="application/json")
+
+@login_required
 def edit_pet(request):
     context = {}
     context = _add_profile_context(request, context)

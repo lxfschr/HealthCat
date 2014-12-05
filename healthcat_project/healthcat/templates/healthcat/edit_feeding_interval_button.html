@@ -1,8 +1,8 @@
 <form 
-	id="{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval_buttom_form" 
+	id="{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval_button_form" 
 	class="feeding_interval_button_form pull-right" 
 	onsubmit="add_pet_form(event, 
-				'{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval_buttom_form', '{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval', 
+				'{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval_button_form', '{{ bowl.id }}_{{ pet.id }}_{{ feeding_interval.id }}_feeding_interval', 
 				'{% url 'edit_feeding_interval' %}')"
 >
 	{% csrf_token %}
