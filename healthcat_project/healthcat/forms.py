@@ -230,5 +230,14 @@ class FeedingIntervalForm(forms.ModelForm):
         }
 
     def clean(self):
+        start = self.cleaned_data.get('start')
+        end = self.cleaned_data.get('end')
+        if end <= start:
+            raise forms.ValidationError("End must come after start.")
+        starts_between = FeedingInterval.objects.filter(start__lte=start, end__gt=start).exists()
+        ends_between = FeedingInterval.objects.filter(start__lt=end, end__gte=end).exists()
+        between = FeedingInterval.objects.filter(start__lte=start, end__gte=end).exists()
+        if between or ends_between or starts_between:
+            raise forms.ValidationError("Period already exists between this interval")
         cleaned_data = super(FeedingIntervalForm,self).clean()
         return cleaned_data

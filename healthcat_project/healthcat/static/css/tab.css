@@ -299,6 +299,11 @@ ul {
   border: 1px solid #ddd;
   padding: 6px 12px;
 }
+
+.add_feeding_interval_col {
+  border: 1px solid #ddd;
+}
+
 .feeding_interval_row:hover .glyphicon-edit {
   display: inline;
 }

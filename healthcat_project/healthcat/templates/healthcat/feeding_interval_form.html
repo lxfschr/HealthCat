@@ -1,4 +1,9 @@
-<form class="form-pet form-horizontal" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
+<form class="form-pet form-horizontal col col-xs-12 add_feeding_interval_col" role="form" method="POST" action="{% url 'add_feeding_interval' %}">
+    {% for error in feeding_interval_form.non_field_errors %}
+        <div class="row">
+            <span class='text-danger'> {{ error }} </span>
+        </div>
+    {% endfor %}
     <div class="row">
         {% for field in feeding_interval_form.visible_fields %}
             <div class="col col-xs-4">
