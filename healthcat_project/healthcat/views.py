@@ -545,7 +545,7 @@ def validateBowl(request):
             unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial = bowl_serial)
 
             if not unassigned_bowl.bowl_key == bowl_key:
-                raise bowlKeyMismatch
+                raise Exception('bowlKeyMismatch')
 
             cpBowl = ConnectionPendingBowls.objects.get(uaBowl=unassigned_bowl)
 
@@ -553,7 +553,7 @@ def validateBowl(request):
             timenow = datetime.datetime.now()
             dTime=datetime.timedelta(seconds=TIMEOUT)#magic number alert
             if timenow- cpBowl >dTime:
-                raise bowlValidationTimeOut
+                raise Exception('bowlValidationTimeOut')
 
             #create a connected bowl.
             newBowl = Bowl(name=cpBowl.name,owner=cpBowl.owner,

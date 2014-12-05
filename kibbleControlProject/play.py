@@ -1,10 +1,12 @@
 import datetime
 import time
+Dreaded=Exception('boo')
 
-d = datetime.datetime.now()
-time.sleep(2)
-d2 = datetime.datetime.now()
+try:
+	raise Dreaded
+	b = 1/0
 
-p=datetime.timedelta(seconds=1)
 
-print d2-d<p
+except Exception,e:
+	print e
+	print 'hello'
