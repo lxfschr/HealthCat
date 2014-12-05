@@ -106,7 +106,6 @@ def newRfidDetected(index):
 	try:
 		# send a request to application on web.
 		r=urllib2.urlopen(HOST+'new-rfid-detected/'+BOWLSERIAL+'/'+str(a)).read()
-
 		stashDumps()
 		releaseLock()
 		return 1
@@ -129,7 +128,7 @@ def openOrNot(index):
 
 	global indexToRfid,rfidToIndex,schedules
 
-	getOrCreateDumps()	
+	getOrCreateDumps()
 
 	if str(index) not in indexToRfid:
 		return 0 # an new index is not allowed
@@ -176,7 +175,11 @@ def petJustAte(index,amount):
 	# stores in a local log file
 	timenow= datetime.datetime.now().strftime("%Y%m%d%H%M")
 
-	
+
+def bullyNotify(bigCat,littleCat):
+
+
+	pass
 
 def validateBowl():
 	return validation_helper('True')
@@ -199,11 +202,7 @@ def validation_helper(arg):
 	return 1
 
 
-
-
 validateBowl()
-
-
 
 
 ####################################################################
