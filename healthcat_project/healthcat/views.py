@@ -46,6 +46,13 @@ def home(request):
     context = _add_profile_context(request, context)
     return render(request, 'healthcat/profile.html', context)
 
+@login_required
+def failed_to_connect(request):
+    # Sets up list of just the logged-in user's (request.user's) items
+    context = {}
+    context = _add_profile_context(request, context)
+    context['modal'] = "healthcat/failed_to_connect.html"
+    return render(request, 'healthcat/profile.html', context)
 
 def _add_profile_context(request, context):
     user = request.user
@@ -395,8 +402,6 @@ def add_pet(request):
 def add_bowl(request):
     context={}
     context = _add_profile_context(request, context)
-    context['modal'] = "healthcat/press_button_modal.html"
-    print 'adding a bowl'
 
     if request.method=='GET':
         context['add_bowl_form'] = BowlForm()
@@ -415,7 +420,6 @@ def add_bowl(request):
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
     bowl_name = add_bowl_form.cleaned_data['name']
 
-
     unassigned_bowl = UnAssignedBowls.objects.filter(bowl_serial=bowl_serial)
 
     if unassigned_bowl:
@@ -425,6 +429,9 @@ def add_bowl(request):
         newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl[0],
          owner=owner,initTime=cDateTime, name=bowl_name)
         newcpBowl.save()
+
+    context['modal'] = "healthcat/press_button_modal.html"
+    context['serial_number'] = bowl_serial
 
     return render(request, 'healthcat/profile.html', context)
 
@@ -572,7 +579,8 @@ def validateBowl(request):
 
     pass
 
-def isBowlConnected(request,serial_number):
+def isBowlConnected(request):
+    serial_number = request.GET.get("serial_number")
     responseDict={}
 
     try:

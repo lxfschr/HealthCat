@@ -8,7 +8,8 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'healthcat.views.home', name='home'),
-    url(r'^$', 'healthcat.views.home', name='profile'),
+    url(r'^profile$', 'healthcat.views.home', name='profile'),
+    url(r'^failed-to-connect$', 'healthcat.views.failed_to_connect', name='failed_to_connect'),
     # Route for built-in authentication with our own custom login page
     url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'healthcat/login.html'}, name='login'),
     # Route to logout a user and send them back to the login page
@@ -35,9 +36,9 @@ urlpatterns = patterns('',
             name='get_feeding_intervals'),
     url(r'^edit-feeding-interval$', 'healthcat.views.edit_feeding_interval', name='edit_feeding_interval'),
     url(r'^validate-bowl','healthcat.views.validateBowl',name='validate_bowl'),
-    url(r'^is-bowl-connected/(?P<serial_number>[a-zA-Z0-9]+)','healthcat.views.isBowlConnected',
+
+    url(r'^is-bowl-connected','healthcat.views.isBowlConnected',
                 name='is_bowl_connected'),
-    url(r'^notify-bully','healthcat.views.add_bully',
-                name='add_bully'),
+
 
 )
