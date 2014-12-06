@@ -41,5 +41,4 @@ urlpatterns = patterns('',
     #url(r'^notify-bully','healthcat.views.add_bully', name='add_bully'),
     url(r'^is-bowl-connected','healthcat.views.isBowlConnected',
                 name='is_bowl_connected'),
-
 )

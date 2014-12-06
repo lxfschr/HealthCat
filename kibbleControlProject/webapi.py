@@ -131,7 +131,7 @@ def openOrNot(index):
 	getOrCreateDumps()
 
 	if str(index) not in indexToRfid:
-		return 0 # an new index is not allowed
+		return -1 # an new index is not allowed
 
 	# get the rfid based on index
 	rfid=indexToRfid[str(index)]
@@ -174,12 +174,11 @@ def petJustAte(index,amount):
 	#tries to send the info right away. if the internet connection fails
 	# stores in a local log file
 	timenow= datetime.datetime.now().strftime("%Y%m%d%H%M")
+	return
 
 
 def bullyNotify(bigCat,littleCat):
-
-
-	pass
+	return
 
 def validateBowl():
 	return validation_helper('True')
