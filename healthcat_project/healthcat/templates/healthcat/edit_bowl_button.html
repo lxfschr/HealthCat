@@ -2,7 +2,7 @@
 	{% if bowl_form and bowl_form_id == bowl.id|stringformat:"s" %}
         {% include "healthcat/edit_bowl_form.html" with pageToRender="/healthcat/profile" %}
     {% else %}
-	    <form id="{{ bowl.id }}_bowl_name" class="bowl" onsubmit="add_bowl_form(event, '{{ bowl.id }}_bowl_name', '{% url 'edit_bowl' %}')" >
+	    <form id="{{ bowl.id }}_bowl_form" class="bowl" onsubmit="add_bowl_form(event, '{{ bowl.id }}_bowl_form', '{% url 'edit_bowl' %}')" >
 		    {% csrf_token %}
 		    <h2> 
 		    	<button class="add_button"> 

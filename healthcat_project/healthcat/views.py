@@ -452,7 +452,7 @@ def edit_bowl(request):
         bowl_id = request.GET.get("bowl_id")
         bowl = get_object_or_404(Bowl, id=bowl_id)
         initial = {}
-        initial['ip_address'] = bowl.ip_address
+        initial['serial_number'] = bowl.serial_number
         initial['name'] = bowl.name
         bowl_form = BowlForm(initial=initial)
         context['bowl_form'] = bowl_form
