@@ -220,25 +220,41 @@ def statistics(request):
 @login_required
 @transaction.commit_on_success
 def notifications(request):
-    id = request.GET.get("id")
-    if id: 
-        id = int(id)
+    date = request.GET.get("date")
+    print date
     context = {}
     context = _add_profile_context(request, context)
 
+    owner = Owner.objects.get(user = request.user)
+    bowls = Bowl.objects.filter(owner = owner)
+
     notifications = []
 
-    if id is not None:
-        notifications = Notification.objects.all().filter(owner = context['owner']).filter(id__gt=id).order_by('-date')
+    if date is not None:
+        notifications = ConsumptionRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        consumption_records = ConsumptionRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        bullying_records = BullyingRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        new_rfid_records = NewRFIDRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        refilled_bowl_records = RefilledBowlRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+
+        latest = list(consumption_records) + list(bullying_records) + list(new_rfid_records) + list(refilled_bowl_records)
+        notifications = sorted(latest, key=lambda x: x.date, reverse=True)
     else:
-        notifications = Notification.objects.all().filter(owner = context['owner']).order_by('-date')
+        notifications = ConsumptionRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        consumption_records = ConsumptionRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        bullying_records = BullyingRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        new_rfid_records = NewRFIDRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        refilled_bowl_records = RefilledBowlRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+
+        latest = list(consumption_records) + list(bullying_records) + list(new_rfid_records) + list(refilled_bowl_records)
+        notifications = sorted(latest, key=lambda x: x.date, reverse=True)
 
     context['notifications'] = notifications
 
-    if id is not None:
+    if date is not None:
         return render(request, 'healthcat/notifications_list.html', context)
     else:
-        return render(request, 'healthcat/notifications.html', context)
+        return render(request, 'healthcat/notifications.html', context)    
 
 @login_required
 def edit_profile(request):
