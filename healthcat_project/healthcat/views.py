@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.core.exceptions import ObjectDoesNotExist
 
 # Decorator to use built-in authentication system
@@ -210,7 +210,7 @@ def get_pet_photo(request, pet_id):
 
 @login_required
 def statistics(request):
-    context = {}
+    context = _get_consumption_records_data({})
     user = request.user
     context['user'] = user
     owner = Owner.objects.get(user = user)
@@ -250,7 +250,8 @@ def notifications(request):
         notifications = sorted(latest, key=lambda x: x.date, reverse=True)
 
     context['notifications'] = notifications
-
+    owner.num_notifications = 0;
+    owner.save()
     if date is not None:
         return render(request, 'healthcat/notifications_list.html', context)
     else:
@@ -619,3 +620,67 @@ def add_bully(request):
     responseDict['result'] = 'NOT IMPLEMENTED'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
+
+def mass_addition(list):
+    sum = 0
+    for item in list:
+        sum += item
+    return sum
+
+def consumption_records(request):
+    xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
+    ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
+    pets = Pet.objects.all()
+    amounts = []
+    for pet in pets:
+        records = ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)
+        print records
+        amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
+    print pets.values_list("name", flat=True)
+    print amounts
+    xdata = pets.values_list("name", flat=True)
+    ydata = amounts
+    chartdata = {'x': xdata, 'y': ydata}
+    charttype = "pieChart"
+    chartcontainer = 'piechart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
+    return render_to_response('healthcat/piechart.html', data)
+
+def _get_consumption_records_data(data):
+    xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
+    ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
+    pets = Pet.objects.all()
+    amounts = []
+    for pet in pets:
+        records = ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)
+        print records
+        amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
+    print pets.values_list("name", flat=True)
+    print amounts
+    xdata = pets.values_list("name", flat=True)
+    ydata = amounts
+    chartdata = {'x': xdata, 'y': ydata}
+    charttype = "pieChart"
+    chartcontainer = 'piechart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
+    return data

@@ -40,6 +40,7 @@ DEFAULT_APPS = (
 
 # Apps that needed to be pip installed.
 THIRD_PARTY_APPS = (
+    'django_nvd3',
 )
 
 # Apps that we create, like healthcat.
