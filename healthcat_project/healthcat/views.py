@@ -662,14 +662,11 @@ def _get_consumption_records_data(data):
     pets = Pet.objects.all()
     amounts = []
     for pet in pets:
-        records = ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)
-        print records
         amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
-    print pets.values_list("name", flat=True)
-    print amounts
     xdata = pets.values_list("name", flat=True)
     ydata = amounts
-    chartdata = {'x': xdata, 'y': ydata}
+    extra_serie = {"tooltip": {"y_start": "", "y_end": " grams"}}
+    chartdata = {'x': xdata, 'y1': ydata, 'extra1': extra_serie}
     charttype = "pieChart"
     chartcontainer = 'piechart_container'
     data = {
@@ -681,6 +678,8 @@ def _get_consumption_records_data(data):
             'x_axis_format': '',
             'tag_script_js': True,
             'jquery_on_ready': False,
+            'color_category': 'category20c',
+            'chart_attr': {'color': ['red', 'blue',]}
         }
     }
     return data
