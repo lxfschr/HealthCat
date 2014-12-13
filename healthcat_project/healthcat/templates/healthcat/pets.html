@@ -2,11 +2,14 @@
     {% for pet in bowl.pets.all %}
         <div class="row">
             <div class="col col-md-3 col-xs-3">
+                <div class="pet_photo">
                 {% if pet.photo %}
-                    <img class="pet_photo" id="{{ pet.id }}_photo" src={% url 'get_pet_photo' pet.id %} alt=" {{ pet.name }}'s photo" title="{{ pet.name }}'s photo" />
+                    <img class="pet_photo" id="{{ pet.id }}_photo" src={% url 'get_pet_photo' pet.id %} alt=" {{ pet.name }}'s photo" title="{{ pet.name }}'s photo" style="border: 2px solid {{ pet.color }}" />
                 {% else %}
-                    <img class="pet_photo" id="{{ pet.id }}_photo" src="/static/images/default_pet_photo.jpg" alt="default pet photo" title="default pet photo" />
+                    <img class="pet_photo" id="{{ pet.id }}_photo" src="/static/images/default_pet_photo.jpg" alt="default pet photo" title="default pet photo" style="border: 2px solid {{ pet.color }}"/>
                 {% endif %}
+                <div class="color_box" style="background-color: {{ pet.color }};"></div>
+                </div>
             </div>
             <div class="col col-md-8 col-xs-8">
                 <div class="pet_info_container">
