@@ -665,6 +665,9 @@ def _get_consumption_records_data(data):
     xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
     ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
     pets = Pet.objects.all()
+    colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
+    #colors = pets.values_list("color", flat=True)
+    print "colors: ", colors
     amounts = []
     for pet in pets:
         amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
@@ -684,7 +687,7 @@ def _get_consumption_records_data(data):
             'tag_script_js': True,
             'jquery_on_ready': False,
             'color_category': 'category20c',
-            'chart_attr': {'color': ['red', 'blue',]}
+            'chart_attr': {'color': colors}
         }
     }
     return data
