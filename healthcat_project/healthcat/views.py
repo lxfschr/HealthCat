@@ -395,7 +395,23 @@ def edit_pet(request):
 
     pet_form.save()
 
+    _determine_next_color(Owner.objects.filter(user=request.user))
+
     return render(request, 'healthcat/profile.html', context)
+
+def _determine_next_color(owner):
+    hex_colors = [pet.encode("utf8") for pet in Pet.objects.filter(owner=owner).values_list('color', flat=True)]
+    colors = []
+    for hex_color in hex_colors:
+        colors.append(hex_color.translate(None, '#').upper())
+    print "colors: ", colors 
+    from django.conf import settings
+    print "settings.COLORS: ", settings.COLORS
+    for color in settings.COLORS:
+        if color not in colors:
+            settings.NEXT_COLOR = color
+            print "settings.NEXT_COLOR: ", settings.NEXT_COLOR
+            break
 
 @login_required
 def add_pet(request):
@@ -422,6 +438,8 @@ def add_pet(request):
         return render(request, 'healthcat/profile.html', context)
 
     pet_form.save()
+
+    _determine_next_color(owner)
 
     bowl.pets.add(Pet.objects.get(id=new_pet.id))
 

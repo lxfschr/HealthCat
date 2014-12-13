@@ -52,7 +52,9 @@ class UnAssignedBowls(models.Model):
 
 def next_color():
     from django.conf import settings
-    return settings.COLORS[3]
+    print "in next_color()"
+    print "settings.NEXT_COLOR: ", settings.NEXT_COLOR
+    return settings.NEXT_COLOR
 
 class Pet(models.Model):
     # one owner per pet
