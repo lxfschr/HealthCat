@@ -5,6 +5,18 @@ import os
 # User class for built-in authentication module
 from django.contrib.auth.models import User
 
+#import custom widgets
+from healthcat.widgets import ColorPickerWidget
+
+class ColorField(models.CharField):
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 10
+        super(ColorField, self).__init__(*args, **kwargs)
+
+    def formfield(self, **kwargs):
+        kwargs['widget'] = ColorPickerWidget
+        return super(ColorField, self).formfield(**kwargs)
+
 # Create your models here.
 class Owner(models.Model):
   user = models.OneToOneField(User)
@@ -45,6 +57,7 @@ class Pet(models.Model):
     name = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='pet_photos', blank=True)
     rfid = models.IntegerField(max_length=30, unique=True)
+    color = ColorField(blank=True, default="225B66") 
 
 class FeedingInterval(models.Model):
     pet = models.ForeignKey('Pet', related_name="feeding_interval")

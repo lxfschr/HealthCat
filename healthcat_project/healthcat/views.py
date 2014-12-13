@@ -35,6 +35,9 @@ import random
 # serializing data to send back to bowl.
 from django.core import serializers
 
+#import custom widgets
+from healthcat.widgets import ColorPickerWidget
+
 #time out
 TIMEOUT = 120 #seconds
 
@@ -44,6 +47,8 @@ def home(request):
     # Sets up list of just the logged-in user's (request.user's) items
     context = {}
     context = _add_profile_context(request, context)
+    w = PetForm()
+    print "media: ", w.media
     return render(request, 'healthcat/profile.html', context)
 
 @login_required

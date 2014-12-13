@@ -6,6 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 # making http requests and json
 import urllib2,urllib,httplib,json
 
+from healthcat.widgets import ColorPickerWidget
+
 
 
 class IconName(object):
@@ -196,12 +198,12 @@ class PetForm(forms.ModelForm):
         widgets = {
                    'name': forms.TextInput(attrs={'label':'Name', 'autofocus': 'autofocus', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: Mr. Bigglesworth'}),
                    'rfid': forms.TextInput(attrs={'label':'RFID #', 'class':'form-control' + ' ' + error_css_class + ' ' + required_css_class, 'placeholder':'eg: C02002F18538AE2DFDC1C35'}),
-                   'photo': forms.FileInput()
+                   'photo': forms.FileInput(),
                   }
         labels = {
             "name": "Pet Name",
             "rfid": "RFID #",
-            "photo": "Pet Photo"
+            "photo": "Pet Photo",
         }
         
     def clean(self):
