@@ -139,3 +139,5 @@ ALLOWED_HOSTS = ['*']
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+COLORS = ["225B66", "17A3A5", "8DBF67", "FCCB5F", "FC6E59", "FC90E6"]

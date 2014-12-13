@@ -20,6 +20,13 @@ class ColorPickerWidget(forms.TextInput):
 
     def render(self, name, value, attrs=None):
         rendered = super(ColorPickerWidget, self).render(name, value, attrs)
-        return rendered + mark_safe(u'''<script type="text/javascript">
-            $('#id_%s').colorPicker({colors: ["225B66", "17A3A5", "8DBF67", "FCCB5F", "FC6E59", "FC90E6"], showHexField: false});
-            </script>''' % name)
+        from django.conf import settings
+        # return rendered + mark_safe(u'''<script type="text/javascript">
+        #     $('#id_%s').colorPicker({colors: ["225B66", "17A3A5", "8DBF67", "FCCB5F", "FC6E59", "FC90E6"], showHexField: false});
+        #     </script>''' % name)
+        script = """ <script type="text/javascript">
+            $('#id_%s').colorPicker({colors: ["%s", "%s", "%s", "%s", "%s", "%s"], showHexField: false});
+            </script> """
+        strings = [name,]
+        strings.extend(settings.COLORS)
+        return rendered + mark_safe(script % tuple(strings))

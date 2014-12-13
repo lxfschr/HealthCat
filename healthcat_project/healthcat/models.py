@@ -50,6 +50,9 @@ class UnAssignedBowls(models.Model):
     bowl_serial = models.CharField(max_length=100, unique=True)
     bowl_key = models.CharField(max_length=100)
 
+def next_color():
+    from django.conf import settings
+    return settings.COLORS[3]
 
 class Pet(models.Model):
     # one owner per pet
@@ -57,7 +60,7 @@ class Pet(models.Model):
     name = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='pet_photos', blank=True)
     rfid = models.IntegerField(max_length=30, unique=True)
-    color = ColorField(blank=True, default="225B66") 
+    color = ColorField(blank=True, default=next_color) 
 
 class FeedingInterval(models.Model):
     pet = models.ForeignKey('Pet', related_name="feeding_interval")
