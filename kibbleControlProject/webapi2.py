@@ -209,6 +209,5 @@ def releaseLock():
 	fLock.close()
 
 	print 'lockReleased'
-
-
-init()
+init
+()

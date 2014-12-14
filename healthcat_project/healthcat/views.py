@@ -600,6 +600,16 @@ def isBowlConnected(request):
 
 
 def add_bully(request):
+
+    if request.method=='POST':
+        bowl_serial = request.POST.get('bowlSerial')
+        bowl_key = request.POST.get('bowlKey')
+        validate = request.POST.get('validate')
+
+        try :
+            
+        except:
+
     responseDict['result'] = 'NOT IMPLEMENTED'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
