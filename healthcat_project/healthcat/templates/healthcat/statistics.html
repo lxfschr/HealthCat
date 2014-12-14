@@ -12,31 +12,41 @@
         class="active" 
 {% endblock %}
 
-{% block chart_data %}
-    {% load nvd3_tags %}
-    {% include_chart_jscss %}
-    {% load_chart charttype chartdata chartcontainer extra %}
-{% endblock chart_data %}
-
 <!--Body -->
 {% block body %}
     <div class="page-container">
 
         <div class="row">
             <div class="col-md-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation" class="active"><a href={% url 'consumption_records' %}> Consumption Records </a></li>
-                    <li role="presentation"><a href={% url 'consumption_records' %}> Bullying Reports </a></li>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                <ul class="nav nav-pills nav-stacked stats-list">
+
+                    <li role="presentation" class="active"> 
+                        <a id="total_food_consumption_btn"> Total Food Consumption / Pet </a>
+                    </li>
+
+                    <script> 
+                        $('#total_food_consumption_btn').click(function () { replace_html("total_food_consumption_btn", "statistics_div", '{% url 'total_consumption' %}') });
+                    </script>
+                    <li role="presentation"><a id="total_bullying_instances_btn"> Total Bullying Instances </a></li>
+                    <script> 
+                        $('#total_bullying_instances_btn').click(function () { replace_html("total_bullying_instances_btn", "statistics_div", '{% url 'total_bullying_instances' %}') });
+                    </script>
+                    <li role="presentation"><a id="total_bullied_instances_btn"> Total Bullied Instances </a></li>
+                    <script> 
+                        $('#total_bullied_instances_btn').click(function () { replace_html("total_bullied_instances_btn", "statistics_div", '{% url 'total_bullied_instances' %}') });
+                    </script>
                 </ul>
                 
             </div>
             <div class="col-md-9 col-md-offset-0">
-                {% include_container chartcontainer 400 600 %}
+                <div id="statistics_div">
+                </div>
             </div>
         </div>
     </div>
 {% endblock body %}
 
 {% block javascript %}
-    
+    <script src="/static/js/statistics.js"></script>
 {% endblock javascript %}

@@ -215,7 +215,7 @@ def get_pet_photo(request, pet_id):
 
 @login_required
 def statistics(request):
-    context = _get_consumption_records_data({})
+    context = {}
     user = request.user
     context['user'] = user
     owner = Owner.objects.get(user = user)
@@ -647,9 +647,9 @@ def add_bully(request):
         validate = request.POST.get('validate')
 
         try :
-            
+            pass
         except:
-
+            pass
     responseDict['result'] = 'NOT IMPLEMENTED'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
@@ -660,42 +660,10 @@ def mass_addition(list):
         sum += item
     return sum
 
-def consumption_records(request):
-    xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
-    ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
-    pets = Pet.objects.all()
-    amounts = []
-    for pet in pets:
-        records = ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)
-        print records
-        amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
-    print pets.values_list("name", flat=True)
-    print amounts
-    xdata = pets.values_list("name", flat=True)
-    ydata = amounts
-    chartdata = {'x': xdata, 'y': ydata}
-    charttype = "pieChart"
-    chartcontainer = 'piechart_container'
-    data = {
-        'charttype': charttype,
-        'chartdata': chartdata,
-        'chartcontainer': chartcontainer,
-        'extra': {
-            'x_is_date': False,
-            'x_axis_format': '',
-            'tag_script_js': True,
-            'jquery_on_ready': False,
-        }
-    }
-    return render_to_response('healthcat/piechart.html', data)
-
-def _get_consumption_records_data(data):
-    xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
-    ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
-    pets = Pet.objects.all()
+def total_consumption(request):
+    owner = Owner.objects.filter(user=request.user)
+    pets = Pet.objects.filter(owner=owner)
     colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
-    #colors = pets.values_list("color", flat=True)
-    print "colors: ", colors
     amounts = []
     for pet in pets:
         amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
@@ -714,8 +682,69 @@ def _get_consumption_records_data(data):
             'x_axis_format': '',
             'tag_script_js': True,
             'jquery_on_ready': False,
-            'color_category': 'category20c',
             'chart_attr': {'color': colors}
         }
     }
-    return data
+    return render_to_response('healthcat/piechart.html', data)
+
+def total_bullying_instances(request):
+    owner = Owner.objects.filter(user=request.user)
+    pets = Pet.objects.filter(owner=owner)
+    colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
+
+    amounts = []
+    for pet in pets:
+        amounts.append(BullyingRecord.objects.filter(bully=pet).count())
+    xdata = pets.values_list("name", flat=True)
+    ydata = amounts
+
+    extra_serie1 = {"tooltip": {"y_start": "", "y_end": " cal"}}
+    chartdata = {
+        'x': xdata, 'name1': '', 'y1': ydata, 'extra1': extra_serie1,
+    }
+    charttype = "discreteBarChart"
+    chartcontainer = 'discretebarchart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+            'chart_attr': {'color': colors}
+        }
+    }
+    return render_to_response('healthcat/bar_chart.html', data)
+
+def total_bullied_instances(request):
+    owner = Owner.objects.filter(user=request.user)
+    pets = Pet.objects.filter(owner=owner)
+    colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
+
+    amounts = []
+    for pet in pets:
+        amounts.append(BullyingRecord.objects.filter(pet=pet).count())
+    xdata = pets.values_list("name", flat=True)
+    ydata = amounts
+
+    extra_serie1 = {"tooltip": {"y_start": "", "y_end": " cal"}}
+    chartdata = {
+        'x': xdata, 'name1': '', 'y1': ydata, 'extra1': extra_serie1,
+    }
+    charttype = "discreteBarChart"
+    chartcontainer = 'discretebarchart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+            'chart_attr': {'color': colors}
+        }
+    }
+    return render_to_response('healthcat/bar_chart.html', data)
