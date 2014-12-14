@@ -4,7 +4,7 @@
 
 {% block chart_data %}
     {% include_chart_jscss %}
-    {% load_chart charttype chartdata chartcontainer extra %}
+    {% load_chart charttype chartdata "multibarchart_container" %}
 {% endblock chart_data %}
 
-{% include_container chartcontainer 450 600 %}
+{% include_container "multibarchart_container" 450 600 %}
