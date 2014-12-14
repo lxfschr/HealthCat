@@ -1,3 +1,7 @@
+{% block media %}
+    {{ pet_form.media }}
+{% endblock media %}
+
 {% if pet_form.is_multipart %}
     <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action={% url 'edit_pet' %}>
 {% else %}

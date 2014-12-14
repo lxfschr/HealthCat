@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.core.exceptions import ObjectDoesNotExist
 
 # Decorator to use built-in authentication system
@@ -35,6 +35,9 @@ import random
 # serializing data to send back to bowl.
 from django.core import serializers
 
+#import custom widgets
+from healthcat.widgets import ColorPickerWidget
+
 #time out
 TIMEOUT = 120 #seconds
 
@@ -44,6 +47,8 @@ def home(request):
     # Sets up list of just the logged-in user's (request.user's) items
     context = {}
     context = _add_profile_context(request, context)
+    w = PetForm()
+    print "media: ", w.media
     return render(request, 'healthcat/profile.html', context)
 
 @login_required
@@ -210,7 +215,7 @@ def get_pet_photo(request, pet_id):
 
 @login_required
 def statistics(request):
-    context = {}
+    context = _get_consumption_records_data({})
     user = request.user
     context['user'] = user
     owner = Owner.objects.get(user = user)
@@ -220,25 +225,42 @@ def statistics(request):
 @login_required
 @transaction.commit_on_success
 def notifications(request):
-    id = request.GET.get("id")
-    if id: 
-        id = int(id)
+    date = request.GET.get("date")
+    print date
     context = {}
     context = _add_profile_context(request, context)
 
+    owner = Owner.objects.get(user = request.user)
+    bowls = Bowl.objects.filter(owner = owner)
+
     notifications = []
 
-    if id is not None:
-        notifications = Notification.objects.all().filter(owner = context['owner']).filter(id__gt=id).order_by('-date')
+    if date is not None:
+        notifications = ConsumptionRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        consumption_records = ConsumptionRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        bullying_records = BullyingRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        new_rfid_records = NewRFIDRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+        refilled_bowl_records = RefilledBowlRecord.objects.all().filter(bowl__in=bowls).filter(date__gt=date).order_by('-date')
+
+        latest = list(consumption_records) + list(bullying_records) + list(new_rfid_records) + list(refilled_bowl_records)
+        notifications = sorted(latest, key=lambda x: x.date, reverse=True)
     else:
-        notifications = Notification.objects.all().filter(owner = context['owner']).order_by('-date')
+        notifications = ConsumptionRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        consumption_records = ConsumptionRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        bullying_records = BullyingRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        new_rfid_records = NewRFIDRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+        refilled_bowl_records = RefilledBowlRecord.objects.all().filter(bowl__in=bowls).order_by('-date')
+
+        latest = list(consumption_records) + list(bullying_records) + list(new_rfid_records) + list(refilled_bowl_records)
+        notifications = sorted(latest, key=lambda x: x.date, reverse=True)
 
     context['notifications'] = notifications
-
-    if id is not None:
+    owner.num_notifications = 0;
+    owner.save()
+    if date is not None:
         return render(request, 'healthcat/notifications_list.html', context)
     else:
-        return render(request, 'healthcat/notifications.html', context)
+        return render(request, 'healthcat/notifications.html', context)    
 
 @login_required
 def edit_profile(request):
@@ -373,7 +395,23 @@ def edit_pet(request):
 
     pet_form.save()
 
+    _determine_next_color(Owner.objects.filter(user=request.user))
+
     return render(request, 'healthcat/profile.html', context)
+
+def _determine_next_color(owner):
+    hex_colors = [pet.encode("utf8") for pet in Pet.objects.filter(owner=owner).values_list('color', flat=True)]
+    colors = []
+    for hex_color in hex_colors:
+        colors.append(hex_color.translate(None, '#').upper())
+    print "colors: ", colors 
+    from django.conf import settings
+    print "settings.COLORS: ", settings.COLORS
+    for color in settings.COLORS:
+        if color not in colors:
+            settings.NEXT_COLOR = color
+            print "settings.NEXT_COLOR: ", settings.NEXT_COLOR
+            break
 
 @login_required
 def add_pet(request):
@@ -400,6 +438,8 @@ def add_pet(request):
         return render(request, 'healthcat/profile.html', context)
 
     pet_form.save()
+
+    _determine_next_color(owner)
 
     bowl.pets.add(Pet.objects.get(id=new_pet.id))
 
@@ -452,7 +492,7 @@ def edit_bowl(request):
         bowl_id = request.GET.get("bowl_id")
         bowl = get_object_or_404(Bowl, id=bowl_id)
         initial = {}
-        initial['ip_address'] = bowl.ip_address
+        initial['serial_number'] = bowl.serial_number
         initial['name'] = bowl.name
         bowl_form = BowlForm(initial=initial)
         context['bowl_form'] = bowl_form
@@ -613,3 +653,69 @@ def add_bully(request):
     responseDict['result'] = 'NOT IMPLEMENTED'
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
+
+def mass_addition(list):
+    sum = 0
+    for item in list:
+        sum += item
+    return sum
+
+def consumption_records(request):
+    xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
+    ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
+    pets = Pet.objects.all()
+    amounts = []
+    for pet in pets:
+        records = ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)
+        print records
+        amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
+    print pets.values_list("name", flat=True)
+    print amounts
+    xdata = pets.values_list("name", flat=True)
+    ydata = amounts
+    chartdata = {'x': xdata, 'y': ydata}
+    charttype = "pieChart"
+    chartcontainer = 'piechart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
+    return render_to_response('healthcat/piechart.html', data)
+
+def _get_consumption_records_data(data):
+    xdata = ["Apple", "Apricot", "Avocado", "Banana", "Boysenberries", "Blueberries", "Dates", "Grapefruit", "Kiwi", "Lemon"]
+    ydata = [52, 48, 160, 94, 75, 71, 490, 82, 46, 17]
+    pets = Pet.objects.all()
+    colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
+    #colors = pets.values_list("color", flat=True)
+    print "colors: ", colors
+    amounts = []
+    for pet in pets:
+        amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
+    xdata = pets.values_list("name", flat=True)
+    ydata = amounts
+    extra_serie = {"tooltip": {"y_start": "", "y_end": " grams"}}
+    chartdata = {'x': xdata, 'y1': ydata, 'extra1': extra_serie}
+    charttype = "pieChart"
+    chartcontainer = 'piechart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+            'color_category': 'category20c',
+            'chart_attr': {'color': colors}
+        }
+    }
+    return data

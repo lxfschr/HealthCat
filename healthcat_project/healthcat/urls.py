@@ -42,4 +42,6 @@ urlpatterns = patterns('',
     url(r'^is-bowl-connected','healthcat.views.isBowlConnected',
                 name='is_bowl_connected'),
 
+    url(r'^consumption-records','healthcat.views.consumption_records',
+                name='consumption_records'),
 )

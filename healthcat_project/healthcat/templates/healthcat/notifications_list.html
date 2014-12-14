@@ -1,5 +1,5 @@
 {% for notification in notifications %}
-	<div notification_id="{{ notification.id }}">
-		<p> {{ notification.text }} <span class="pull-right"> {{ notification.date|date:"h:iA m/d/y" }} </span> </p>
+	<div notification_date="{{ notification.date|date:'Y-m-d H:i:s ' }}">
+		<p> {{ notification.notification_text }} <span class="pull-right"> {{ notification.date|date:"h:iA m/d/y" }} </span> </p>
 	</div>
 {% endfor %}

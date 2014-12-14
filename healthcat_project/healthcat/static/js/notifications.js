@@ -1,15 +1,13 @@
 function update_notifications() {
     console.log("in update_notifications()");
     var notifications_list = $("#notifications_list");
-    var last_notification_id = notifications_list.children(':first').attr('notification_id');
-    if(last_notification_id == null) {
-        last_notification_id = 0;
-    }
-    console.log("last_notification_id: " + last_notification_id);
+    var last_notification_date = notifications_list.children(':first').attr('notification_date');
+
+    console.log("last_notification_date: " + last_notification_date);
 
     $.ajax({
         // the URL for the request
-        url: "/healthcat/notifications?id="+last_notification_id,
+        url: "/healthcat/notifications?date="+last_notification_date,
      
         // whether this is a POST or GET request
         type: "GET",
@@ -27,7 +25,7 @@ function update_notifications() {
         // code to run if the request fails; the raw request and
         // status codes are passed to the function
         error: function( xhr, status, errorThrown ) {
-            alert( "Sorry, there was a problem!" );
+            //alert( "Sorry, there was a problem!" );
             console.log( "Error: " + errorThrown );
             console.log( "Status: " + status );
             console.dir( xhr );
