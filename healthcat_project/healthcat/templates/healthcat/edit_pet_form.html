@@ -3,9 +3,9 @@
 {% endblock media %}
 
 {% if pet_form.is_multipart %}
-    <form class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" action={% url 'edit_pet' %}>
+    <form id="{{ bowl_id }}_bowl_{{ pet_id }}_pet_form" class="form-pet form-signin" role="form" method="POST" enctype="multipart/form-data" onsubmit="add_pet(event, '{{ bowl_id }}_bowl_{{ pet_id }}_pet_form', '{{ pet_id }}_pet_profile', '{% url 'edit_pet' %}')">
 {% else %}
-    <form class="form-pet form-signin" role="form" method="POST" action={% url 'edit_pet' %}>
+    <form class="form-pet form-signin" role="form" method="POST" onsubmit="add_pet(event, '{{ bowl_id }}_bowl_{{ pet_id }}_pet_form', '{{ pet_id }}_pet_profile', '{% url 'edit_pet' %}')">
 {% endif %}
         {% for field in pet_form.visible_fields %}
             <div class="inline-block">

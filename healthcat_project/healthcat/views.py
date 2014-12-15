@@ -360,11 +360,14 @@ def delete_feeding_interval(request):
 
 @login_required
 def edit_pet(request):
+    print "in edit_pet()"
     context = {}
     context = _add_profile_context(request, context)
 
     if request.method == 'GET':
+        print "GET"
         pet_id = request.GET.get("pet_id")
+        print "pet_id: ", pet_id
         bowl_id = request.GET.get("bowl_id")
         pet = get_object_or_404(Pet, id=pet_id)
         initial = {}
@@ -383,6 +386,7 @@ def edit_pet(request):
     pet = get_object_or_404(Pet, id=pet_id)
     
     context['pet_id'] = pet_id
+    context['pet'] = pet
 
     pet_form = PetForm(request.POST, request.FILES, instance=pet)
 
@@ -390,13 +394,13 @@ def edit_pet(request):
         context['pet_form'] = pet_form
         context['pet_id'] = pet_id
         context['bowl_id'] = bowl_id
-        return render(request, 'healthcat/profile.html', context)
+        return render(request, 'healthcat/edit_pet_form.html', context)
 
     pet_form.save()
 
     _determine_next_color(Owner.objects.filter(user=request.user))
 
-    return render(request, 'healthcat/profile.html', context)
+    return render(request, 'healthcat/pet.html', context)
 
 def _determine_next_color(owner):
     hex_colors = [pet.encode("utf8") for pet in Pet.objects.filter(owner=owner).values_list('color', flat=True)]

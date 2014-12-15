@@ -1,0 +1,9 @@
+<ul class="pet_info_list">
+    <li>
+        {% include "healthcat/edit_pet_button.html" with pageToRender="/healthcat/profile" %}
+    </li>
+    <li>
+        RFID Tag #: {{ pet.rfid }}
+    </li>
+</ul>
+{% include "healthcat/feeding_intervals_table.html" with pageToRender="/healthcat/profile" %}
