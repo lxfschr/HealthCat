@@ -77,6 +77,11 @@ class BowlForm(forms.ModelForm):
             raise forms.ValidationError("No record of this serial.")
         return bowl_serial
 
+class EditBowlForm(BowlForm):
+    def __init__(self, *args, **kwargs):
+        super (EditBowlForm, self).__init__(*args,**kwargs)
+        self.fields.pop('serial_number')
+
 class RegistrationForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'

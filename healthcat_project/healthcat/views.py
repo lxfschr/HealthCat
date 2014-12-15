@@ -28,7 +28,6 @@ from django.http import HttpResponse, Http404
 import urllib2,urllib,httplib,json
 
 import time,datetime
-import pytz
 from django.utils import timezone
 
 #debug
@@ -36,9 +35,6 @@ import random
 
 # serializing data to send back to bowl.
 from django.core import serializers
-
-#import custom widgets
-from healthcat.widgets import ColorPickerWidget
 
 #time out
 TIMEOUT = 120 #seconds
@@ -375,6 +371,7 @@ def edit_pet(request):
         initial['name'] = pet.name
         initial['rfid'] = pet.rfid
         initial['photo'] = pet.photo
+        initial['color'] = pet.color
         pet_form = PetForm(initial=initial)
         context['pet_form'] = pet_form
         context['pet_id'] = pet_id
@@ -503,9 +500,8 @@ def edit_bowl(request):
         bowl_id = request.GET.get("bowl_id")
         bowl = get_object_or_404(Bowl, id=bowl_id)
         initial = {}
-        initial['serial_number'] = bowl.serial_number
         initial['name'] = bowl.name
-        bowl_form = BowlForm(initial=initial)
+        bowl_form = EditBowlForm(initial=initial)
         context['bowl_form'] = bowl_form
         context['bowl_id'] = bowl_id
         return render(request,'healthcat/edit_bowl_form.html',context)
@@ -513,7 +509,7 @@ def edit_bowl(request):
     bowl_id = request.POST.get("bowl_id")
     context['bowl_id'] = bowl_id
     bowl = get_object_or_404(Bowl, id=bowl_id)
-    bowl_form = BowlForm(request.POST, instance=bowl)
+    bowl_form = EditBowlForm(request.POST, instance=bowl)
     
     if not bowl_form.is_valid():
         context['bowl_form'] = bowl_form
@@ -693,6 +689,7 @@ def _mass_addition(list):
         sum += item
     return sum
 
+@login_required
 def total_consumption(request):
     owner = Owner.objects.filter(user=request.user)
     pets = Pet.objects.filter(owner=owner)
@@ -732,6 +729,7 @@ def _previous_and_next(some_iterable):
     nexts = chain(islice(nexts, 1, None), [None])
     return izip(prevs, items, nexts)
 
+@login_required
 def consumption_over_time(request):
     owner = get_object_or_404(Owner, user=request.user)
     pets = Pet.objects.filter(owner=owner)
@@ -824,6 +822,7 @@ def consumption_over_time(request):
     
     return render_to_response('healthcat/line_graph_with_focus.html', data)
 
+@login_required
 def total_bullying_instances(request):
     owner = Owner.objects.filter(user=request.user)
     pets = Pet.objects.filter(owner=owner)
@@ -855,6 +854,7 @@ def total_bullying_instances(request):
     }
     return render_to_response('healthcat/bar_chart.html', data)
 
+@login_required
 def total_bullied_instances(request):
     owner = Owner.objects.filter(user=request.user)
     pets = Pet.objects.filter(owner=owner)
