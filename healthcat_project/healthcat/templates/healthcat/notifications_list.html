@@ -1,5 +1,11 @@
 {% for notification in notifications %}
 	<div notification_date="{{ notification.date|date:'Y-m-d H:i:s ' }}">
-		<p> {{ notification.notification_text }} <span class="pull-right"> {{ notification.date|date:"h:iA m/d/y" }} </span> </p>
+		<p class="notification" style="background-color:{{ notification.pet.color }}" 
+
+		onmouseout='this.style.backgroundColor="{{ notification.pet.color }}"'> 
+			{{ notification.notification_text }} 
+			<span class="pull-right"> {{ notification.date|date:"h:iA m/d/y" }} </span> 
+		</p>
 	</div>
 {% endfor %}
+

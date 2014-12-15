@@ -1,3 +1,26 @@
+$(document).ready(function(){
+    
+    over = function() {
+        var color = $( this ).css( "background-color" );
+            console.log("color!: " + color);
+            rgb = color.substring(4, color.length-1).replace(/ /g, '').split(',');
+            console.log(rgb);
+            var new_color = "rgba(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ", " + "1" + ")"
+            console.log("new_color: " + new_color);
+            $( this ).css( "background-color",  new_color);
+    }
+    out = function() {
+        var color = $( this ).css( "background-color" );
+            console.log("color!: " + color);
+            rgb = color.substring(4, color.length-1).replace(/ /g, '').split(',');
+            console.log(rgb);
+            var new_color = "rgba(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ", " + "0.75" + ")"
+            console.log("new_color: " + new_color);
+            $( this ).css( "background-color",  new_color);
+    }
+    $(".notification").hover(out, over)
+});
+
 function update_notifications() {
     console.log("in update_notifications()");
     var notifications_list = $("#notifications_list");

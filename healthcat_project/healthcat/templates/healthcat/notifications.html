@@ -8,6 +8,10 @@
         class="active" 
 {% endblock %}
 
+{% block styles %} 
+        <link href="/static/css/notification.css" rel="stylesheet">
+{% endblock styles %}
+
 <!--Body -->
 {% block body %}
     <div class="page-container">
@@ -18,8 +22,6 @@
                     <div id="notifications_list">
                       {% include "healthcat/notifications_list.html" with pageToRender="/healthcat/notifications" %}
                     </div>
-                    <p> Rocky ate 5 grams from Cat Bowl <span class="pull-right"> 08:52PM 12/03/14 </span> </p>
-                    <p> New RFID detected: A6C2GB1F87E12D <span class="pull-right"> 12:34PM 11/29/14 </span> </p>
                 </div>
             </div>
         </div>
