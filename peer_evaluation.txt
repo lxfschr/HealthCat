@@ -1,0 +1,12 @@
+We set a high bar for ourselves and this 5 week project because we had a lot of ideas of what it could do. We knew that we were never going to complete all the features, but we what the core functionality needed to be. We did not set hard deadlines for any features, which honestly we probably should have. It would have helped us complete more the project. However, this did allow us to be open to changing the architecture and features more fluidly, which was neccesary. 
+
+We knew what eachothers skills were because we have known eachother for a year know, so we knew who could do what. We never set a schedule and team meetings were mostly ad hoc. We work in the same studio space and were aware of each other other time commitments. 
+
+We had healthy heated discussions about features and social issues, but they were neceesary and productive. 
+
+Alex:
+	User-facing web application features.
+
+Vasif:
+	Backend web app.
+	Connection and communication between the bowl and the web app.
