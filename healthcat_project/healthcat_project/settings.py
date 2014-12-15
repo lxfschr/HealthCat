@@ -26,6 +26,8 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 TIME_INPUT_FORMATS = ('%H:%M', '%I:%M%p', '%I:%M %p')
+DATE_FORMAT = '%m/%d/%y'
+DATETIME_FORMAT = '%I:%M%p %m/%d/%y'
 
 # Application definition
 DEFAULT_APPS = (

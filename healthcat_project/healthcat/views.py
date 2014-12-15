@@ -627,6 +627,7 @@ def validateBowl(request):
 
 def isBowlConnected(request):
     serial_number = request.GET.get("serial_number")
+    print "serial_number: " + serial_number
     responseDict={}
 
     try:
@@ -716,7 +717,7 @@ def consumption_over_time(request):
         'extra2': extra_serie,
         'extra3': extra_serie
     }
-
+    from django.conf import settings
     charttype = "lineWithFocusChart"
     chartcontainer = 'linewithfocuschart_container'
     data = {
@@ -725,7 +726,7 @@ def consumption_over_time(request):
         'chartcontainer': chartcontainer,
         'extra': {
             'x_is_date': True,
-            'x_axis_format': "%d %b %Y",
+            'x_axis_format': settings.DATE_FORMAT,
             'tag_script_js': True,
             'jquery_on_ready': False,
             'chart_attr': {'color': colors}
@@ -785,8 +786,7 @@ def consumption_over_time(request):
         name = "name%s" % index
         chartdata[name] = pet.name
 
-        chartdata['x'] = map(lambda date: int(time.mktime(date.timetuple()) * 1000), date_dict.keys())
-    
+    chartdata['x'] = map(lambda date: int(time.mktime(date.timetuple()) * 1000), date_dict.keys())
     data['chartdata'] = chartdata
 
     print "chartdata", chartdata
