@@ -28,6 +28,14 @@ def init():
     # create a new file or read from the existing pickle.
     # check for files
 
+    # this shall happen on the first run only.
+    # delete existing lock .
+    f3= open(lockFileName,'w+')
+    f3.write('UNLOCKED')
+    f3.close()
+
+
+    # then Start looping.
     while (True):
 
         acquireLock()
