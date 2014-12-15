@@ -157,7 +157,7 @@ class ResetPasswordForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'
 
-    email = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'input-block-level', 'placeholder':'Email Address...'}))
+    email = forms.EmailField(max_length = 40 , widget=forms.TextInput(attrs={'class':'form-control input-block-level', 'placeholder':'Email Address...'}))
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

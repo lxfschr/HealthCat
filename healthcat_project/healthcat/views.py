@@ -166,7 +166,7 @@ def change_password(request):
     user.set_password(form.cleaned_data['password1'])
     user.save()
 
-    return render(request, 'healthcat/login', context)
+    return render(request, 'healthcat/changed_password.html', context)
 
 @transaction.commit_on_success
 def confirm_registration(request, username, token):
