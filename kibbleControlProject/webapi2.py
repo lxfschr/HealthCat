@@ -28,7 +28,6 @@ def init():
     # create a new file or read from the existing pickle.
     # check for files
 
-    # while loop
     while (True):
 
         acquireLock()
@@ -162,8 +161,6 @@ def stashDumps():
     f3.close()
 
 
-
-
 def acquireLock():
     # set the lock file to 1
 
@@ -209,5 +206,4 @@ def releaseLock():
     fLock.close()
 
     print 'lockReleased'
-init
-()
+init ()

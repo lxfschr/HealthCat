@@ -28,7 +28,8 @@ from django.http import HttpResponse, Http404
 import urllib2,urllib,httplib,json
 
 import time,datetime
-
+import pytz
+from django.utils import timezone
 
 #debug
 import random
@@ -467,14 +468,23 @@ def add_bowl(request):
     # logic here
     bowl_serial = add_bowl_form.cleaned_data['serial_number']
     bowl_name = add_bowl_form.cleaned_data['name']
-
-    unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial=bowl_serial)
+    
+    unassigned_bowl = UnAssignedBowls.objects.get( bowl_serial=bowl_serial )
+    
     #get the current datetime
     cDateTime = datetime.datetime.now()
-    #create a connection pending bowl.
-    newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl,
-     owner=owner,initTime=cDateTime, name=bowl_name)
-    newcpBowl.save()
+
+    # update / create a connection pending bowl.
+    try:
+        cpBowl=ConnectionPendingBowls.objects.get(uaBowl=unassigned_bowl)
+        cpBowl.initTime = cDateTime
+        cpBowl.name=bowl_name
+        cpBowl.save()
+
+    except:
+        newcpBowl = ConnectionPendingBowls(uaBowl=unassigned_bowl,
+         owner=owner,initTime=cDateTime, name=bowl_name)
+        newcpBowl.save()
 
     context['modal'] = "healthcat/press_button_modal.html"
     context['serial_number'] = bowl_serial
@@ -558,7 +568,9 @@ def retrieveFeedingIntervals(request,rfid):
     intervals= FeedingInterval.objects.filter(pet=p)
     jsonIntervals =serializers.serialize('json',intervals,
         fields=('start','end','amount',))
+
     return HttpResponse(jsonIntervals,content_type="application/json")
+
 
 def addConsumptionRecord(request,rfid,amount,dateAndTime):
 
@@ -590,16 +602,27 @@ def validateBowl(request):
         try:
             unassigned_bowl = UnAssignedBowls.objects.get(bowl_serial = bowl_serial)
 
+            print 'unassigned_bowl found'
+
             if not unassigned_bowl.bowl_key == bowl_key:
+                print 'bowlKey Mismatch'
                 raise Exception('bowlKeyMismatch')
 
             cpBowl = ConnectionPendingBowls.objects.get(uaBowl=unassigned_bowl)
 
+
+            print 'connection pending bowl found'
+
+
             # check for time out. 
-            timenow = datetime.datetime.now()
-            dTime=datetime.timedelta(seconds=TIMEOUT)#magic number alert
-            if timenow- cpBowl >dTime:
+            timenow = timezone.now()
+            cpBowlTime = cpBowl.initTime
+            dTime=datetime.timedelta(seconds=TIMEOUT)
+
+            if timenow - cpBowlTime >dTime:
+                print 'timeout'
                 raise Exception('bowlValidationTimeOut')
+
 
             #create a connected bowl.
             newBowl = Bowl(name=cpBowl.name,owner=cpBowl.owner,
@@ -613,7 +636,9 @@ def validateBowl(request):
             return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
 
-        except :
+        except Exception, e:
+            print e
+
             responseDict['result']='FAIL'
             return HttpResponse(json.dumps(responseDict),
             content_type="application/json")
@@ -631,11 +656,17 @@ def isBowlConnected(request):
     responseDict={}
 
     try:
+
         b = Bowl.objects.get(serial_number=serial_number)
         responseDict['result'] = 'SUCCESS'
+
+        print 'returning success'
+
         return HttpResponse(json.dumps(responseDict),
             content_type="application/json")    
-    except:
+    except Exception, e:
+
+        print 'returning fail exception :', e
         responseDict['result'] = 'FAIL'
         return HttpResponse(json.dumps(responseDict),
             content_type="application/json")

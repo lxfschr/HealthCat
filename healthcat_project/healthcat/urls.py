@@ -39,7 +39,8 @@ urlpatterns = patterns('',
     url(r'^validate-bowl','healthcat.views.validateBowl',name='validate_bowl'),
 
     #url(r'^notify-bully','healthcat.views.add_bully', name='add_bully'),
-    url(r'^is-bowl-connected','healthcat.views.isBowlConnected',
+
+    url(r'^is-bowl-connected/','healthcat.views.isBowlConnected',
                 name='is_bowl_connected'),
     url(r'^total-consumption','healthcat.views.total_consumption',
                 name='total_consumption'),
@@ -49,4 +50,5 @@ urlpatterns = patterns('',
                 name='total_bullying_instances'),
     url(r'^total-bullied-instances','healthcat.views.total_bullied_instances',
                 name='total_bullied_instances'),
+
 )

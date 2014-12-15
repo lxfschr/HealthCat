@@ -40,6 +40,7 @@ def init():
             else:
                 cf.open()
 
+
 def shouldBowlClose(snapshotList):
 
     #get all cats from the list
@@ -79,5 +80,4 @@ def getRfidsNearby():
         listoflists.append(cf.readRFID())
 
 
-#init()
-testGetCatsFromSnapShotList()
+init()
