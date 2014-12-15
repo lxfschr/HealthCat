@@ -22,19 +22,25 @@
                 <ul class="nav nav-pills nav-stacked stats-list">
 
                     <li role="presentation" class="active"> 
-                        <a id="total_food_consumption_btn"> Total Food Consumption / Pet </a>
+                        <a id="total_food_consumption_btn"> Total Consumption per Pet </a>
                     </li>
-
                     <script> 
                         $('#total_food_consumption_btn').click(function () { replace_html("total_food_consumption_btn", "statistics_div", '{% url 'total_consumption' %}') });
                     </script>
+
                     <li role="presentation"><a id="total_bullying_instances_btn"> Total Bullying Instances </a></li>
                     <script> 
                         $('#total_bullying_instances_btn').click(function () { replace_html("total_bullying_instances_btn", "statistics_div", '{% url 'total_bullying_instances' %}') });
                     </script>
+
                     <li role="presentation"><a id="total_bullied_instances_btn"> Total Bullied Instances </a></li>
                     <script> 
                         $('#total_bullied_instances_btn').click(function () { replace_html("total_bullied_instances_btn", "statistics_div", '{% url 'total_bullied_instances' %}') });
+                    </script>
+
+                    <li role="presentation"><a id="consumption_over_time_btn"> Consumption Over Time </a></li>
+                    <script> 
+                        $('#consumption_over_time_btn').click(function () { replace_html("consumption_over_time_btn", "statistics_div", '{% url 'consumption_over_time' %}') });
                     </script>
                 </ul>
                 

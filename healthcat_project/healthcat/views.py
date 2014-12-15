@@ -29,6 +29,7 @@ import urllib2,urllib,httplib,json
 
 import time,datetime
 
+
 #debug
 import random
 
@@ -654,7 +655,7 @@ def add_bully(request):
     return HttpResponse(json.dumps(responseDict),
         content_type="application/json")
 
-def mass_addition(list):
+def _mass_addition(list):
     sum = 0
     for item in list:
         sum += item
@@ -666,7 +667,7 @@ def total_consumption(request):
     colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
     amounts = []
     for pet in pets:
-        amounts.append(mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
+        amounts.append(_mass_addition(ConsumptionRecord.objects.filter(pet=pet).values_list("amount", flat=True)))
     xdata = pets.values_list("name", flat=True)
     ydata = amounts
     extra_serie = {"tooltip": {"y_start": "", "y_end": " grams"}}
@@ -686,6 +687,111 @@ def total_consumption(request):
         }
     }
     return render_to_response('healthcat/piechart.html', data)
+
+def _dates_inbetween(start, end):
+    r = (end-start).days
+    return [start+datetime.timedelta(days=i) for i in range(1,r)]
+
+from itertools import tee, islice, chain, izip
+
+def _previous_and_next(some_iterable):
+    prevs, items, nexts = tee(some_iterable, 3)
+    prevs = chain([None], prevs)
+    nexts = chain(islice(nexts, 1, None), [None])
+    return izip(prevs, items, nexts)
+
+def consumption_over_time(request):
+    owner = get_object_or_404(Owner, user=request.user)
+    pets = Pet.objects.filter(owner=owner)
+    colors = [pet.encode("utf8") for pet in pets.values_list('color', flat=True)]
+
+    # Add tooltip to chartdata
+    tooltip_date = "%d %b %Y"
+    extra_serie = {"tooltip": {"y_start": "consumed ", "y_end": " grams"},
+                   "date_format": tooltip_date}
+    chartdata = {
+        'x': [],
+        'y1': [],
+        'extra1': extra_serie,
+        'extra2': extra_serie,
+        'extra3': extra_serie
+    }
+
+    charttype = "lineWithFocusChart"
+    chartcontainer = 'linewithfocuschart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': True,
+            'x_axis_format': "%d %b %Y",
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+            'chart_attr': {'color': colors}
+        }
+    }
+
+    # find earliest date
+    start_date = None
+    try:
+        start_date = ConsumptionRecord.objects.filter(pet__owner=owner).order_by('date')[:1].get().date.date()
+        end_date = ConsumptionRecord.objects.filter(pet__owner=owner).latest('date').date.date()
+        print "start_date", start_date
+        print "end_date", end_date
+    except ObjectDoesNotExist:
+        return render_to_response('healthcat/line_graph_with_focus.html', data)
+
+    # create dictionary of dates and amounts
+    from collections import OrderedDict
+    for i, pet in enumerate(pets):
+        index = i+1
+        date_dict = OrderedDict()
+        print "pet: ", pet.name
+        records = ConsumptionRecord.objects.filter(pet=pet).order_by('date')
+        print "records: ", records
+        last_record = None
+        for prev, record, next in _previous_and_next(records):
+            # if the date already exisits, add the amount to the value
+            if date_dict.has_key(record.date.date()):
+                prev_value = date_dict[record.date.date()]
+                date_dict[record.date.date()] = prev_value + record.amount
+            # Otherwise, add all the dates inbetween the previous and current date
+            else:
+                if prev is None:
+                    print "prev: ", prev
+                    inbetween_dates = _dates_inbetween(start_date-datetime.timedelta(days=1), record.date.date())
+                else:
+                    inbetween_dates = _dates_inbetween(prev.date.date(), record.date.date())
+                print "inbetween_dates: ", inbetween_dates
+                inbetween_dates_dict = OrderedDict.fromkeys(inbetween_dates, 0)
+                print "inbetween_dates_dict: ", inbetween_dates_dict
+                date_dict.update(inbetween_dates_dict)
+                date_dict[record.date.date()] = record.amount
+            last_record = record
+        print "date_dict", date_dict
+
+        # Add trailing dates
+        if last_record is None:
+            trailing_dates = _dates_inbetween(start_date-datetime.timedelta(days=1), end_date+datetime.timedelta(days=1))
+        else:
+            trailing_dates = _dates_inbetween(record.date.date(), end_date+datetime.timedelta(days=1))
+        trailing_dates_dict = OrderedDict.fromkeys(trailing_dates, 0)
+        date_dict.update(trailing_dates_dict)
+
+        y = "y%s" % index
+        chartdata[y] = map(lambda amount: int(amount), date_dict.values())
+
+        name = "name%s" % index
+        chartdata[name] = pet.name
+
+        chartdata['x'] = map(lambda date: int(time.mktime(date.timetuple()) * 1000), date_dict.keys())
+    
+    data['chartdata'] = chartdata
+
+    print "chartdata", chartdata
+    
+    return render_to_response('healthcat/line_graph_with_focus.html', data)
 
 def total_bullying_instances(request):
     owner = Owner.objects.filter(user=request.user)

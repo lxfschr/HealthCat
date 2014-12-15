@@ -1,0 +1,10 @@
+{% block above_head %}
+	{% load nvd3_tags %}
+ {% endblock above_head %}
+
+{% block chart_data %}
+    {% include_chart_jscss %}
+    {% load_chart charttype chartdata chartcontainer extra %}
+{% endblock chart_data %}
+
+{% include_container chartcontainer 400 '100%' %}
