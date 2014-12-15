@@ -33,8 +33,7 @@ function is_bowl_connected() {
                     window.setTimeout( is_bowl_connected, 5000 );
                 }
             }
-            console.log( "Success! " + response['result'] );
-        },
+            console.log( "Success! " + response['result'] );        },
      
         // code to run if the request fails; the raw request and
         // status codes are passed to the function

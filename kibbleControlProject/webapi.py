@@ -188,18 +188,23 @@ def unValidateBowl():
 
 
 def validation_helper(arg):
-    url = HOST+'validate-bowl'
-    values = {'bowlSerial' : BOWLSERIAL,
-              'bowlKey' : BOWL_KEY,
-              'validate':arg }
+    try:
+
+        url = HOST+'validate-bowl'
+        values = {'bowlSerial' : BOWLSERIAL,
+                  'bowlKey' : BOWL_KEY,
+                  'validate':arg }
 
 
-    data = urllib.urlencode(values)
-    req = urllib2.Request(url, data)
-    response = urllib2.urlopen(req)
-    print response.read()
-    return 1
+        data = urllib.urlencode(values)
+        req = urllib2.Request(url, data)
 
+        response = urllib2.urlopen(req)
+        print response.read()
+        return 1
+    except:
+        print ' no connection'
+        return 0
 
 # def rfidsDetected(rfidList):
 
