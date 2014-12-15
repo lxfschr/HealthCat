@@ -177,7 +177,7 @@ def petJustAte(index,amount):
     return
 
 
-def bullyNotify(bigCat,littleCat):
+def bullyNotify(catList):
     return
 
 def validateBowl():
