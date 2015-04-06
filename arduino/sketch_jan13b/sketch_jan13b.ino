@@ -10,13 +10,21 @@ Servo feedServo;
 int scalePin = 0;
 
 //load scale variables
-float loadA = .453592; // kg
-int analogvalA = 527.02; // analog reading taken with load A on the load cell
-float loadB = .907185; // kg
-int analogvalB = 715.12; // analog reading taken with load B on the load cell
-float analogValueAverage = 0;
-long time = 0; //
-int timeBetweenReadings = 200; // We want a reading every 200 ms;
+float aReading = 33.0;
+float aLoad = 315.0; // gs.
+float bReading = 378.0;
+float bLoad = 1290.0; // gs.
+
+
+const int numReadings = 50;
+
+int readings[numReadings];      // the readings from the analog input
+int index = 0;                  // the index of the current reading
+float total = 0;                  // the running total
+float load = 0;                // the average
+float average = 0; 
+
+
 
 //RFID variables
 const char command_scan[]={
@@ -37,34 +45,41 @@ void setup(){
   delay(2000);
   feedServo.detach();
 
-
+ for (int thisReading = 0; thisReading < numReadings; thisReading++)
+    readings[thisReading] = 0; 
 }
 
 void loop() 
 {
-    int analogValue = analogRead(0);
 
-  // running average - We smooth the readings a little bit
-  analogValueAverage = 0.99*analogValueAverage + 0.01*analogValue;
-  float load;
-  // Is it time to print?
-  if(millis() > time + timeBetweenReadings){
-    float load = (((analogToLoad(analogValueAverage)+0.63898)/2)*1000)-348.5;
+    // subtract the last reading:
+  total = total - readings[index];         
+  // read from the sensor:
+  // Calculate load based on A and B readings above
+  float newReading = analogRead(0);
+  load = ((bLoad - aLoad)/(bReading - aReading)) * (newReading - aReading) + aLoad;
+  readings[index] = load; 
+  // add the reading to the total:
+  total= total + readings[index];       
+  // advance to the next position in the array:  
+  index = index + 1;                    
 
-//    Serial.print("analogValue: ");Serial.println(analogValueAverage);
-//    Serial.print("             load: ");Serial.println(load,5);
-    time = millis();
-  }
-//  
-//  float load = getWeight();
+  // if we're at the end of the array...
+  if (index >= numReadings)              
+    // ...wrap around to the beginning: 
+    index = 0;                           
+
+  // calculate the average:
+  average = total / numReadings;  
+  
+  
   if (Serial.available()>0)
   {
     incomingByte = Serial.read();
 
     switch (incomingByte){
     case 'w':
-      Serial.println(load,5);
-      time = millis();
+      Serial.println(average,2);
       break;
     case 'o':
       openBowl();
@@ -158,40 +173,6 @@ void feed()
   feedServo.detach();
 }
 
-
-//SCALE
-//float getWeight()
-//{
-//  int analogValue = analogRead(0);
-//
-//  // running average - We smooth the readings a little bit
-//  analogValueAverage = 0.99*analogValueAverage + 0.01*analogValue;
-//
-//  // Is it time to print?
-//  if(millis() > time + timeBetweenReadings){
-//    float load = (((analogToLoad(analogValueAverage)+0.63898)/2)*1000)-348.5;
-//
-////    Serial.print("analogValue: ");Serial.println(analogValueAverage);
-////    Serial.print("             load: ");Serial.println(load,5);
-//    time = millis();
-//    return load;
-//  }
-//  
-//}
-
-
-//scale helper functions
-float analogToLoad(float analogval){
-  // using a custom map-function, because the standard arduino map function only uses int
-  float load = mapfloat(analogval, analogvalA, analogvalB, loadA, loadB);
-  return load;
-}
-
-float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 boolean isOpen()
 {
   if (bowlServo.read() > 90){ 
@@ -199,4 +180,3 @@ boolean isOpen()
   }
   else{ Serial.println('0');}
 }
-
